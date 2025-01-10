@@ -1,0 +1,8 @@
+[submodule "Drivers/STM32N6xx_HAL_Driver"]
+	path = Drivers/STM32N6xx_HAL_Driver
+	url = https://github.com/STMicroelectronics/stm32n6xx-hal-driver.git
+	branch = main
+[submodule "Drivers/CMSIS/Device/ST/STM32N6xx"]
+	path = Drivers/CMSIS/Device/ST/STM32N6xx
+	url = https://github.com/STMicroelectronics/cmsis-device-n6.git
+	branch = main
