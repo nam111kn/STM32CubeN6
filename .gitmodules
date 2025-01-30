@@ -6,3 +6,51 @@
 	path = Drivers/CMSIS/Device/ST/STM32N6xx
 	url = https://github.com/STMicroelectronics/cmsis-device-n6.git
 	branch = main
+[submodule "Drivers/BSP/Components/Common"]
+	path = Drivers/BSP/Components/Common
+	url = https://github.com/STMicroelectronics/stm32-bsp-common.git
+	branch = main
+[submodule "Drivers/BSP/Components/cs42l51"]
+	path = Drivers/BSP/Components/cs42l51
+	url = https://github.com/STMicroelectronics/stm32-cs42l51.git
+	branch = main
+[submodule "Drivers/BSP/Components/gt911"]
+	path = Drivers/BSP/Components/gt911
+	url = https://github.com/STMicroelectronics/stm32-gt911.git
+	branch = main
+[submodule "Drivers/BSP/Components/imx335"]
+	path = Drivers/BSP/Components/imx335
+	url = https://github.com/STMicroelectronics/stm32-imx335.git
+	branch = main
+[submodule "Drivers/BSP/Components/lan8742"]
+	path = Drivers/BSP/Components/lan8742
+	url = https://github.com/STMicroelectronics/stm32-lan8742.git
+	branch = main
+[submodule "Drivers/BSP/Components/mx25um51245g"]
+	path = Drivers/BSP/Components/mx25um51245g
+	url = https://github.com/STMicroelectronics/stm32-mx25um51245g.git
+	branch = main
+[submodule "Drivers/BSP/Components/mx66uw1g45g"]
+	path = Drivers/BSP/Components/mx66uw1g45g
+	url = https://github.com/STMicroelectronics/stm32-mx66uw1g45g.git
+	branch = main
+[submodule "Drivers/BSP/Components/rk050hr18"]
+	path = Drivers/BSP/Components/rk050hr18
+	url = https://github.com/STMicroelectronics/stm32-rk050hr18.git
+	branch = main
+[submodule "Drivers/BSP/Components/rtl8211"]
+	path = Drivers/BSP/Components/rtl8211
+	url = https://github.com/STMicroelectronics/stm32-rtl8211.git
+	branch = main
+[submodule "Drivers/BSP/Components/tcpp0203"]
+	path = Drivers/BSP/Components/tcpp0203
+	url = https://github.com/STMicroelectronics/stm32-tcpp0203.git
+	branch = main
+[submodule "Drivers/BSP/Components/wm8904"]
+	path = Drivers/BSP/Components/wm8904
+	url = https://github.com/STMicroelectronics/stm32-wm8904.git
+	branch = main
+[submodule "Drivers/BSP/Components/aps256xx"]
+	path = Drivers/BSP/Components/aps256xx
+	url = https://github.com/STMicroelectronics/stm32-aps256.git
+	branch = main
