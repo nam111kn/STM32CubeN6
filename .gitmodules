@@ -54,3 +54,11 @@
 	path = Drivers/BSP/Components/aps256xx
 	url = https://github.com/STMicroelectronics/stm32-aps256.git
 	branch = main
+[submodule "Drivers/BSP/STM32N6xx_Nucleo"]
+	path = Drivers/BSP/STM32N6xx_Nucleo
+	url = https://github.com/STMicroelectronics/stm32n6xx-nucleo-bsp
+	branch = main
+[submodule "Drivers/BSP/STM32N6570-DK"]
+	path = Drivers/BSP/STM32N6570-DK
+	url = https://github.com/STMicroelectronics/stm32n6570-dk-bsp
+	branch = main
