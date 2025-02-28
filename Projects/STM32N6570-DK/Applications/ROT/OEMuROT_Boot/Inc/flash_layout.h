@@ -97,12 +97,14 @@
  * is used as a temporary storage during image swapping.
  */
 
-/* area for BL2 code protected by hdp */
+/* Area for BL2 code */
 #define FLASH_AREA_BL2_OFFSET           (0x0)
-#define FLASH_AREA_BL2_SIZE             (0x20000)
+#define FLASH_AREA_BL2_SIZE             (0x40000)
+
+#define FLASH_AREA_BL2_SECONDARY_OFFSET (0x40000)
 
 /* BL2 partitions size */
-#define FLASH_S_PARTITION_SIZE          (0x10000) /* 128 KB for S partition */
+#define FLASH_S_PARTITION_SIZE          (0x10000) /* 64 KB for S partition */
 #define FLASH_NS_PARTITION_SIZE         (0x20000) /* 128 KB for NS partition */
 #define FLASH_PARTITION_SIZE            (FLASH_S_PARTITION_SIZE + FLASH_NS_PARTITION_SIZE)
 
@@ -131,7 +133,7 @@
                                          FLASH_MAX_DATA_PARTITION_SIZE)
 
 /* BL2 flash areas */
-#define FLASH_AREA_BEGIN_OFFSET         (FLASH_AREA_BL2_OFFSET + FLASH_AREA_BL2_SIZE)
+#define FLASH_AREA_BEGIN_OFFSET         (FLASH_AREA_BL2_SECONDARY_OFFSET + FLASH_AREA_BL2_SIZE)
 #define FLASH_AREA_BEGIN_ADDRESS        (FLASH_BASE_ADDRESS + FLASH_AREA_BEGIN_OFFSET)
 #define FLASH_AREAS_DEVICE_ID           (FLASH_DEVICE_ID - FLASH_DEVICE_ID)
 

@@ -11,7 +11,7 @@ hashtable="Keys/publicKeysHashHashes.bin"
 oem_secret="Keys/OEM_SECRET.bin"
 rma_password="Keys/RMA_password.bin"
 
-connect_no_reset="-c port=SWD ap=1 mode=Hotplug"
+connect_no_reset="-c port=SWD ap=1"
 
 error()
 {

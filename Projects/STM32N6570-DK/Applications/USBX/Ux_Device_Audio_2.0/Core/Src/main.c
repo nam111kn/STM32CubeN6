@@ -251,7 +251,7 @@ void MPU_Config(void)
 
   default_config.Enable = MPU_REGION_ENABLE;
   default_config.Number = MPU_REGION_NUMBER0;
-  default_config.BaseAddress = 0x341E0000;
+  default_config.BaseAddress = 0x341C0000;
   default_config.LimitAddress = 0x341FFFFF;
   default_config.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
   default_config.AccessPermission = MPU_REGION_ALL_RW;

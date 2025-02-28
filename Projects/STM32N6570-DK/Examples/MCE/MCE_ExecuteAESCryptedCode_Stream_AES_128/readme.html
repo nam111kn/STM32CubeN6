@@ -19,8 +19,6 @@
 <body>
 <div class="row">
 <div class="col-sm-12 col-lg-8">
-<div class="row">
-<div class="col-sm-12 col-lg-8">
 <h2 id="mce_executeaescryptedcode_stream_aes_128-example-description"><b>MCE_ExecuteAESCryptedCode_Stream_AES_128 Example Description</b></h2>
 <p>his project provides a description of how to run encrypted application code from external flash. The decryption is performed on the fly using the MCE IP(AES128 encryption algorithm). It boots from internal RAM and jumps to the encrypted application code in external flash. The user can provide their own application and encrypt it using the AES algorithm. In this case, the encryption key must be updated in the main.c file. The encrypted code consists of a basic application that toggles the user LD1 each 250 ms.</p>
 <ul>
@@ -72,6 +70,7 @@
 <li>Open the View &gt; Images.</li>
 <li>Double-click to deselect the second instance of project.out.</li>
 </ul></li>
+<li><p><strong>MDK-ARM</strong> : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.</p></li>
 </ul>
 <h3 id="how-to-use-it"><b>How to use it ?</b></h3>
 <p>In order to make the program work, you must do the following :</p>
@@ -85,8 +84,6 @@
 <ul>
 <li><em>STM32_SigningTool_CLI.exe -bin Project.bin -nk -of 0x80000000 -t fsbl -o Project-trusted.bin -hv 2.3 -dump Project-trusted.bin</em></li>
 </ul>
-</div>
-</div>
 </div>
 </div>
 </body>

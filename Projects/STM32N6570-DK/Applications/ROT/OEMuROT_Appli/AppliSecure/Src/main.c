@@ -54,6 +54,12 @@ int main(void)
 {
   funcptr_NS NonSecure_ResetHandler;
 
+  /* Enable I-Cache */
+  SCB_EnableICache();
+
+  /* Enable D-Cache */
+  SCB_EnableDCache();
+
   /* Enable BusFault and SecureFault handlers (HardFault is default) */
   SCB->SHCSR |= (SCB_SHCSR_BUSFAULTENA_Msk | SCB_SHCSR_SECUREFAULTENA_Msk);
 

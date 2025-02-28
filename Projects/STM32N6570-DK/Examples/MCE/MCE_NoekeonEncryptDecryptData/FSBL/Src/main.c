@@ -44,6 +44,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 MCE_HandleTypeDef hmce1;
+__ALIGN_BEGIN static const uint32_t pKeyMCE1[4] __ALIGN_END = {
+                            0xEDCBA987,0x6543210F,0xEDCBA987,0x6543210F};
 
 XSPI_HandleTypeDef hxspi1;
 
@@ -54,21 +56,7 @@ uint8_t aTxBuffer[BUFFER_SIZE];
 uint8_t CmdCplt, TxCplt , StatusMatch , RxCplt;
 XSPI_MemoryMappedTypeDef sMemMappedCfg;
 
-MCE_NoekeonConfigTypeDef NoekeonConfig ;
-
-MCE_RegionConfigTypeDef  RegionConfig ;
-
 uint32_t RX_Buffer[256] __ALIGN_END ;
-
-uint32_t Nonce[2][2]   =    { { 0xA5A5A5A5, 0xC3C3C3C3 },
-                              { 0x11111111, 0x55555555 }
-};
-
-uint32_t Key[4][4]     = { { 0x71234567, 0x89ABCDEF, 0x71234567, 0x89ABCDEF },
-                           { 0xEDCBA987, 0x6543210F, 0xEDCBA987, 0x6543210F },
-                           { 0x23456789, 0xABCDEF01, 0x23456789, 0xABCDEF01 },
-                           { 0xCBA98765, 0x43210FED, 0xCBA98765, 0x43210FED }
-};
 
 uint32_t Plain1[BUFFER_SIZE] = { 0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xF0,
                                  0x01, 0x11, 0x21, 0x31, 0x41, 0x51, 0x61, 0x71, 0x81, 0x91, 0xA1, 0xB1, 0xC1, 0xD1, 0xE1, 0xF1,
@@ -92,8 +80,8 @@ uint32_t Plain1[BUFFER_SIZE] = { 0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70,
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_MCE1_Init(void);
 static void MX_XSPI1_Init(void);
+static void MX_MCE1_Init(void);
 /* USER CODE BEGIN PFP */
 uint32_t XSPI_Memory_WriteReg(XSPI_HandleTypeDef *Ctx, uint32_t Address, uint8_t *Value);
 static void Configure_APMemory(void);
@@ -138,8 +126,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_MCE1_Init();
   MX_XSPI1_Init();
+  MX_MCE1_Init();
   /* USER CODE BEGIN 2 */
 
   /* Initialization of the LED_GREEN and LED_ORANGE ------------------------- */
@@ -193,35 +181,16 @@ int main(void)
     Error_Handler();
   }
 
-  NoekeonConfig.KeyType = MCE_USE_MASTERKEYS;
-  NoekeonConfig.pKey = Key[2];
-
-  if (HAL_MCE_ConfigNoekeon(&hmce1, &NoekeonConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /* Set the MCE Region configuration*/
-  RegionConfig.Mode             = MCE_BLOCK_CIPHER;
-  RegionConfig.ContextID        = MCE_NO_CONTEXT;
-  RegionConfig.StartAddress     = 0x90000000;
-  RegionConfig.EndAddress       = 0x90000FFF;
-
-
-  if (HAL_MCE_ConfigRegion(&hmce1, 0, &RegionConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
   mem_addr= (uint32_t *)0x90000000 ;
   for (index = 0; index <BUFFER_SIZE; index++)
   {
     *mem_addr = Plain1[index];
+    HAL_Delay(1);
     mem_addr++;
   }
 
   /* disable the region */
-  if (HAL_MCE_DisableRegion(&hmce1, 0) != HAL_OK)
+  if (HAL_MCE_DisableRegion(&hmce1, 1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -254,7 +223,7 @@ int main(void)
   }
 
   /* Re-Enable region config */
-  if (HAL_MCE_EnableRegion(&hmce1, 0) != HAL_OK)
+  if (HAL_MCE_EnableRegion(&hmce1, 1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -404,11 +373,28 @@ static void MX_MCE1_Init(void)
 
   /* USER CODE END MCE1_Init 0 */
 
+  MCE_NoekeonConfigTypeDef pConfig = {0};
+  MCE_RegionConfigTypeDef RegionConfig = {0};
+
   /* USER CODE BEGIN MCE1_Init 1 */
 
   /* USER CODE END MCE1_Init 1 */
   hmce1.Instance = MCE1;
   if (HAL_MCE_Init(&hmce1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  pConfig.KeyType = MCE_USE_MASTERKEYS;
+  pConfig.pKey = (uint32_t *)pKeyMCE1;
+  if (HAL_MCE_ConfigNoekeon(&hmce1, &pConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  RegionConfig.Mode = MCE_BLOCK_CIPHER;
+  RegionConfig.ContextID = MCE_NO_CONTEXT;
+  RegionConfig.StartAddress = 0x90000000;
+  RegionConfig.EndAddress = 0x90000FFF;
+  if (HAL_MCE_ConfigRegion(&hmce1, MCE_REGION2, &RegionConfig) != HAL_OK)
   {
     Error_Handler();
   }
@@ -439,16 +425,16 @@ static void MX_XSPI1_Init(void)
   hxspi1.Instance = XSPI1;
   hxspi1.Init.FifoThresholdByte = 4;
   hxspi1.Init.MemoryMode = HAL_XSPI_SINGLE_MEM;
-  hxspi1.Init.MemoryType = HAL_XSPI_MEMTYPE_APMEM;
-  hxspi1.Init.MemorySize = HAL_XSPI_SIZE_64MB;
-  hxspi1.Init.ChipSelectHighTimeCycle = 1;
+  hxspi1.Init.MemoryType = HAL_XSPI_MEMTYPE_APMEM_16BITS;
+  hxspi1.Init.MemorySize = HAL_XSPI_SIZE_256MB;
+  hxspi1.Init.ChipSelectHighTimeCycle = 5;
   hxspi1.Init.FreeRunningClock = HAL_XSPI_FREERUNCLK_DISABLE;
   hxspi1.Init.ClockMode = HAL_XSPI_CLOCK_MODE_0;
   hxspi1.Init.WrapSize = HAL_XSPI_WRAP_NOT_SUPPORTED;
   hxspi1.Init.ClockPrescaler = 1;
   hxspi1.Init.SampleShifting = HAL_XSPI_SAMPLE_SHIFT_NONE;
   hxspi1.Init.DelayHoldQuarterCycle = HAL_XSPI_DHQC_DISABLE;
-  hxspi1.Init.ChipSelectBoundary = HAL_XSPI_BONDARYOF_NONE;
+  hxspi1.Init.ChipSelectBoundary = HAL_XSPI_BONDARYOF_16KB;
   hxspi1.Init.MaxTran = 0;
   hxspi1.Init.Refresh = 0;
   hxspi1.Init.MemorySelect = HAL_XSPI_CSSEL_NCS1;
@@ -458,6 +444,7 @@ static void MX_XSPI1_Init(void)
   }
   sXspiManagerCfg.nCSOverride = HAL_XSPI_CSSEL_OVR_NCS1;
   sXspiManagerCfg.IOPort = HAL_XSPIM_IOPORT_1;
+  sXspiManagerCfg.Req2AckTime = 1;
   if (HAL_XSPIM_Config(&hxspi1, &sXspiManagerCfg, HAL_XSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
   {
     Error_Handler();
@@ -475,15 +462,15 @@ static void MX_XSPI1_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
+  /* USER CODE BEGIN MX_GPIO_Init_1 */
+  /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOP_CLK_ENABLE();
   __HAL_RCC_GPIOO_CLK_ENABLE();
 
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
+  /* USER CODE BEGIN MX_GPIO_Init_2 */
+  /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */

@@ -60,6 +60,28 @@ None
      ```
      place in RAM_region    { last section FREE_MEM };
      ```
+    + For MDK-ARM:
+    ```
+    either define the RW_IRAM1 region in the ".sct" file
+    or modify the line below in "tx_initialize_low_level.S to match the memory region being used
+        LDR r1, =|Image$$RW_IRAM1$$ZI$$Limit|
+    ```
+    + For STM32CubeIDE add the following section into the .ld file:
+    ```
+    ._threadx_heap :
+      {
+         . = ALIGN(8);
+         __RAM_segment_used_end__ = .;
+         . = . + 64K;
+         . = ALIGN(8);
+       } >RAM AT> RAM
+    ```
+
+       The simplest way to provide memory for ThreadX is to define a new section, see ._threadx_heap above.
+       In the example above the ThreadX heap size is set to 64KBytes.
+       The ._threadx_heap must be located between the .bss and the ._user_heap_stack sections in the linker script.
+       Caution: Make sure that ThreadX does not need more than the provided heap memory (64KBytes in this example).
+       Read more in STM32CubeIDE User Guide, chapter: "Linker script".
 
     + The "tx_initialize_low_level.S" should be also modified to enable the "USE_DYNAMIC_MEMORY_ALLOCATION" flag.
 
@@ -79,7 +101,9 @@ RTOS, ThreadX, USBXDevice, USB_OTG, High speed, SAI, Audio, Streaming, PCM
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 
@@ -92,9 +116,9 @@ In order to make the program work, you must do the following :
 
  Next, this program can be run in boot from flash mode. This is done by following the instructions below:
 
- - Resort to CubeProgrammer to add a header to the generated binary Ux_Device_Audio_2.0.bin with the following command
-   - *STM32_SigningTool_CLI.exe -bin Ux_Device_Audio_2.0.bin -nk -of 0x80000000 -t fsbl -o Ux_Device_Audio_2.0-trusted.bin -hv 2.3 -dump Ux_Device_Audio_2.0-trusted.bin*
-       - The resulting binary is Ux_Device_Audio_2.0-trusted.bin.
- - Next, in resorting again to CubeProgrammer, load the binary and its header (Ux_Device_Audio_2.0-trusted.bin) in DK board external Flash at address 0x7000'0000.
+ - Resort to CubeProgrammer to add a header to the generated binary Ux_Device_Audio.bin with the following command
+   - *STM32_SigningTool_CLI.exe -bin Ux_Device_Audio.bin -nk -of 0x80000000 -t fsbl -o Ux_Device_Audio-trusted.bin -hv 2.3 -dump Ux_Device_Audio-trusted.bin*
+       - The resulting binary is Ux_Device_Audio-trusted.bin.
+ - Next, in resorting again to CubeProgrammer, load the binary and its header (Ux_Device_Audio-trusted.bin) in DK board external Flash at address 0x7000'0000.
  - Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).
  - Press the reset button. The code then executes in boot from external Flash mode.

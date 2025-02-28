@@ -89,6 +89,8 @@ Graphics, VENC, Encoding,  Hardware Encoding
   - The following OTP fuses are set in this template:
 
     - VDDIO3_HSLV=1     I/O XSPIM_P2 High speed option enabled
+	
+  - To ensure the project runs properly, the SD card must be formatted in FAT32. 
 
 **WARNING**
 
@@ -100,7 +102,9 @@ To use the full XSPI speed, delete the NO_OTP_FUSE definition.
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 

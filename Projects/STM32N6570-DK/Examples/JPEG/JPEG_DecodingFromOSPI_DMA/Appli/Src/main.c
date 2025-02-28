@@ -70,9 +70,6 @@ int main(void)
   /* Enable D-Cache---------------------------------------------------------*/
   SCB_EnableDCache();
 
-  /* System clock already configured, simply SystemCoreClock init */
-  SystemCoreClockUpdate();
-
   /* MCU Configuration--------------------------------------------------------*/
 
   /* STM32N6xx HAL library initialization:

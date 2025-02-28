@@ -81,19 +81,11 @@
   * @{
   */
 #if !defined  (HSE_VALUE)
-#if defined(USE_FPGA)
-#define HSE_VALUE      30000000UL /*!< Value of the High-Speed External oscillator in Hz */
-#else
 #define HSE_VALUE      48000000UL /*!< Value of the High-Speed External oscillator in Hz */
-#endif /* USE_FPGA */
 #endif /* HSE_VALUE */
 
 #if !defined  (HSI_VALUE)
-#if defined(USE_FPGA)
-  #define HSI_VALUE      48000000UL /*!< Value of the High-Speed Internal oscillator in Hz */
-#else
-  #define HSI_VALUE      64000000UL /*!< Value of the High-Speed Internal oscillator in Hz */
-#endif /* USE_FPGA */
+#define HSI_VALUE      64000000UL /*!< Value of the High-Speed Internal oscillator in Hz */
 #endif /* HSI_VALUE */
 
 #if !defined  (MSI_VALUE)
@@ -198,18 +190,12 @@ void SystemInit(void)
   /* Delay after an RCC peripheral clock enabling */
   (void)RCC->APB4ENR2;
 
-  /* Setup I/O compensation cells for */
-  SYSCFG->VDDIO2CCCR = 0x00000278UL; /* SDMMC1 domain compensation */
-  SYSCFG->VDDIO3CCCR = 0x00000278UL; /* SDMMC2 domain compensation */
-  SYSCFG->VDDIO4CCCR = 0x00000278UL; /* Hexa-SPI domain compensation */
-  SYSCFG->VDDIO5CCCR = 0x00000278UL; /* Octo-SPI domain compensation */
-  SYSCFG->VDDCCCR    = 0x00000278UL; /* VDD domain compensation */
-
   /* Set default Vector Table location after system reset or return from Standby */
   SYSCFG->INITSVTORCR = SCB->VTOR;
+  /* Read back the value to make sure it is written before deactivating SYSCFG */
+  (void) SYSCFG->INITSVTORCR;
   /* Deactivate SYSCFG clock */
   RCC->APB4ENCR2 = RCC_APB4ENCR2_SYSCFGENC;
-
   /* FPU settings ------------------------------------------------------------*/
 #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
   SCB->CPACR |= ((3UL << 20U)|(3UL << 22U));  /* set CP10 and CP11 Full Access */
@@ -274,7 +260,12 @@ void SystemInit(void)
 void SystemCoreClockUpdate(void)
 {
   uint32_t sysclk = 0;
-  uint32_t pllcfgr, pllsource, pllbypass, pllm, plln, pllfracn, pllp1, pllp2, ic_divider;
+  uint32_t pllm = 0;
+  uint32_t plln = 0;
+  uint32_t pllfracn = 0;
+  uint32_t pllp1 = 0;
+  uint32_t pllp2 = 0;
+  uint32_t pllcfgr, pllsource, pllbypass, ic_divider;
   float_t pllvco;
 
   /* Get CPUCLK source -------------------------------------------------------*/
@@ -363,13 +354,6 @@ void SystemCoreClockUpdate(void)
       break;
     }
 
-#if defined(USE_FPGA)
-    /********** FPGA SPECIFIC *************/
-    /* FPGA PLL implementation use 32MHz as fixed PLL input frequency */
-    (void)pllsource;
-    sysclk = 32000000UL;
-    pllbypass = 0U;
-#else
     /* Get oscillator frequency used as PLL clock source */
     switch (pllsource)
     {
@@ -396,14 +380,14 @@ void SystemCoreClockUpdate(void)
       /* Nothing to do, should not occur */
       break;
     }
-#endif /* USE_FPGA */
+
     /* Check whether PLL is in bypass mode or not */
     if (pllbypass == 0U)
     {
       /* Compte PLL output frequency (Integer and fractional modes) */
       /* PLLVCO = (Freq * (DIVN + (FRACN / 0x1000000) / DIVM) / (DIVP1 * DIVP2)) */
       pllvco = ((float_t)sysclk * ((float_t)plln + ((float_t)pllfracn/(float_t)0x1000000UL))) / (float_t)pllm;
-      sysclk = (uint32_t)(pllvco/(float_t)(pllp1 * pllp2));
+      sysclk = (uint32_t)((float_t)(pllvco/(((float_t)pllp1) * ((float_t)pllp2))));
     }
     /* Apply IC1 divider */
     ic_divider = (READ_BIT(RCC->IC1CFGR, RCC_IC1CFGR_IC1INT) >> RCC_IC1CFGR_IC1INT_Pos) + 1UL;

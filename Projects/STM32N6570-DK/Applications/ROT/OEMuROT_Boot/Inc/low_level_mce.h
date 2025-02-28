@@ -46,6 +46,7 @@ extern "C" {
 
 /* Exported functions ------------------------------------------------------- */
 void mce_init_cfg(void);
+void mce_lock_cfg(void);
 bool LL_MCE_IsCodePrimaryRegionEnabled(void);
 HAL_StatusTypeDef LL_MCE_DisableCodePrimaryRegion(void);
 HAL_StatusTypeDef LL_MCE_EnableCodePrimaryRegion(void);

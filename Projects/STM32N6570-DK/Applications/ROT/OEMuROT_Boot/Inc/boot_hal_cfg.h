@@ -36,11 +36,20 @@
 #define RTC_SYNCH_PREDIV   0x00FF
 #endif
 
-/* Static protections */
+/* Cache */
+#define OEMUROT_CACHE_ENABLE /*!< Cache activated : instruction and data */
+
+/* Tamper */
 #define OEMUROT_INTERNAL_TAMPER_ENABLE /*!< Internal TAMPER activated */
+
+#define NO_TAMPER            (0)             /*!< No tamper activated */
+#define INTERNAL_TAMPER_ONLY (1)             /*!< Only Internal tamper activated */
+#define OEMUROT_TAMPER_ENABLE INTERNAL_TAMPER_ONLY      /*!< TAMPER configuration flag  */
 
 #ifdef OEMUROT_DEV_MODE
 #define OEMUROT_ERROR_HANDLER_STOP_EXEC /*!< Error handler stops execution (else it resets) */
+#else
+#define OEMUROT_SECURE_BOOT /*!< Device lifecyle expected to be locked */
 #endif /* OEMUROT_DEV_MODE */
 
 /* Run time protections */

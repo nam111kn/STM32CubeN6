@@ -93,11 +93,7 @@ extern "C" {
   *        (when HSE is used as system clock source, directly or through the PLL).
   */
 #if !defined  (HSE_VALUE)
-#if defined(USE_FPGA)
-#define HSE_VALUE            30000000UL /*!< Value of the High-Speed External oscillator in Hz */
-#else
 #define HSE_VALUE            48000000UL /*!< Value of the High-Speed External oscillator in Hz */
-#endif /* USE_FPGA */
 #endif /* HSE_VALUE */
 
 #if !defined  (HSE_STARTUP_TIMEOUT)
@@ -122,11 +118,7 @@ extern "C" {
   *        (when HSI is used as system clock source, directly or through the PLL).
   */
 #if !defined  (HSI_VALUE)
-#if defined(USE_FPGA)
-  #define HSI_VALUE          48000000UL /*!< Value of the High-Speed Internal oscillator in Hz */
-#else
   #define HSI_VALUE          64000000UL /*!< Value of the High-Speed Internal oscillator in Hz */
-#endif /* USE_FPGA */
 #endif /* HSI_VALUE */
 
 /**

@@ -74,9 +74,6 @@ void HAL_MspInit(void)
   /* USER CODE END MspInit 1 */
 }
 
-/* USER CODE BEGIN 1 */
-#if !defined(TERMINAL_IO)
-
 /**
 * @brief UART MSP Initialization
 * This function configures the hardware resources used in this example
@@ -154,5 +151,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
   }
 
 }
-#endif /* TERMINAL_IO */
+
+/* USER CODE BEGIN 1 */
+
 /* USER CODE END 1 */

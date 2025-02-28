@@ -1099,6 +1099,24 @@
         </settings>
     </configuration>
     <group>
+        <name>Application</name>
+        <group>
+            <name>User</name>
+            <file>
+                <name>$PROJ_DIR$\..\..\FSBL\Src\extmem.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\FSBL\Src\main.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\FSBL\Src\stm32n6xx_hal_msp.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\FSBL\Src\stm32n6xx_it.c</name>
+            </file>
+        </group>
+    </group>
+    <group>
         <name>Doc</name>
         <file>
             <name>$PROJ_DIR$\..\..\README.md</name>
@@ -1155,24 +1173,6 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\STM32N6xx_HAL_Driver\Src\stm32n6xx_hal_xspi.c</name>
-            </file>
-        </group>
-    </group>
-    <group>
-        <name>Example</name>
-        <group>
-            <name>User</name>
-            <file>
-                <name>$PROJ_DIR$\..\..\FSBL\Src\extmem.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\FSBL\Src\main.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\FSBL\Src\stm32n6xx_hal_msp.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\FSBL\Src\stm32n6xx_it.c</name>
             </file>
         </group>
     </group>

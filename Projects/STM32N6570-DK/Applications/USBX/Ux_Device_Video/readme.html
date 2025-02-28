@@ -28,7 +28,9 @@
 </ul>
 <h4 id="expected-success-behavior"><b>Expected success behavior</b></h4>
 <p>When plugged to PC host, the STM32N6570-DK must be properly enumerated as a USB video device. During the enumeration phase, device provides host with the requested descriptors (device, configuration, string). Those descriptors are used by host driver to identify the device capabilities.</p>
-<p>Once the STM32N6570-DK USB device successfully completed the enumeration phase: 1- Open a camera application (Camera, ContaCam or VLC media player) then open the capture device and play the video on the PC host. 2- To test other stream change number of included file “ux_device_video.c”:</p>
+<p>Once the STM32N6570-DK USB device successfully completed the enumeration phase:</p>
+<p>1- Open a camera application (Camera, ContaCam or VLC media player) then open the capture device and play the video on the PC host.</p>
+<p>2- To test other stream change number of included file “ux_device_video.c”:</p>
 <pre><code>- stream1 FORMAT : MJPEG and Width = 320, Height = 236.</code></pre>
 <h4 id="error-behaviors"><b>Error behaviors</b></h4>
 <p>Host PC shows that USB device does not operate as designed (video device enumeration failed).</p>
@@ -50,6 +52,27 @@
 </ul>
 <pre><code>place in RAM_region    { last section FREE_MEM };</code></pre>
 <ul>
+<li>For MDK-ARM:</li>
+</ul>
+<pre><code>either define the RW_IRAM1 region in the &quot;.sct&quot; file
+or modify the line below in &quot;tx_initialize_low_level.S to match the memory region being used
+    LDR r1, =|Image$$RW_IRAM1$$ZI$$Limit|</code></pre>
+<ul>
+<li>For STM32CubeIDE add the following section into the .ld file:</li>
+</ul>
+<pre><code>._threadx_heap :
+  {
+     . = ALIGN(8);
+     __RAM_segment_used_end__ = .;
+     . = . + 64K;
+     . = ALIGN(8);
+   } &gt;RAM_D1 AT&gt; RAM_D1</code></pre>
+<pre><code>The simplest way to provide memory for ThreadX is to define a new section, see ._threadx_heap above.
+In the example above the ThreadX heap size is set to 64KBytes.
+The ._threadx_heap must be located between the .bss and the ._user_heap_stack sections in the linker script.
+Caution: Make sure that ThreadX does not need more than the provided heap memory (64KBytes in this example).
+Read more in STM32CubeIDE User Guide, chapter: &quot;Linker script&quot;.</code></pre>
+<ul>
 <li>The “tx_initialize_low_level.S” should be also modified to enable the “USE_DYNAMIC_MEMORY_ALLOCATION” flag.</li>
 </ul></li>
 </ul>
@@ -58,13 +81,14 @@
 <h3 id="hardware-and-software-environment"><b>Hardware and Software environment</b></h3>
 <ul>
 <li>This application runs on STM32N657X0H3QU devices.</li>
-<li><p>This application has been tested with STMicroelectronics SSTM32N6570-DK boards revision MB1939-N6570-C01 and can be easily tailored to any other supported device and development board.</p></li>
+<li><p>This application has been tested with STMicroelectronics STM32N6570-DK boards revision MB1939-N6570-C01 and can be easily tailored to any other supported device and development board.</p></li>
 <li><strong>EWARM</strong> : To monitor a variable in the live watch window, you must proceed as follow :
 <ul>
 <li>Start a debugging session.</li>
 <li>Open the View &gt; Images.</li>
 <li>Double-click to deselect the second instance of project.out.</li>
 </ul></li>
+<li><p><strong>MDK-ARM</strong> : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.</p></li>
 </ul>
 <h3 id="how-to-use-it"><b>How to use it ?</b></h3>
 <p>In order to make the program work, you must do the following :</p>

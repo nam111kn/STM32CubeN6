@@ -36,7 +36,7 @@ The **AppUDPThread**, once started:
  + If the [echotool](https://github.com/PavelBansky/EchoTool/releases/tag/v1.5.0.0) utility is used the message sent by the client are displayed on the PC console.
  + A summary message similar to the following is printed on the HyperTerminal and the green LED is toggling.
  ```
-  SUCCESS : 10 / 10 packets sent
+  SUCCESS : 100 / 100 packets sent
 ```
 
 #### <b>Error behaviors</b>
@@ -85,8 +85,14 @@ None
    This requires changes in the linker files to expose this memory location.
     + For EWARM add the following section into the .icf file:
      ```
-	 place in RAM_region    { last section FREE_MEM };
+     place in RAM_region    { last section FREE_MEM };
     + For STM32CubeIDE add the following section into the .ld file:
+    ```
+    + For MDK-ARM:
+    ```
+    either define the RW_IRAM1 region in the ".sct" file
+    or modify the line below in "tx_initialize_low_level.S to match the memory region being used
+        LDR r1, =|Image$$RW_IRAM1$$ZI$$Limit|
     ```
     ._threadx_heap :
       {
@@ -95,7 +101,7 @@ None
          . = . + 64K;
          . = ALIGN(8);
        } >RAM AT> RAM
-	```
+    ```
 
        The simplest way to provide memory for ThreadX is to define a new section, see ._threadx_heap above.
        In the example above the ThreadX heap size is set to 64KBytes.
@@ -112,11 +118,25 @@ None
 Below is an example of the section declaration for different IDEs.
    + For EWARM ".icf" file
    ```
-   define symbol __ICFEDIT_region_NXDATA_start__ = 0x341F8400;
-   define symbol __ICFEDIT_region_NXDATA_end__   = 0x341FFC00;
+   define symbol __ICFEDIT_region_NXDATA_start__ = 0x341F8800;
+   define symbol __ICFEDIT_region_NXDATA_end__   = 0x341FFFFF;
    define region NXApp_region  = mem:[from __ICFEDIT_region_NXDATA_start__ to __ICFEDIT_region_NXDATA_end__];
    place in NXApp_region { section .NetXPoolSection};
-
+   ```
+   + For MDK-ARM
+   ```
+   RW_NXDriverSection 0x341F8800 0x7800 {
+    *(.NetXPoolSection)
+   }
+   ```
+   + For STM32CubeIDE ".ld" file
+   ```
+    .nx_data (NOLOAD):
+   {
+      . = ABSOLUTE(0x341F8800);
+      *(.NetXPoolSection)
+   } >RAM AT> ROM
+   ```
   This section is then used in the <code> app_azure_rtos.c</code> file to force the <code>nx_byte_pool_buffer</code> allocation.
 
 ```
@@ -156,6 +176,8 @@ RTOS, Network, ThreadX, NetXDuo, UDP, UART
     - Start a debugging session.
     - Open the View > Images.
     - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 

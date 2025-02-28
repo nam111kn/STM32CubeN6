@@ -2,7 +2,7 @@
 <project>
     <fileVersion>4</fileVersion>
     <configuration>
-        <name>Tx_SecureLEDToggle_TrustZone_ns</name>
+        <name>Tx_SecureLEDToggle_TrustZone_NS</name>
         <toolchain>
             <name>ARM</name>
         </toolchain>
@@ -16,7 +16,7 @@
                 <debug>1</debug>
                 <option>
                     <name>BrowseInfoPath</name>
-                    <state>Tx_SecureLEDToggle_TrustZone_ns\BrowseInfo</state>
+                    <state>Tx_SecureLEDToggle_TrustZone_NS\BrowseInfo</state>
                 </option>
                 <option>
                     <name>TrustZone</name>
@@ -24,15 +24,15 @@
                 </option>
                 <option>
                     <name>ExePath</name>
-                    <state>Tx_SecureLEDToggle_TrustZone_ns\Exe</state>
+                    <state>Tx_SecureLEDToggle_TrustZone_NS\Exe</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
-                    <state>Tx_SecureLEDToggle_TrustZone_ns\Obj</state>
+                    <state>Tx_SecureLEDToggle_TrustZone_NS\Obj</state>
                 </option>
                 <option>
                     <name>ListPath</name>
-                    <state>Tx_SecureLEDToggle_TrustZone_ns\List</state>
+                    <state>Tx_SecureLEDToggle_TrustZone_NS\List</state>
                 </option>
                 <option>
                     <name>GEndianMode</name>
@@ -201,7 +201,7 @@
                 </option>
                 <option>
                     <name>BuildFilesPath</name>
-                    <state>Tx_SecureLEDToggle_TrustZone_ns</state>
+                    <state>Tx_SecureLEDToggle_TrustZone_NS</state>
                 </option>
                 <option>
                     <name>PointerAuthentication</name>
@@ -670,7 +670,7 @@
                 </option>
                 <option>
                     <name>OOCOutputFile</name>
-                    <state>Tx_SecureLEDToggle_TrustZone_ns.bin</state>
+                    <state>Tx_SecureLEDToggle_TrustZone_NS.bin</state>
                 </option>
                 <option>
                     <name>OOCCommandLineProducer</name>
@@ -709,7 +709,7 @@
                 </option>
                 <option>
                     <name>IlinkOutputFile</name>
-                    <state>Tx_SecureLEDToggle_TrustZone_ns.out</state>
+                    <state>Tx_SecureLEDToggle_TrustZone_NS.out</state>
                 </option>
                 <option>
                     <name>IlinkDebugInfoEnable</name>
@@ -821,7 +821,7 @@
                 </option>
                 <option>
                     <name>IlinkAdditionalLibs</name>
-                    <state>$PROJ_DIR$\..\AppliSecure\Tx_SecureLEDToggle_TrustZone_s\Exe\Project_import_lib.lib</state>
+                    <state>$PROJ_DIR$\..\AppliSecure\Tx_SecureLEDToggle_TrustZone_S\Exe\Project_import_lib.lib</state>
                 </option>
                 <option>
                     <name>IlinkOverrideProgramEntryLabel</name>
@@ -1099,6 +1099,30 @@
         </settings>
     </configuration>
     <group>
+        <name>Application</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\AppliNonSecure\Src\app_azure_rtos.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\AppliNonSecure\Src\app_threadx.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\AppliNonSecure\Src\main.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\AppliNonSecure\Src\stm32n6xx_hal_msp.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\AppliNonSecure\Src\stm32n6xx_hal_timebase_tim.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\AppliNonSecure\Src\stm32n6xx_it.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\AppliNonSecure\Src\tx_initialize_low_level.S</name>
+        </file>
+    </group>
+    <group>
         <name>Drivers</name>
         <group>
             <name>CMSIS</name>
@@ -1148,30 +1172,6 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\STM32N6xx_HAL_Driver\Src\stm32n6xx_hal_uart_ex.c</name>
             </file>
         </group>
-    </group>
-    <group>
-        <name>Example</name>
-        <file>
-            <name>$PROJ_DIR$\..\..\AppliNonSecure\Src\app_azure_rtos.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\AppliNonSecure\Src\app_threadx.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\AppliNonSecure\Src\main.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\AppliNonSecure\Src\stm32n6xx_hal_msp.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\AppliNonSecure\Src\stm32n6xx_hal_timebase_tim.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\AppliNonSecure\Src\stm32n6xx_it.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\AppliNonSecure\Src\tx_initialize_low_level.S</name>
-        </file>
     </group>
     <group>
         <name>Middleware</name>
@@ -1283,12 +1283,6 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_initialize_kernel_setup.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\..\Middlewares\ST\threadx\ports\cortex_m55\iar\src\tx_initialize_low_level.s</name>
-                    <excluded>
-                        <configuration>Tx_SecureLEDToggle_TrustZone_ns</configuration>
-                    </excluded>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\..\..\Middlewares\ST\threadx\ports\cortex_m55\iar\src\tx_misra.s</name>

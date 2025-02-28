@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "stdio.h"
 #include "string.h"
 #include "app_threadx.h"
 #include "usbpd.h"

@@ -27,7 +27,7 @@
 <p>The triggering DMA channel performs transactions from source buffer “aSRC_Buffer” to destination buffer “aDST_TriggerChannel_Buffer” with block size equal to 4 bytes and generates a transfer complete signal when transaction ends. The triggered channel performs transaction from source buffer “aDST_TriggerChannel_Buffer” to destination buffer “aDST_TriggeredChannel_Buffer” with block size equal to 128 bytes. At each trigger signal generation, the triggered channel performs a single data transaction (4 bytes).</p>
 <p>NUCLEO-N657X0-Q board’s LED can be used to monitor the transfers status:</p>
 <ul>
-<li>LED2 toggle when no error detected.</li>
+<li>LED1 toggle when no error detected.</li>
 <li>LED2 is ON when any error occurred.</li>
 </ul>
 <h4 id="notes"><b>Notes</b></h4>
@@ -57,6 +57,7 @@
 <li>Open the View &gt; Images.</li>
 <li>Double-click to deselect the second instance of project.out.</li>
 </ul></li>
+<li><p><strong>MDK-ARM</strong> : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.</p></li>
 </ul>
 <h3 id="how-to-use-it"><b>How to use it ?</b></h3>
 <p>In order to make the program work, you must do the following :</p>

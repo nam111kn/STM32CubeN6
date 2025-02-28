@@ -1,6 +1,6 @@
 # STM32 ISP Library
 
-version 1.0.0
+version 1.0.2
 
 The ISP Library middleware (running on the target) hosts 2A algorithms
 (Auto Exposure and Auto White Balance) and mechanisms to control the

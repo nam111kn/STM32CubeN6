@@ -40,7 +40,7 @@ static void SystemClock_Config(void);
 static void MPU_Config(void);
 void Error_Handler(void);
 static void MX_XSPI2_Init(void);
-BOOTStatus_TypeDef JumpToApplication(void); 
+BOOTStatus_TypeDef JumpToApplication(void);
 BOOTStatus_TypeDef MapMemory(void);
 MCE_AESConfigTypeDef ContextAESConfig;
 MCE_RegionConfigTypeDef  RegionConfig ;
@@ -51,7 +51,7 @@ uint32_t Nonce[2][2]   =  { { 0xA5A5A5A5, 0xC3C3C3C3 },
                             { 0x11111111, 0x55555555 }
 };
 
-uint32_t Key[] = {0x71234567, 0x89ABCDEF, 0x71234567, 0x89ABCDEF };                  
+uint32_t Key[] = {0x71234567, 0x89ABCDEF, 0x71234567, 0x89ABCDEF };
 
 
 MCE_AESConfigTypeDef ContextAESConfig;
@@ -67,7 +67,7 @@ MCE_HandleTypeDef hmce2;
   * @param  None
   * @retval None
   */
-void main(void)
+int main(void)
 {
   /* Enable and set up the MPU------------------------------------------------*/
   MPU_Config();
@@ -97,59 +97,59 @@ void main(void)
 
   /* Add your application code here */
   MX_XSPI2_Init();
-  
+
   /* Initialise the serial memory */
   MX_EXTMEM_Init();
-    
+
   MapMemory();
-    
+
   hmce2.Instance = MCE2;
   if (HAL_MCE_Init(&hmce2) != HAL_OK)
   {
     while(1);
   }
-  
+
   /* Enable illegal access interrupts */
   __HAL_MCE_ENABLE_IT(&hmce2, MCE_IT_ILLEGAL_ACCESS_ERROR);
-  
+
   ContextAESConfig.Nonce [0] = Nonce[0][0];
   ContextAESConfig.Nonce [1] = Nonce[0][1];
   ContextAESConfig.Version   = 0xFEDC;
   ContextAESConfig.pKey      = Key;
   ContextAESConfig.KeySize   = MCE_AES_128;
-  ContextAESConfig.Cipher_Mode= MCE_CONTEXT_STREAM_CIPHER; 
+  ContextAESConfig.Cipher_Mode= MCE_CONTEXT_STREAM_CIPHER;
 
-  
+
   /* Set MCE AES context configuration */
   if (HAL_MCE_ConfigAESContext(&hmce2, &ContextAESConfig, MCE_CONTEXT1)!= HAL_OK)
   {
     while(1);
   }
-  
+
   /* Enable the AES context configuration */
   if (HAL_MCE_EnableAESContext(&hmce2, MCE_CONTEXT1)!= HAL_OK)
   {
     while(1);
   }
-  
+
   /* Set the MCE Region configuration*/
   RegionConfig.Mode             = MCE_STREAM_CIPHER;
   RegionConfig.ContextID        = MCE_CONTEXT1;
   RegionConfig.StartAddress     = 0x70100400;
   RegionConfig.EndAddress       = 0x7010FFFF;
-  
-  
+
+
   if (HAL_MCE_ConfigRegion(&hmce2, 0, &RegionConfig)!= HAL_OK)
   {
     while(1);
   }
-  
+
   /* link the context used to the region */
   if (HAL_MCE_SetRegionAESContext(&hmce2, MCE_CONTEXT1, 0) != HAL_OK)
   {
     while(1);
   }
-  
+
   /* jump on the application */
    JumpToApplication();
 

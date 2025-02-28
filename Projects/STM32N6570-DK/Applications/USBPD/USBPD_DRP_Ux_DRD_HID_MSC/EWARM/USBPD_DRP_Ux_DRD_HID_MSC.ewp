@@ -78,7 +78,7 @@
                 </option>
                 <option>
                     <name>OGChipSelectEditMenu</name>
-                    <state>STM32N6570-DK	ST STM32N6570-DK</state>
+                    <state>STM32N657X0	ST STM32N657X0</state>
                 </option>
                 <option>
                     <name>GenLowLevelInterface</name>
@@ -124,7 +124,7 @@
                 </option>
                 <option>
                     <name>GFPUDeviceSlave</name>
-                    <state>STM32N6570-DK	ST STM32N6570-DK</state>
+                    <state>STM32N657X0	ST STM32N657X0</state>
                 </option>
                 <option>
                     <name>FPU2</name>
@@ -2375,9 +2375,6 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_thread_resume.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\threadx\ports_module\cortex_m33\iar\module_manager\src\tx_thread_secure_stack.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_thread_shell_entry.c</name>

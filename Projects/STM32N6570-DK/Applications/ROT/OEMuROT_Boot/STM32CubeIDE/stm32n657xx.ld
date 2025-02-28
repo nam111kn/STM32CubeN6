@@ -36,7 +36,7 @@
 ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
-_estack = ORIGIN(RAM) + LENGTH(RAM); /* end of "RAM" Ram type memory */
+_estack = ORIGIN(STACK_RAM) + LENGTH(STACK_RAM); /* end of "RAM" Ram type memory */
 _sstack = _estack - _Min_Stack_Size;
 
 _Min_Heap_Size = BL2_HEAP_SIZE; /* required amount of heap */
@@ -47,7 +47,8 @@ MEMORY
 {
   ROM  (rx)  : ORIGIN = BL2_CODE_START, LENGTH = BL2_CODE_SIZE
   ROM_JUMPER  (rx)  : ORIGIN = BL2_JUMP_CODE_START, LENGTH = BL2_JUMP_CODE_SIZE
-  RAM  (rwx) : ORIGIN = BL2_DATA_START, LENGTH = BL2_DATA_SIZE
+  RAM  (rw)  : ORIGIN = BL2_DATA_START, LENGTH = BL2_DATA_SIZE
+  STACK_RAM  (rw)  : ORIGIN = 0x38004000, LENGTH = 0x4000
 }
 
 /* Sections */
@@ -60,6 +61,18 @@ SECTIONS
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
   } >ROM
+
+  .text :
+  {
+    KEEP(*(.BL2_Jump_Code))
+    KEEP(*(.BL2_Jump_Data))
+    *stm32n6xx_hal_cortex.o (.text* .rodata*)
+    *stm32n6xx_hal_mce.o (.text* .rodata*)
+    *stm32n6xx_hal_bsec.o (.text* .rodata*)
+    *low_level_mce.o (.text* .rodata*)
+    *low_level_otp.o (.text* .rodata*)
+    KEEP(*(.BL2_Error_Code))
+  } >ROM_JUMPER
 
   /* The program code and other data into "RAM" Ram type memory */
   .text :
@@ -79,11 +92,6 @@ SECTIONS
     . = ALIGN(4);
     _etext = .;        /* define a global symbols at end of code */
   } >ROM
-
-  .text :
-  {
-    *(.BL2_Jump_Code)
-  } >ROM_JUMPER
 
   /* Constant data into "RAM" Ram type memory */
   .rodata :
@@ -187,16 +195,23 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM
 
-  /* User_heap_stack section, used to check that there is enough "RAM" Ram  type memory left */
-  ._user_heap_stack :
+  /* User_heap section, used to to allocate heap memory */
+  ._user_heap :
   {
     . = ALIGN(8);
     PROVIDE ( end = . );
     PROVIDE ( _end = . );
     . = . + _Min_Heap_Size;
-    . = . + _Min_Stack_Size;
     . = ALIGN(8);
   } >RAM
+
+  /* User_stack section, used to allocate stack memory */
+  ._user_stack :
+  {
+    . = ALIGN(8);
+    . = . + _Min_Stack_Size;
+    . = ALIGN(8);
+  } >STACK_RAM
 
   /* Remove information from the compiler libraries */
   /DISCARD/ :

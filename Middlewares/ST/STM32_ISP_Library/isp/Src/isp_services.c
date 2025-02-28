@@ -19,6 +19,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "isp_core.h"
 #include "isp_services.h"
+#ifdef ISP_MW_TUNING_TOOL_SUPPORT
+#include "isp_cmd_parser.h"
+#endif
 
 /* Private types -------------------------------------------------------------*/
 typedef enum {
@@ -75,6 +78,7 @@ static uint32_t ISP_ManualWBRefColorTemp = 0;
 static ISP_DecimationTypeDef ISP_DecimationValue = {ISP_DECIM_FACTOR_1};
 static ISP_IQParamTypeDef ISP_IQParamCache;
 static ISP_SVC_StatEngineTypeDef ISP_SVC_StatEngine;
+static bool ISP_SensorDelayMeasureRun;
 
 static const uint32_t avgRGBUp[] = {
     DCMIPP_STAT_EXT_SOURCE_PRE_BLKLVL_R, DCMIPP_STAT_EXT_SOURCE_PRE_BLKLVL_G, DCMIPP_STAT_EXT_SOURCE_PRE_BLKLVL_B
@@ -133,6 +137,7 @@ static const DCMIPP_StatisticExtractionConfTypeDef statConfDownBins_9_11 = {
 };
 
 /* Exported variables --------------------------------------------------------*/
+extern ISP_MetaTypeDef Meta;
 
 /* Private functions ---------------------------------------------------------*/
 static void To_Shift_Multiplier(uint32_t Factor, uint8_t *pShift, uint8_t *pMultiplier)
@@ -422,7 +427,7 @@ static ISP_SVC_StatEngineStage GetStatCycleEnd(ISP_SVC_StatLocation location)
 uint8_t LuminanceFromRGB(uint8_t r, uint8_t g, uint8_t b)
 {
   /* Compute luminance from RGB components (BT.601) */
-  return r * 0.299 + g * 0.587 + b * 0.114;
+  return (uint8_t) (r * 0.299 + g * 0.587 + b * 0.114);
 }
 
 uint8_t LuminanceFromRGBMono(uint8_t r, uint8_t g, uint8_t b)
@@ -712,6 +717,9 @@ ISP_StatusTypeDef ISP_SVC_ISP_SetStatArea(ISP_HandleTypeDef *hIsp, ISP_StatAreaT
     return ISP_ERR_STATAREA_HAL;
   }
 
+  /* Update internal state */
+  hIsp->statArea = *pConfig;
+
   return ret;
 }
 
@@ -975,8 +983,10 @@ ISP_StatusTypeDef ISP_SVC_ISP_GetGain(ISP_HandleTypeDef *hIsp, ISP_ISPGainTypeDe
 ISP_StatusTypeDef ISP_SVC_ISP_SetColorConv(ISP_HandleTypeDef *hIsp, ISP_ColorConvTypeDef *pConfig)
 {
   HAL_StatusTypeDef halStatus;
-  DCMIPP_ColorConversionConfTypeDef colorConvConfig = {0};
+  DCMIPP_ColorConversionConfTypeDef colorConvConfig;
   uint32_t i, j;
+
+  memset(&colorConvConfig, 0, sizeof(colorConvConfig));
 
   /* Check handle validity */
   if ((hIsp == NULL) || (pConfig == NULL))
@@ -1109,6 +1119,8 @@ ISP_StatusTypeDef ISP_SVC_Sensor_SetGain(ISP_HandleTypeDef *hIsp, ISP_SensorGain
     }
   }
 
+  Meta.gain = pConfig->gain;
+
   return ISP_OK;
 }
 
@@ -1160,6 +1172,8 @@ ISP_StatusTypeDef ISP_SVC_Sensor_SetExposure(ISP_HandleTypeDef *hIsp, ISP_Sensor
       return ISP_ERR_SENSOREXPOSURE;
     }
   }
+
+  Meta.exposure = pConfig->exposure;
 
   return ISP_OK;
 }
@@ -1359,6 +1373,55 @@ ISP_StatusTypeDef ISP_SVC_Misc_GetWBRefMode(ISP_HandleTypeDef *hIsp, uint32_t *p
   *pRefColorTemp = ISP_ManualWBRefColorTemp;
 
   return ISP_OK;
+}
+
+/**
+  * @brief  ISP_SVC_Misc_SensorDelayMeasureStart
+  *         Start the sensor delay measure
+  * @param  None
+  * @retval None
+  */
+void ISP_SVC_Misc_SensorDelayMeasureStart()
+{
+  ISP_SensorDelayMeasureRun = true;
+}
+
+/**
+  * @brief  ISP_SVC_Misc_SensorDelayMeasureStop
+  *         Stop the sensor delay measure
+  * @param  None
+  * @retval None
+  */
+void ISP_SVC_Misc_SensorDelayMeasureStop()
+{
+  ISP_SensorDelayMeasureRun = false;
+}
+
+/**
+  * @brief  ISP_SVC_Misc_SensorDelayMeasureIsRunning
+  *         Return the sensor delay measure status
+  * @param  None
+  * @retval true if the sensor delay measure is running
+  */
+bool ISP_SVC_Misc_SensorDelayMeasureIsRunning()
+{
+  return ISP_SensorDelayMeasureRun;
+}
+
+/**
+  * @brief  ISP_SVC_Misc_SendSensorDelayMeasure
+  *         Send the answer to the Get SensorDelay measure command
+  * @param  hIsp: ISP device handle
+  * @param  pSensorDelay: Pointer to the measured Sensor Delay
+  * @retval operation result
+  */
+ISP_StatusTypeDef ISP_SVC_Misc_SendSensorDelayMeasure(ISP_HandleTypeDef *hIsp, ISP_SensorDelayTypeDef *pSensorDelay)
+{
+#ifdef ISP_MW_TUNING_TOOL_SUPPORT
+  return ISP_CmdParser_SendSensorDelayMeasure(hIsp, pSensorDelay);
+#else
+  return ISP_OK;
+#endif
 }
 
 /**
@@ -1574,6 +1637,7 @@ void ISP_SVC_Stats_Gather(ISP_HandleTypeDef *hIsp)
 {
   static ISP_SVC_StatEngineStage stagePrevious1 = ISP_STAT_CFG_LAST, stagePrevious2 = ISP_STAT_CFG_LAST;
   DCMIPP_StatisticExtractionConfTypeDef statConf[3];
+  ISP_IQParamTypeDef *IQParamConfig;
   ISP_SVC_StatStateTypeDef *ongoing;
   uint32_t i, avgR, avgG, avgB, frameId;
 
@@ -1633,7 +1697,8 @@ void ISP_SVC_Stats_Gather(ISP_HandleTypeDef *hIsp)
     ongoing->down.averageR = GetAvgStats(hIsp, ISP_STAT_LOC_DOWN, ISP_RED, avgR);
     ongoing->down.averageG = GetAvgStats(hIsp, ISP_STAT_LOC_DOWN, ISP_GREEN, avgG);
     ongoing->down.averageB = GetAvgStats(hIsp, ISP_STAT_LOC_DOWN, ISP_BLUE, avgB);
-    if (hIsp->sensorInfo.bayer_pattern == ISP_DEMOS_TYPE_MONO)
+    IQParamConfig = ISP_SVC_IQParam_Get(hIsp);
+    if ((hIsp->sensorInfo.bayer_pattern == ISP_DEMOS_TYPE_MONO) || (!IQParamConfig->demosaicing.enable))
     {
       ongoing->down.averageL = LuminanceFromRGBMono(ongoing->down.averageR, ongoing->down.averageG, ongoing->down.averageB);
     }

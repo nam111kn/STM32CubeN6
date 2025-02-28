@@ -54,6 +54,10 @@
 #define MBEDTLS_CIPHER_MODE_CTR
 #define MBEDTLS_AES_C
 
+#define MBEDTLS_SHA256_ALT
+
+#include "mbedtls_alt_config.h"
+
 /* mbedtls >3.6 compatibility */
 #define MBEDTLS_ALLOW_PRIVATE_ACCESS
 

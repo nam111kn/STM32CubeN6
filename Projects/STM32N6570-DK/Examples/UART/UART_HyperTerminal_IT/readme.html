@@ -19,8 +19,6 @@
 <body>
 <div class="row">
 <div class="col-sm-12 col-lg-8">
-<div class="row">
-<div class="col-sm-12 col-lg-8">
 <h2 id="uart_hyperterminal_it-example-description"><b>UART_HyperTerminal_IT Example Description</b></h2>
 <p>UART transmission (transmit/receive) in Interrupt mode between a board and an HyperTerminal PC application.</p>
 <pre><code>   Board: STM32N6570-DK
@@ -88,6 +86,7 @@
 <li>Open the View &gt; Images.</li>
 <li>Double-click to deselect the second instance of project.out.</li>
 </ul></li>
+<li><p><strong>MDK-ARM</strong> : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.</p></li>
 </ul>
 <h3 id="how-to-use-it"><b>How to use it ?</b></h3>
 <p>In order to make the program work, you must do the following :</p>
@@ -107,8 +106,6 @@
 <li>Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).</li>
 <li>Press the reset button. The code then executes in boot from external Flash mode.</li>
 </ul>
-</div>
-</div>
 </div>
 </div>
 </body>

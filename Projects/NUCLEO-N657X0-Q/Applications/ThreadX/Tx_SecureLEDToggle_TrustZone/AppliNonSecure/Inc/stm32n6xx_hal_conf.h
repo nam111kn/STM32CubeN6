@@ -73,7 +73,7 @@ extern "C" {
   *        (when HSE is used as system clock source, directly or through the PLL).
   */
 #if !defined  (HSE_VALUE)
-#define HSE_VALUE              48000000UL /*!< Value of the External oscillator in Hz */  /* FPGA */
+#define HSE_VALUE              48000000UL /*!< Value of the External oscillator in Hz */
 #endif /* HSE_VALUE */
 
 #if !defined  (HSE_STARTUP_TIMEOUT)
@@ -94,7 +94,7 @@ extern "C" {
   *        (when HSI is used as system clock source, directly or through the PLL).
   */
 #if !defined  (HSI_VALUE)
-#define HSI_VALUE              48000000UL /*!< Value of the Internal oscillator in Hz*/  /* FPGA */
+#define HSI_VALUE              64000000UL /*!< Value of the Internal oscillator in Hz*/
 #endif /* HSI_VALUE */
 
 /**
@@ -110,7 +110,7 @@ extern "C" {
   *        This value is used by the UART, RTC HAL module to compute the system frequency
   */
 #if !defined  (LSE_VALUE)
-#define LSE_VALUE              32000UL   /*!< Value of the External oscillator in Hz*/  /* FPGA */
+#define LSE_VALUE              32000UL   /*!< Value of the External oscillator in Hz*/
 #endif /* LSE_VALUE */
 
 #if !defined  (LSE_STARTUP_TIMEOUT)

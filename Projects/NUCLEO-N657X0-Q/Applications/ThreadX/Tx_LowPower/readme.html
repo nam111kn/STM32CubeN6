@@ -19,8 +19,6 @@
 <body>
 <div class="row">
 <div class="col-sm-12 col-lg-8">
-<div class="row">
-<div class="col-sm-12 col-lg-8">
 <h2 id="tx_lowpower-application-description"><b>Tx_LowPower Application Description</b></h2>
 <p>This application provides an example of Azure RTOS ThreadX stack usage, it shows how to develop an application using ThreadX LowPower feature. It demonstrates how to configure the LowPower feature of Azure RTOS ThreadX stack. In addition, it shows how to use ThreadX MACRO related to the LowPower feature. The main entry function tx_application_define() is then called by ThreadX during kernel start, at this stage, the application creates 1 thread and 1 semaphore:</p>
 <ul>
@@ -72,6 +70,12 @@
 </ul>
 <pre><code>place in RAM_region    { last section FREE_MEM };</code></pre>
 <ul>
+<li>For MDK-ARM:</li>
+</ul>
+<pre><code>either define the RW_IRAM1 region in the &quot;.sct&quot; file
+or modify the line below in &quot;tx_initialize_low_level.S to match the memory region being used
+    LDR r1, =|Image$$RW_IRAM1$$ZI$$Limit|</code></pre>
+<ul>
 <li>For STM32CubeIDE add the following section into the .ld file:</li>
 </ul>
 <pre><code>._threadx_heap :
@@ -121,8 +125,6 @@ Read more in STM32CubeIDE User Guide, chapter: &quot;Linker script&quot;.</code>
 <li>Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).</li>
 <li>Press the reset button. The code then executes in boot from external Flash mode.</li>
 </ul>
-</div>
-</div>
 </div>
 </div>
 </body>

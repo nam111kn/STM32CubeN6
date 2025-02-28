@@ -379,6 +379,23 @@ typedef struct
   uint32_t histogram[12];     /* Histogram of the L, R, G or B component */
 } ISP_StatisticsTypeDef;
 
+/* Sensor delay */
+typedef struct
+{
+  uint8_t delay;              /* Sensor delay */
+} ISP_SensorDelayTypeDef;
+
+/* Meta data will transit through STLINK if validation test is enabled */
+typedef struct
+{
+  uint8_t outputEnable;
+  uint8_t averageL;
+  uint32_t exposureTarget;
+  uint32_t gain;              /* Gain in mdB */
+  uint32_t exposure;          /* Exposure time in micro seconds */
+  uint32_t colorTemp;
+} ISP_MetaTypeDef;
+
 /* IQ parameter */
 typedef struct
 {
@@ -396,6 +413,7 @@ typedef struct
   ISP_ISPGainTypeDef ispGainStatic;
   ISP_ColorConvTypeDef colorConvStatic;
   ISP_GammaTypeDef gamma;
+  ISP_SensorDelayTypeDef sensorDelay;
 } ISP_IQParamTypeDef;
 
 /* Exported constants --------------------------------------------------------*/

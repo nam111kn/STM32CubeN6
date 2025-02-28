@@ -96,8 +96,24 @@ void MX_ETH_Init(void)
    This requires changes in the linker files to expose this memory location.
     + For EWARM add the following section into the .icf file:
      ```
-	 place in RAM_region    { last section FREE_MEM };
-
+     place in RAM_region    { last section FREE_MEM };
+     ```
+    + For MDK-ARM:
+    ```
+    Either define the RW_IRAM1 region in the ".sct" file
+    or modify the line below in "tx_initialize_low_level.S to match the memory region being used
+    LDR r1, =|Image$$RW_IRAM1$$ZI$$Limit|
+    ```
+    + For STM32CubeIDE add the following section into the .ld file:
+    ```
+    ._threadx_heap :
+      {
+         . = ALIGN(8);
+         __RAM_segment_used_end__ = .;
+         . = . + 64K;
+         . = ALIGN(8);
+       } >RAM_D1 AT> RAM_D1
+    ```
 
 #### <b>NetX Duo usage hints</b>
 
@@ -106,27 +122,44 @@ void MX_ETH_Init(void)
 Below is an example of the section declaration for different IDEs.
    + For EWARM ".icf" file
    ```
-   define symbol __ICFEDIT_region_NXDATA_start__ = 0x341F0FFF;
+   define symbol __ICFEDIT_region_NXDATA_start__ = 0x341F1000;
    define symbol __ICFEDIT_region_NXDATA_end__   = 0x341FFFFF;
    define region NXApp_region  = mem:[from __ICFEDIT_region_NXDATA_start__ to __ICFEDIT_region_NXDATA_end__];
    place in NXApp_region { section .NetXPoolSection};
+   ```
 
+   + For MDK-ARM add the following section into the .sct file:
+   ```
+    RW_NXDriverSection 0x341F1000 0xF000  {
+      *(.NetXPoolSection)
+    }
+  ```
+  
+   + For STM32CubeIDE add the following section into the .ld file:
+   ```
+    .nx_data (NOLOAD):
+    {
+        . = ABSOLUTE(0x341F1000);
+        *(.NetXPoolSection)
+
+    } >RAM
+   ```
   This section is then used in the <code> app_azure_rtos.c</code> file to force the <code>nx_byte_pool_buffer</code> allocation.
 
 ```
-/* USER CODE BEGIN NX_Pool_Buffer */
+      /* USER CODE BEGIN NX_Pool_Buffer */
 
-#if defined ( __ICCARM__ ) /* IAR Compiler */
-#pragma location = ".NetXPoolSection"
+      #if defined ( __ICCARM__ ) /* IAR Compiler */
+      #pragma location = ".NetXPoolSection"
 
-#else /* GNU and AC6 compilers */
-__attribute__((section(".NetXPoolSection")))
+      #else /* GNU and AC6 compilers */
+      __attribute__((section(".NetXPoolSection")))
 
-#endif
+      #endif
 
-/* USER CODE END NX_Pool_Buffer */
-static UCHAR  nx_byte_pool_buffer[NX_APP_MEM_POOL_SIZE];
-static TX_BYTE_POOL nx_app_byte_pool;
+      /* USER CODE END NX_Pool_Buffer */
+      static UCHAR  nx_byte_pool_buffer[NX_APP_MEM_POOL_SIZE];
+      static TX_BYTE_POOL nx_app_byte_pool;
 ```
 For more details about the MPU configuration please refer to the [AN4838](https://www.st.com/resource/en/application_note/dm00272912-managing-memory-protection-unit-in-stm32-mcus-stmicroelectronics.pdf)
 
@@ -168,3 +201,6 @@ Next, this program can be run in boot from flash mode. This can be done by follo
  - Next, in resorting again to CubeProgrammer, load the binary and its header (Nx_TimeAwareShaper_Talker_trusted.bin) in Nucleo board external Flash at address 0x7000'0000.
  - Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).
  - Press the reset button. The code then executes in boot from external Flash mode.
+
+
+

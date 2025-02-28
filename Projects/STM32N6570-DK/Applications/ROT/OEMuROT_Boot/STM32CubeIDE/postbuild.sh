@@ -18,6 +18,7 @@ current_log_file="$project_dir/postbuild.log"
 
 # arg1 is the config type (Debug, Release)
 config=$1
+projname=$2
 
 applicfg="$cube_fw_path/Utilities/PC_Software/ROT_AppliConfig/dist/AppliCfg.exe"
 uname | grep -i -e windows -e mingw
@@ -96,7 +97,7 @@ s_data_xml=$provisioningdir/OEMuROT/Images/OEMuROT_S_Data_Image.xml
 ns_data_xml=$provisioningdir/OEMuROT/Images/OEMuROT_NS_Data_Image.xml
 
 # Binary copy
-cp "$project_dir/$config/STM32N6570-DK_OEMuROT_Boot.bin" "$project_dir/../Binary/OEMuROT_Boot.bin" > "$current_log_file" 2>&1
+cp "$project_dir/$config/$projname.bin" "$project_dir/../Binary/OEMuROT_Boot.bin" >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
 # Image signing
@@ -104,218 +105,218 @@ if [ $? != 0 ]; then error; fi
 if [ $? != 0 ]; then error; fi
 
 # Provisioning
-"$python$applicfg" flash --layout "$preprocess_bl2_file" -b s_data_image_number -m RE_S_DATA_IMAGE_NUMBER "$provisioning" --vb >> "$current_log_file" 2>&1
+$python$applicfg flash --layout "$preprocess_bl2_file" -b s_data_image_number -m RE_S_DATA_IMAGE_NUMBER "$provisioning" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" flash --layout "$preprocess_bl2_file" -b ns_data_image_number -m RE_NS_DATA_IMAGE_NUMBER "$provisioning" --vb >> "$current_log_file" 2>&1
+$python$applicfg flash --layout "$preprocess_bl2_file" -b ns_data_image_number -m RE_NS_DATA_IMAGE_NUMBER "$provisioning" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
 # Flash programming
-"$python$applicfg" flash --layout "$preprocess_bl2_file" -b s_data_image_number -m RE_S_DATA_IMAGE_NUMBER "$flash_programming" --vb >> "$current_log_file" 2>&1
+$python$applicfg flash --layout "$preprocess_bl2_file" -b s_data_image_number -m RE_S_DATA_IMAGE_NUMBER "$flash_programming" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" flash --layout "$preprocess_bl2_file" -b ns_data_image_number -m RE_NS_DATA_IMAGE_NUMBER "$flash_programming" --vb >> "$current_log_file" 2>&1
+$python$applicfg flash --layout "$preprocess_bl2_file" -b ns_data_image_number -m RE_NS_DATA_IMAGE_NUMBER "$flash_programming" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" flash --layout "$preprocess_bl2_file" -b appli_s_address -m RE_FLASH_AREA_2_ADDRESS "$flash_programming" --vb >> "$current_log_file" 2>&1
+$python$applicfg flash --layout "$preprocess_bl2_file" -b appli_s_address -m RE_FLASH_AREA_2_ADDRESS "$flash_programming" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" flash --layout "$preprocess_bl2_file" -b data_s_address -m RE_FLASH_AREA_6_ADDRESS "$flash_programming" --vb >> "$current_log_file" 2>&1
+$python$applicfg flash --layout "$preprocess_bl2_file" -b data_s_address -m RE_FLASH_AREA_6_ADDRESS "$flash_programming" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" flash --layout "$preprocess_bl2_file" -b appli_ns_address -m RE_FLASH_AREA_3_ADDRESS "$flash_programming" --vb >> "$current_log_file" 2>&1
+$python$applicfg flash --layout "$preprocess_bl2_file" -b appli_ns_address -m RE_FLASH_AREA_3_ADDRESS "$flash_programming" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" flash --layout "$preprocess_bl2_file" -b data_ns_address -m RE_FLASH_AREA_7_ADDRESS "$flash_programming" --vb >> "$current_log_file" 2>&1
+$python$applicfg flash --layout "$preprocess_bl2_file" -b data_ns_address -m RE_FLASH_AREA_7_ADDRESS "$flash_programming" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" flash --layout "$preprocess_bl2_file" -b last_sector -m RE_FLASH_END_SECTOR -d 0x10000 --decimal "$flash_programming" --vb >> "$current_log_file" 2>&1
+$python$applicfg flash --layout "$preprocess_bl2_file" -b last_sector -m RE_FLASH_END_SECTOR -d 0x10000 --decimal "$flash_programming" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
 # XML files
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_S_PARTITION_SIZE -c S "$s_code_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_S_PARTITION_SIZE -c S "$s_code_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_S_PARTITION_SIZE -c S "$s_code_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_S_PARTITION_SIZE -c S "$s_code_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_NS_PARTITION_SIZE -c S "$ns_code_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_NS_PARTITION_SIZE -c S "$ns_code_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_NS_PARTITION_SIZE -c S "$ns_code_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_NS_PARTITION_SIZE -c S "$ns_code_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_S_DATA_PARTITION_SIZE -c S "$s_data_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_S_DATA_PARTITION_SIZE -c S "$s_data_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_S_DATA_PARTITION_SIZE -c S "$s_data_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_S_DATA_PARTITION_SIZE -c S "$s_data_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_NS_DATA_PARTITION_SIZE -c S "$ns_data_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_NS_DATA_PARTITION_SIZE -c S "$ns_data_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_NS_DATA_PARTITION_SIZE -c S "$ns_data_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_NS_DATA_PARTITION_SIZE -c S "$ns_data_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$s_code_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$s_code_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$s_code_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$s_code_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$ns_code_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$ns_code_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$ns_code_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$ns_code_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$s_data_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$s_data_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$s_data_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$s_data_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$ns_data_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$ns_data_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$ns_data_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlparam --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n "Write Option" -t Data -c --overwrite-only -h 1 -d "" "$ns_data_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$s_code_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$s_code_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$s_code_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$s_code_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval -xml "$s_code_init_xml" -nxml "Firmware download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$s_code_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval -xml "$s_code_init_xml" -nxml "Firmware download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$s_code_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval -xml "$s_code_xml" -nxml "Firmware download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$s_code_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval -xml "$s_code_xml" -nxml "Firmware download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$s_code_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$ns_code_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$ns_code_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$ns_code_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$ns_code_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval -xml "$ns_code_init_xml" -nxml "Firmware download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$ns_code_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval -xml "$ns_code_init_xml" -nxml "Firmware download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$ns_code_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval -xml "$ns_code_xml" -nxml "Firmware download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$ns_code_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval -xml "$ns_code_xml" -nxml "Firmware download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$ns_code_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$s_data_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$s_data_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$s_data_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$s_data_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval -xml "$s_data_init_xml" -nxml "Data download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$s_data_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval -xml "$s_data_init_xml" -nxml "Data download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$s_data_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval -xml "$s_data_xml" -nxml "Data download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$s_data_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval -xml "$s_data_xml" -nxml "Data download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$s_data_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$ns_data_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$ns_data_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$ns_data_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_SCRATCH_SIZE -n "Number of scratch sectors" --decimal "$ns_data_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval -xml "$ns_data_init_xml" -nxml "Data download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$ns_data_init_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval -xml "$ns_data_init_xml" -nxml "Data download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$ns_data_init_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" xmlval -xml "$ns_data_xml" -nxml "Data download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$ns_data_xml" --vb >> "$current_log_file" 2>&1
+$python$applicfg xmlval -xml "$ns_data_xml" -nxml "Data download slot size" -nxml "Number of scratch sectors" --decimal -e "(((val1+1)/val2)+1)" -cond val2 -c M "$ns_data_xml" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
 # Application secure
-"$python$applicfg" linker --layout "$preprocess_bl2_file" -m RE_APPLI_S_ADDRESS -n CODE_S_ADDRESS "$appli_s_ld_file" --vb >> "$current_log_file" 2>&1
+$python$applicfg linker --layout "$preprocess_bl2_file" -m RE_APPLI_S_ADDRESS -n CODE_S_ADDRESS "$appli_s_ld_file" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" linker --layout "$preprocess_bl2_file" -m RE_FLASH_S_PARTITION_SIZE -n CODE_S_SIZE "$appli_s_ld_file" --vb >> "$current_log_file" 2>&1
+$python$applicfg linker --layout "$preprocess_bl2_file" -m RE_FLASH_S_PARTITION_SIZE -n CODE_S_SIZE "$appli_s_ld_file" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" linker --layout "$preprocess_bl2_file" -m RE_DATA_S_ADDRESS -n DATA_S_ADDRESS "$appli_s_ld_file" --vb >> "$current_log_file" 2>&1
+$python$applicfg linker --layout "$preprocess_bl2_file" -m RE_DATA_S_ADDRESS -n DATA_S_ADDRESS "$appli_s_ld_file" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" linker --layout "$preprocess_bl2_file" -m RE_DATA_S_SIZE -n DATA_S_SIZE "$appli_s_ld_file" --vb >> "$current_log_file" 2>&1
+$python$applicfg linker --layout "$preprocess_bl2_file" -m RE_DATA_S_SIZE -n DATA_S_SIZE "$appli_s_ld_file" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_APPLI_S_ADDRESS -n VECT_TAB_BASE_ADDRESS "$appli_s_system_file" --vb >> "$current_log_file" 2>&1
+$python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_APPLI_S_ADDRESS -n VECT_TAB_BASE_ADDRESS "$appli_s_system_file" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_APPLI_NS_ADDRESS -n VTOR_TABLE_NS_START_ADDR "$appli_s_main_file" --vb >> "$current_log_file" 2>&1
+$python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_APPLI_NS_ADDRESS -n VTOR_TABLE_NS_START_ADDR "$appli_s_main_file" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
 # Application non secure
-"$python$applicfg" linker --layout "$preprocess_bl2_file" -m RE_APPLI_NS_ADDRESS -n CODE_NS_ADDRESS "$appli_ns_ld_file" --vb >> "$current_log_file" 2>&1
+$python$applicfg linker --layout "$preprocess_bl2_file" -m RE_APPLI_NS_ADDRESS -n CODE_NS_ADDRESS "$appli_ns_ld_file" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" linker --layout "$preprocess_bl2_file" -m RE_FLASH_NS_PARTITION_SIZE -n CODE_NS_SIZE "$appli_ns_ld_file" --vb >> "$current_log_file" 2>&1
+$python$applicfg linker --layout "$preprocess_bl2_file" -m RE_FLASH_NS_PARTITION_SIZE -n CODE_NS_SIZE "$appli_ns_ld_file" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" linker --layout "$preprocess_bl2_file" -m RE_DATA_NS_ADDRESS -n DATA_NS_ADDRESS "$appli_ns_ld_file" --vb >> "$current_log_file" 2>&1
+$python$applicfg linker --layout "$preprocess_bl2_file" -m RE_DATA_NS_ADDRESS -n DATA_NS_ADDRESS "$appli_ns_ld_file" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" linker --layout "$preprocess_bl2_file" -m RE_DATA_NS_SIZE -n DATA_NS_SIZE "$appli_ns_ld_file" --vb >> "$current_log_file" 2>&1
+$python$applicfg linker --layout "$preprocess_bl2_file" -m RE_DATA_NS_SIZE -n DATA_NS_SIZE "$appli_ns_ld_file" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
-"$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_APPLI_NS_ADDRESS -n VECT_TAB_BASE_ADDRESS "$appli_ns_system_file" --vb >> "$current_log_file" 2>&1
+$python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_APPLI_NS_ADDRESS -n VECT_TAB_BASE_ADDRESS "$appli_ns_system_file" --vb >> "$current_log_file" 2>&1
 if [ $? != 0 ]; then error; fi
 
 # Application flash layout
 # Bypass configuration of appli flash layout file if not present
 if [ -f "$appli_flash_layout" ]; then
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_DOWNLOAD_MENU -n DOWNLOAD_MENU "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_DOWNLOAD_MENU -n DOWNLOAD_MENU "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n MCUBOOT_OVERWRITE_ONLY "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_OVERWRITE -n MCUBOOT_OVERWRITE_ONLY "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_S_DATA_IMAGE_NUMBER -n S_DATA_IMAGE_NUMBER "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_S_DATA_IMAGE_NUMBER -n S_DATA_IMAGE_NUMBER "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_NS_DATA_IMAGE_NUMBER -n NS_DATA_IMAGE_NUMBER "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_NS_DATA_IMAGE_NUMBER -n NS_DATA_IMAGE_NUMBER "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_DATA2_NS_ADDRESS -n NS_DATA_ADDRESS "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_DATA2_NS_ADDRESS -n NS_DATA_ADDRESS "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_0_OFFSET -n S_APPLI_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_0_OFFSET -n S_APPLI_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_1_OFFSET -n NS_APPLI_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_1_OFFSET -n NS_APPLI_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_4_OFFSET -n S_DATA_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_4_OFFSET -n S_DATA_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_5_OFFSET -n NS_DATA_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_5_OFFSET -n NS_DATA_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_2_OFFSET -n S_APPLI_SECONDARY_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_2_OFFSET -n S_APPLI_SECONDARY_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_3_OFFSET -n NS_APPLI_SECONDARY_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_3_OFFSET -n NS_APPLI_SECONDARY_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_6_OFFSET -n S_DATA_SECONDARY_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_6_OFFSET -n S_DATA_SECONDARY_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_7_OFFSET -n NS_DATA_SECONDARY_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_7_OFFSET -n NS_DATA_SECONDARY_OFFSET "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_S_PARTITION_SIZE -n S_APPLI_PARTITION_SIZE "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_S_PARTITION_SIZE -n S_APPLI_PARTITION_SIZE "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_NS_PARTITION_SIZE -n NS_APPLI_PARTITION_SIZE "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_NS_PARTITION_SIZE -n NS_APPLI_PARTITION_SIZE "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_6_SIZE -n S_DATA_PARTITION_SIZE "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_6_SIZE -n S_DATA_PARTITION_SIZE "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
-  "$python$applicfg" definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_7_SIZE -n NS_DATA_PARTITION_SIZE "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
+  $python$applicfg definevalue --layout "$preprocess_bl2_file" -m RE_FLASH_AREA_7_SIZE -n NS_DATA_PARTITION_SIZE "$appli_flash_layout" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 fi
 

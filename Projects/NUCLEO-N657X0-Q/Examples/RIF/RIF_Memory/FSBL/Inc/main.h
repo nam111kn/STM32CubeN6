@@ -59,21 +59,20 @@ typedef funcptr funcptr_NS;
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-
+#define LED1_Pin GPIO_PIN_8
+#define LED1_GPIO_Port GPIOG
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
 
 /* USER CODE END EM */
-#define LED1_Pin GPIO_PIN_8
-#define LED1_GPIO_Port GPIOG
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
-void HAL_RIF_ILA_Callback(uint32_t PeriphId);
-/* USER CODE BEGIN EFP */
 
+/* USER CODE BEGIN EFP */
+void HAL_RIF_ILA_Callback(uint32_t PeriphId);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

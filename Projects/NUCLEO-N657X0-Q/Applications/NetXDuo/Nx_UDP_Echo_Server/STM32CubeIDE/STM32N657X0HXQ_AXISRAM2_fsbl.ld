@@ -204,7 +204,7 @@ SECTIONS
 
   .nx_data (NOLOAD):
  {
-    . = ABSOLUTE(0x341F8400);
+    . = ABSOLUTE(0x341F8800);
     *(.NetXPoolSection)
 
  } >RAM AT> ROM

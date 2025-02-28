@@ -246,6 +246,7 @@ static void MX_LTDC_Init(void)
   }
   pLayerFlexYUVFullPlanar.Layer.WindowX0 = 0;
   pLayerFlexYUVFullPlanar.Layer.WindowX1 = 200;
+  pLayerFlexYUVFullPlanar.Layer.WindowY0 = 0;
   pLayerFlexYUVFullPlanar.Layer.WindowY1 = 163;
   pLayerFlexYUVFullPlanar.Layer.Alpha = 255;
   pLayerFlexYUVFullPlanar.Layer.Alpha0 = 0;

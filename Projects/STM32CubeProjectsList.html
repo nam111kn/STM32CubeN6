@@ -102,58 +102,6 @@ to build any firmware application. Note that security is enabled by default on C
         <td>0</td>
       </tr>
       <tr align=center>
-        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" rowspan=2><p id="Templates_ROT">Templates_ROT</p></td>
-        <td align=left rowspan=1><p id="-">-</p></td>
-        <td align=left><p id="-">-</p></td>
-        <td align=left>
-This project provides a OEMuROT boot path application example. Boot is performed through OEMuROT boot path after authenticity and integrity checks of the project firmware and project data
-images.
-</td>
-        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
-        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
-        <td>-</td>
-        <td><font size="5" color=green>X</font></td>
-        <td>-</td>
-      </tr>
-      <tr style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>
-        <td colspan="3"><b>Total number of templates_rot</b></td><td>1</td>
-        <td>1</td>
-        <td>0</td>
-        <td>1</td>
-        <td>0</td>
-      </tr>
-      <tr align=center>
-        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" rowspan=3><p id="ROT_Provisioning">ROT_Provisioning</p></td>
-        <td align=left rowspan=2><p id="-">-</p></td>
-        <td align=left><p id="BootROM">BootROM</p></td>
-        <td align=left>
-This section provides the necessary scripts to generate and program BootROM keys.
-</td>
-        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
-        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
-        <td>-</td>
-        <td><font size="5" color=green>X</font></td>
-        <td>-</td>
-      </tr>
-      <tr align=center>
-        <td align=left><p id="OEMuROT">OEMuROT</p></td>
-        <td align=left>
-This section provides available configuration scripts for OEMuROT example.
-</td>
-        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
-        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
-        <td>-</td>
-        <td><font size="5" color=green>X</font></td>
-        <td>-</td>
-      </tr>
-      <tr style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>
-        <td colspan="3"><b>Total number of rot_provisioning</b></td><td>2</td>
-        <td>2</td>
-        <td>0</td>
-        <td>2</td>
-        <td>0</td>
-      </tr>
-      <tr align=center>
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" rowspan=6><p id="Templates">Templates</p></td>
         <td align=left rowspan=5><p id="-">-</p></td>
         <td align=left><p id="Template">Template</p></td>
@@ -217,6 +165,57 @@ This project provides a reference TrustZone Isolation XIP template based on the 
         <td>0</td>
         <td>5</td>
         <td>5</td>
+      </tr>
+      <tr align=center>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" rowspan=3><p id="ROT_Provisioning">ROT_Provisioning</p></td>
+        <td align=left rowspan=2><p id="-">-</p></td>
+        <td align=left><p id="BootROM">BootROM</p></td>
+        <td align=left>
+This section provides the necessary scripts to generate and program BootROM keys.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>2</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="OEMuROT">OEMuROT</p></td>
+        <td align=left>
+This section provides an overview of the available scripts for OEMuROT.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>2</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>
+        <td colspan="3"><b>Total number of rot_provisioning</b></td><td>4</td>
+        <td>2</td>
+        <td>0</td>
+        <td>2</td>
+        <td>2</td>
+      </tr>
+      <tr align=center>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" rowspan=2><p id="Templates_ROT">Templates_ROT</p></td>
+        <td align=left rowspan=1><p id="-">-</p></td>
+        <td align=left><p id="-">-</p></td>
+        <td align=left>
+This project provides a OEMuROT boot path application example.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td><font size="5" color=green>X</font></td>
+        <td>-</td>
+      </tr>
+      <tr style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>
+        <td colspan="3"><b>Total number of templates_rot</b></td><td>1</td>
+        <td>1</td>
+        <td>0</td>
+        <td>1</td>
+        <td>0</td>
       </tr>
       <tr align=center>
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" rowspan=2><p id="Templates_LL">Templates_LL</p></td>
@@ -288,7 +287,7 @@ performed successively in a scan sequence.
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
         <td>-</td>
         <td>-</td>
-        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr align=center>
         <td align=left><p id="ADC_SingleConversion_TriggerTimer_DMA">ADC_SingleConversion_TriggerTimer_DMA</p></td>
@@ -484,7 +483,7 @@ SRAM through the HAL API. Isolation of the HPDMA channel is aligned with targete
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
         <td>-</td>
         <td>-</td>
-        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr align=center>
         <td align=left><p id="DMA_RIF_management">DMA_RIF_management</p></td>
@@ -495,7 +494,7 @@ How to use CID information to isolate DMA channels.
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
         <td>-</td>
         <td>-</td>
-        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr align=center>
         <td align=left><p id="DMA_Trigger">DMA_Trigger</p></td>
@@ -564,7 +563,7 @@ This example describes how to configure the FMC controller to access the NAND me
 </td>
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
-        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>CubeMx</font></td>
         <td>-</td>
         <td>-</td>
       </tr>
@@ -912,7 +911,7 @@ This project provides a description of how to encrypt and decrypt data from exte
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
         <td>-</td>
-        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>CubeMx</font></td>
         <td>-</td>
       </tr>
       <tr align=center>
@@ -924,7 +923,7 @@ This project demonstrates how to configure MDF to perform PCM record in DMA circ
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
         <td>-</td>
-        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>CubeMx</font></td>
         <td>-</td>
       </tr>
       <tr align=center>
@@ -1039,7 +1038,7 @@ reset or the RTC wakeup timer.
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
         <td>-</td>
         <td>-</td>
-        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr align=center>
         <td align=left rowspan=1><p id="RAMCFG">RAMCFG</p></td>
@@ -1098,7 +1097,7 @@ This example describes how to use the RIF HAL API to configure a RISAF in order 
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
         <td>-</td>
         <td>-</td>
-        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr align=center>
         <td align=left><p id="RIF_Peripheral">RIF_Peripheral</p></td>
@@ -1156,7 +1155,7 @@ Configuration of the active tamper detection with backup registers erase.
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
         <td>-</td>
         <td>-</td>
-        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr align=center>
         <td align=left><p id="RTC_Alarm">RTC_Alarm</p></td>
@@ -1167,7 +1166,7 @@ Configuration and generation of an RTC alarm using the RTC HAL API.
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
         <td>-</td>
         <td>-</td>
-        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr align=center>
         <td align=left><p id="RTC_Tamper">RTC_Tamper</p></td>
@@ -1178,7 +1177,7 @@ Configuration of the tamper detection with backup registers erase.
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
         <td>-</td>
         <td>-</td>
-        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr align=center>
         <td align=left><p id="RTC_TimeStamp">RTC_TimeStamp</p></td>
@@ -1189,7 +1188,7 @@ Configuration of the RTC HAL API to demonstrate the timestamp feature.
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
         <td>-</td>
         <td>-</td>
-        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr align=center>
         <td align=left rowspan=1><p id="SD">SD</p></td>
@@ -1536,7 +1535,21 @@ How to use an XSPI PSRAM memory in memory-mapped mode.
         <td>88</td>
       </tr>
       <tr align=center>
-        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" rowspan=6><p id="Examples_LL">Examples_LL</p></td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" rowspan=31><p id="Examples_LL">Examples_LL</p></td>
+        <td align=left rowspan=1><p id="CORTEX">CORTEX</p></td>
+        <td align=left><p id="CORTEX_MPU">CORTEX_MPU</p></td>
+        <td align=left>
+Presentation of the MPU features. This example configures MPU attributes of different
+MPU regions then configures a memory area as privileged read-only, and attempts to
+perform read and write operations in different modes.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
         <td align=left rowspan=1><p id="EXTI">EXTI</p></td>
         <td align=left><p id="EXTI_ToggleLedOnIT_Init">EXTI_ToggleLedOnIT_Init</p></td>
         <td align=left>
@@ -1567,7 +1580,75 @@ is initialized with LL initialization function to demonstrate LL init usage.
         <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr align=center>
-        <td align=left rowspan=1><p id="RCC">RCC</p></td>
+        <td align=left rowspan=3><p id="I2C">I2C</p></td>
+        <td align=left><p id="I2C_TwoBoards_MasterRx_SlaveTx_IT_Init">I2C_TwoBoards_MasterRx_SlaveTx_IT_Init</p></td>
+        <td align=left>
+How to handle the reception of one data byte from an I2C slave device
+by an I2C master device. Both devices operate in interrupt mode. The peripheral
+is initialized with LL unitary service functions to optimize for performance
+and size.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="I2C_TwoBoards_MasterTx_SlaveRx_Init">I2C_TwoBoards_MasterTx_SlaveRx_Init</p></td>
+        <td align=left>
+How to transmit data bytes from an I2C master device using polling mode
+to an I2C slave device using interrupt mode. The peripheral is initialized
+with LL unitary service functions to optimize for performance and size.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="I2C_TwoBoards_WakeUpFromStop_IT_Init">I2C_TwoBoards_WakeUpFromStop_IT_Init</p></td>
+        <td align=left>
+How to handle the reception of a data byte from an I2C slave device in
+Stop mode by an I2C master device, both using interrupt mode. The
+peripheral is initialized with LL unitary service functions to optimize for
+performance and size.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left rowspan=1><p id="IWDG">IWDG</p></td>
+        <td align=left><p id="IWDG_RefreshUntilUserEvent_Init">IWDG_RefreshUntilUserEvent_Init</p></td>
+        <td align=left>
+How to configure the IWDG peripheral to ensure periodical counter update and
+generate an MCU IWDG reset when a USER push-button is pressed. The peripheral
+is initialized with LL unitary service functions to optimize
+for performance and size.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left rowspan=3><p id="RCC">RCC</p></td>
+        <td align=left><p id="RCC_OutputSystemClockOnMCO">RCC_OutputSystemClockOnMCO</p></td>
+        <td align=left>
+Configuration of MCO pin (PC9) to output the system clock.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
         <td align=left><p id="RCC_UseHSEasSystemClock">RCC_UseHSEasSystemClock</p></td>
         <td align=left>
 Use of the RCC LL API to start the HSE and use it as system clock.
@@ -1579,7 +1660,31 @@ Use of the RCC LL API to start the HSE and use it as system clock.
         <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr align=center>
-        <td align=left rowspan=1><p id="RTC">RTC</p></td>
+        <td align=left><p id="RCC_UseHSI_PLLasSystemClock">RCC_UseHSI_PLLasSystemClock</p></td>
+        <td align=left>
+Modification of the PLL parameters in run time.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left rowspan=1><p id="RNG">RNG</p></td>
+        <td align=left><p id="RNG_GenerateRandomNumbers">RNG_GenerateRandomNumbers</p></td>
+        <td align=left>
+Configuration of the RNG to generate 32-bit long random numbers. The peripheral initialization uses LL unitary service
+functions for optimization purposes (performance and size).
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left rowspan=2><p id="RTC">RTC</p></td>
         <td align=left><p id="RTC_Alarm_Init">RTC_Alarm_Init</p></td>
         <td align=left>
 Configuration of the RTC LL API to configure and generate an alarm using the RTC peripheral. The peripheral
@@ -1589,10 +1694,146 @@ initialization uses the LL initialization function.
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
         <td>-</td>
         <td>-</td>
-        <td><font size="5" color=green>X</font></td>
+        <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr align=center>
-        <td align=left rowspan=1><p id="TIM">TIM</p></td>
+        <td align=left><p id="RTC_TimeStamp_Init">RTC_TimeStamp_Init</p></td>
+        <td align=left>
+Configuration of the Timestamp using the RTC LL API. The peripheral initialization
+uses LL unitary service functions for optimization purposes (performance and size).
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left rowspan=3><p id="SPI">SPI</p></td>
+        <td align=left><p id="SPI_OneBoard_HalfDuplex_DMA_Init">SPI_OneBoard_HalfDuplex_DMA_Init</p></td>
+        <td align=left>
+Configuration of GPIO and SPI peripherals to transmit
+bytes from an SPI Master device to an SPI Slave device in DMA mode. This example
+is based on the STM32N6xx SPI LL API. The peripheral initialization uses the
+LL initialization function to demonstrate LL init usage.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="SPI_TwoBoards_FullDuplex_DMA_Master_Init">SPI_TwoBoards_FullDuplex_DMA_Master_Init</p></td>
+        <td align=left>
+Data buffer transmission and receptionvia SPI using DMA mode. This example is
+based on the STM32N6xx SPI LL API. The peripheral initialization uses
+LL unitary service functions for optimization purposes (performance and size).
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="SPI_TwoBoards_FullDuplex_DMA_Slave_Init">SPI_TwoBoards_FullDuplex_DMA_Slave_Init</p></td>
+        <td align=left>
+Data buffer transmission and receptionvia SPI using DMA mode. This example is
+based on the STM32N6xx SPI LL API. The peripheral initialization uses
+LL unitary service functions for optimization purposes (performance and size).
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left rowspan=7><p id="TIM">TIM</p></td>
+        <td align=left><p id="TIM_BreakAndDeadtime_Init">TIM_BreakAndDeadtime_Init</p></td>
+        <td align=left>
+Configuration of the TIM peripheral to
+generate three center-aligned PWM and complementary PWM signals,
+insert a defined deadtime value,
+use the break feature,
+and lock the break and dead-time configuration.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="TIM_DMA_Init">TIM_DMA_Init</p></td>
+        <td align=left>
+Use of the DMA with a timer update request
+to transfer data from memory to Timer Capture Compare Register 3 (TIMx_CCR3). This
+example is based on the STM32N6xx TIM LL API. The peripheral initialization
+uses LL unitary service functions for optimization purposes (performance and size).
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="TIM_InputCapture_Init">TIM_InputCapture_Init</p></td>
+        <td align=left>
+Use of the TIM peripheral to measure a periodic signal frequency
+provided either by an external signal generator or by
+another timer instance. This example is based on the STM32N6xx TIM
+LL API. The peripheral initialization uses LL unitary service functions
+for optimization purposes (performance and size).
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="TIM_OnePulse_Init">TIM_OnePulse_Init</p></td>
+        <td align=left>
+Configuration of a timer to generate a positive pulse in
+Output Compare mode with a length of tPULSE and after a delay of tDELAY. This example
+is based on the STM32N6xx TIM LL API. The peripheral initialization uses
+LL initialization function to demonstrate LL Init.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="TIM_OutputCompare_Init">TIM_OutputCompare_Init</p></td>
+        <td align=left>
+Configuration of the TIM peripheral to generate an output 
+waveform in different output compare modes. This example is based on the 
+STM32N6xx TIM LL API. The peripheral initialization uses 
+LL unitary service functions for optimization purposes (performance and size).
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="TIM_PWMOutput_Init">TIM_PWMOutput_Init</p></td>
+        <td align=left>
+Use of a timer peripheral to generate a PWM output signal and update the PWM duty cycle.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
         <td align=left><p id="TIM_TimeBase_Init">TIM_TimeBase_Init</p></td>
         <td align=left>
 Configuration of the TIM peripheral to generate a timebase. This 
@@ -1605,12 +1846,107 @@ uses LL unitary service functions for optimization purposes (performance and siz
         <td>-</td>
         <td><font size="5" color=green>CubeMx</font></td>
       </tr>
+      <tr align=center>
+        <td align=left rowspan=4><p id="USART">USART</p></td>
+        <td align=left><p id="USART_Communication_Rx_IT_Continuous_VCP_Init">USART_Communication_Rx_IT_Continuous_VCP_Init</p></td>
+        <td align=left>
+This example shows how to configure GPIO and USART peripheral for continuously receiving characters
+from HyperTerminal (PC) in Asynchronous mode using Interrupt mode. Peripheral initialization is
+done using LL unitary services functions for optimization purpose (performance and size).
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="USART_Communication_Rx_IT_VCP_Init">USART_Communication_Rx_IT_VCP_Init</p></td>
+        <td align=left>
+This example shows how to configure GPIO and USART peripheral for receiving characters
+from HyperTerminal (PC) in Asynchronous mode using Interrupt mode. Peripheral initialization is done
+using LL initialization function to demonstrate LL init usage.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="USART_Communication_Tx_IT_VCP_Init">USART_Communication_Tx_IT_VCP_Init</p></td>
+        <td align=left>
+This example shows how to configure GPIO and USART peripheral to send characters
+asynchronously to HyperTerminal (PC) in Interrupt mode. This example is based on
+STM32N6xx USART LL API. Peripheral initialization is done using LL unitary services
+functions for optimization purpose (performance and size).
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="USART_Communication_Tx_VCP_Init">USART_Communication_Tx_VCP_Init</p></td>
+        <td align=left>
+This example shows how to configure GPIO and USART peripherals to send characters
+asynchronously to an HyperTerminal (PC) in Polling mode. If the transfer could not
+be completed within the allocated time, a timeout allows to exit from the sequence
+with a Timeout error code. This example is based on STM32N6xx USART LL API. Peripheral
+initialization is done using LL unitary services functions for optimization purpose
+(performance and size).
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left rowspan=2><p id="UTILS">UTILS</p></td>
+        <td align=left><p id="UTILS_ConfigureSystemClock">UTILS_ConfigureSystemClock</p></td>
+        <td align=left>
+Use of UTILS LL API to configure the system clock using PLL with HSI as source clock. 
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="UTILS_ReadDeviceInfo">UTILS_ReadDeviceInfo</p></td>
+        <td align=left>
+This example reads the UID, Device ID and Revision ID and saves
+them into a global information buffer.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left rowspan=1><p id="WWDG">WWDG</p></td>
+        <td align=left><p id="WWDG_RefreshUntilUserEvent_Init">WWDG_RefreshUntilUserEvent_Init</p></td>
+        <td align=left>
+Configuration of the WWDG to periodically update the counter and
+generate an MCU WWDG reset when a user button is pressed. The peripheral initialization
+uses the LL unitary service functions for optimization purposes (performance and size).
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
       <tr style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>
-        <td colspan="3"><b>Total number of examples_ll</b></td><td>5</td>
-        <td>5</td>
+        <td colspan="3"><b>Total number of examples_ll</b></td><td>30</td>
+        <td>30</td>
         <td>0</td>
         <td>0</td>
-        <td>5</td>
+        <td>30</td>
       </tr>
       <tr align=center>
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" rowspan=2><p id="Examples_MIX">Examples_MIX</p></td>
@@ -1636,7 +1972,7 @@ and LL API, the LL API being used for performance improvement.
         <td>1</td>
       </tr>
       <tr align=center>
-        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" rowspan=47><p id="Applications">Applications</p></td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" rowspan=50><p id="Applications">Applications</p></td>
         <td align=left rowspan=1><p id="-">-</p></td>
         <td align=left><p id="OpenBootloader">OpenBootloader</p></td>
         <td align=left>
@@ -1711,7 +2047,7 @@ and stops file operations from and into the SD card.
         <td>-</td>
       </tr>
       <tr align=center>
-        <td align=left rowspan=12><p id="NetXDuo">NetXDuo</p></td>
+        <td align=left rowspan=13><p id="NetXDuo">NetXDuo</p></td>
         <td align=left><p id="Nx_CreditBasedShaper">Nx_CreditBasedShaper</p></td>
         <td align=left>
 This application provides an example of Azure RTOS NetX/NetXDuo stack usage.
@@ -1764,6 +2100,17 @@ This application provides an example of Azure RTOS NetX/NetXDuo stack usage.
         <td>-</td>
         <td><font size="5" color=green>X</font></td>
         <td>-</td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="Nx_PTP_Client">Nx_PTP_Client</p></td>
+        <td align=left>
+ This application provides an example of Azure RTOS NetX/NetXDuo stack usage.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td>-</td>
+        <td><font size="5" color=green>X</font></td>
       </tr>
       <tr align=center>
         <td align=left><p id="Nx_SNTP_Client">Nx_SNTP_Client</p></td>
@@ -1846,24 +2193,25 @@ This application provides an example of Azure RTOS NetX Duo stack usage on STM32
         <td align=left rowspan=2><p id="ROT">ROT</p></td>
         <td align=left><p id="OEMuROT_Appli">OEMuROT_Appli</p></td>
         <td align=left>
-This project provides a OEMuROT boot path application example. Boot is performed through OEMuROT boot path after authenticity and the integrity checks of the project firmware and project data images.
+This project provides an OEMuROT application example. This application will display a menu on the console that allows
+the download of a new versions of applications and data images.
 </td>
-        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>2</td>
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
         <td>-</td>
         <td><font size="5" color=green>X</font></td>
-        <td>-</td>
+        <td><font size="5" color=green>X</font></td>
       </tr>
       <tr align=center>
         <td align=left><p id="OEMuROT_Boot">OEMuROT_Boot</p></td>
         <td align=left>
-This project provides an OEMuROT example. OEMuROT boot path performs authenticity and the integrity checks of the project firmware and data images.
+This project provides an OEMuROT boot example.
 </td>
-        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>2</td>
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
         <td>-</td>
         <td><font size="5" color=green>X</font></td>
-        <td>-</td>
+        <td><font size="5" color=green>X</font></td>
       </tr>
       <tr align=center>
         <td align=left rowspan=4><p id="ThreadX">ThreadX</p></td>
@@ -1968,7 +2316,7 @@ This application is a USBPD type C Provider using Azure RTOS.
         <td>-</td>
       </tr>
       <tr align=center>
-        <td align=left rowspan=13><p id="USBX">USBX</p></td>
+        <td align=left rowspan=14><p id="USBX">USBX</p></td>
         <td align=left><p id="Ux_Device_Audio_2.0">Ux_Device_Audio_2.0</p></td>
         <td align=left>
 This application provides an example of Azure RTOS USBX stack usage on STM32N6570-DK board, it shows how to develop USB Device communication Class "AUDIO" based application.
@@ -2117,7 +2465,29 @@ This application provides an example of Azure RTOS USBX stack usage. It shows ho
         <td>-</td>
       </tr>
       <tr align=center>
-        <td align=left rowspan=4><p id="VENC">VENC</p></td>
+        <td align=left><p id="Ux_Host_VIDEO">Ux_Host_VIDEO</p></td>
+        <td align=left>
+This application provides an example of Azure RTOS USBX stack usage. It shows how to develop USB Host Video able to enumerate and communicate with a webcam.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td><font size="5" color=green>X</font></td>
+        <td>-</td>
+      </tr>
+      <tr align=center>
+        <td align=left rowspan=5><p id="VENC">VENC</p></td>
+        <td align=left><p id="VENC_JPEG_Encoding">VENC_JPEG_Encoding</p></td>
+        <td align=left>
+This project demonstrates the use of the STM32N6 video encoder peripheral for JPEG encoding.<br>It is targeted to run on STM32N657xx device on STM32N6570-DK board from STMicroelectronics.
+</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>1</td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center></td>
+        <td>-</td>
+        <td><font size="5" color=green>X</font></td>
+        <td>-</td>
+      </tr>
+      <tr align=center>
         <td align=left><p id="VENC_RTSP_Server">VENC_RTSP_Server</p></td>
         <td align=left>
 This application provides an example of the H264 video encoder streamed through Azure RTOS NetX/NetXDuo on STM32N6570-DK board.
@@ -2163,18 +2533,18 @@ it shows how to develop a USB video device using the camera pipeline and VENC IP
         <td>-</td>
       </tr>
       <tr style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>
-        <td colspan="3"><b>Total number of applications</b></td><td>48</td>
-        <td>46</td>
+        <td colspan="3"><b>Total number of applications</b></td><td>53</td>
+        <td>49</td>
         <td>0</td>
-        <td>27</td>
-        <td>21</td>
+        <td>29</td>
+        <td>24</td>
       </tr>
       <tr style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>
-      	<td colspan="4"><b>Total number of projects</b></td><td>186</td>
-          <td>171</td>
+      	<td colspan="4"><b>Total number of projects</b></td><td>218</td>
+          <td>199</td>
       	<td>3</td>
-      	<td>62</td>
-      	<td>121</td>
+      	<td>64</td>
+      	<td>151</td>
       </tr>
     </table>
   </body>

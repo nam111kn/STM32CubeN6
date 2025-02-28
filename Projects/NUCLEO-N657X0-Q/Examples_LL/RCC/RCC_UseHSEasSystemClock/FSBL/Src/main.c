@@ -225,6 +225,7 @@ void SystemClock_Config(void)
   LL_Init1msTick(600000000);
 
   LL_SetSystemCoreClock(600000000);
+  LL_RCC_EnableMCO(LL_RCC_MCO1);
   LL_RCC_ConfigMCO(LL_RCC_MCO1SOURCE_SYSA, LL_RCC_MCO1_DIV_10);
 }
 
@@ -236,8 +237,8 @@ void SystemClock_Config(void)
 static void MX_GPIO_Init(void)
 {
   LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
+  /* USER CODE BEGIN MX_GPIO_Init_1 */
+  /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   LL_AHB4_GRP1_EnableClock(LL_AHB4_GRP1_PERIPH_GPIOG);
@@ -263,8 +264,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = LL_GPIO_AF_0;
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
+  /* USER CODE BEGIN MX_GPIO_Init_2 */
+  /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */

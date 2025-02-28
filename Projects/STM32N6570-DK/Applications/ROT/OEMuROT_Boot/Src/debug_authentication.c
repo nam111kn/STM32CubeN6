@@ -21,6 +21,7 @@
 #include "bootutil_priv.h"
 #include "bootutil/crypto/sha256.h"
 #include "low_level_otp.h"
+#include "debug_authentication.h"
 
 /* Private defines -----------------------------------------------------------*/
 #define DEBUG_REQUEST_MESSAGE "OEDA"
@@ -33,8 +34,14 @@
 
 #define PASSWORD_LENGTH_MIN 4   /* Password minimum length */
 #define PASSWORD_LENGTH_MAX 16  /* Password maximum length */
-#define HASH_SIZE 256           /* Hash length size */
 #define BUFFER_SIZE 256         /* Buffer size that holds TLVs */
+#define TLV_BUFFER_SIZE 64      /* TLV buffer size in bytes */
+#define RESPONSE_BUFFER_SIZE 10 /* TLV buffer size in bytes */
+
+#define SHA256_LEN_BYTES 0x20   /* SHA-256 hash length in bytes (32 bytes) */
+#define SHA256_LEN_WORDS 0x08   /* SHA-256 hash length in words (8 words) */
+
+#define CHALLENGE_VECTOR_SIZE 0x20  /* Challenge vector size in bytes (32 bytes) */
 
 /* Private typedef -----------------------------------------------------------*/
 /** \brief TLV type for extensions
@@ -45,14 +52,14 @@ typedef struct
   uint16_t _reserved; //!< Must be set to zero.
   uint16_t type_id;
   uint32_t length_in_bytes;
-  uint8_t value[100];
+  uint8_t value[TLV_BUFFER_SIZE];
 } psa_tlv_t;
 
 typedef struct {
     uint16_t _reserved; //!< Must be set to zero.
     uint16_t status;
     uint32_t data_count;
-    uint32_t data[10];
+    uint32_t data[RESPONSE_BUFFER_SIZE];
 } response_packet_t;
 
 /** \brief Version type
@@ -71,7 +78,7 @@ typedef struct
 {
   psa_version_t format_version;
   uint16_t _reserved;
-  uint8_t challenge_vector[32];
+  uint8_t challenge_vector[CHALLENGE_VECTOR_SIZE];
 } psa_auth_challenge_t;
 
 /** \brief Commands
@@ -144,10 +151,8 @@ static uint32_t byte_count = 0;
 static uint8_t da_password_provisioned = 0;
 
 /* Private function prototypes -----------------------------------------------*/
-HAL_StatusTypeDef debug_authentication(void);
 static HAL_StatusTypeDef NonSec_Dbg_AuthConfig(uint32_t NonSec_Dbg_Auth);
 static HAL_StatusTypeDef OTP_Get_Password_Hash(uint32_t* hash);
-static HAL_StatusTypeDef OTP_Get_Lifecycle_Status(uint8_t* secure_boot, uint8_t* prov_done);
 
 static HAL_StatusTypeDef send_discovery_message(void);
 static void add_tlv(uint16_t id, uint8_t *buffer, uint32_t length_in_bytes);
@@ -182,8 +187,8 @@ HAL_StatusTypeDef debug_authentication(void)
   HAL_StatusTypeDef status = HAL_ERROR;
   fih_int fih_rc = FIH_FAILURE;
 
-  uint8_t computed_hash[32] = {0};
-  uint32_t stored_hash[8] = {0};
+  uint8_t computed_hash[SHA256_LEN_BYTES] = {0};
+  uint32_t stored_hash[SHA256_LEN_WORDS] = {0};
 
   /* Enable DBGMCU */
   DBGMCU_DBG_ENABLE();
@@ -217,7 +222,7 @@ HAL_StatusTypeDef debug_authentication(void)
           if (status == HAL_OK && psa_tlv.type_id == SDP_AUTH_START_CMD)
           {
             /* Send challenge */
-            rep.data_count = sizeof(psa_auth_challenge) / 4;
+            rep.data_count = sizeof(psa_auth_challenge) / 4; /* Convert bytes to words */
             memcpy(&rep.data, &psa_auth_challenge, sizeof(psa_auth_challenge));
             status = send_message((uint32_t*)&rep, 8 + sizeof(psa_auth_challenge), DA_TIMEOUT);
             if (status == HAL_OK)
@@ -247,7 +252,7 @@ HAL_StatusTypeDef debug_authentication(void)
                   if (OTP_Get_Password_Hash(stored_hash) == HAL_OK)
                   {
                     /* Compare between received password hash and stored hash */
-                    fih_rc = boot_fih_memequal(stored_hash, computed_hash, 32);
+                    fih_rc = boot_fih_memequal(stored_hash, computed_hash, SHA256_LEN_BYTES);
                     if (fih_eq(fih_rc, FIH_SUCCESS))
                     {
                       /* Set DBG authorizations */
@@ -270,6 +275,43 @@ HAL_StatusTypeDef debug_authentication(void)
 }
 
 /**
+ * @brief Retrieve Lifecycle Status
+ *
+ * This function reads the One-Time Programmable (OTP) memory to determine
+ * the lifecycle status of the device.
+ *
+ * @param[out] secure_boot Pointer to a variable where the secure boot status will be stored.
+ *                         - 0: Secure boot is not enabled
+ *                         - > 0: Secure boot is enabled
+ * @param[out] prov_done   Pointer to a variable where the provisioning status will be stored.
+ *                         - 0: Provisioning is not done
+ *                         - > 0: Provisioning is done
+ *
+ * @return HAL_StatusTypeDef - status of the operation.
+ */
+HAL_StatusTypeDef OTP_Get_Lifecycle_Status(uint8_t* secure_boot, uint8_t* prov_done)
+{
+  BSEC_HandleTypeDef sBsecHandler = {.Instance = BSEC};
+  HAL_StatusTypeDef status = HAL_ERROR;
+  uint32_t otp_value = 0;
+
+  /* Enable BSEC & SYSCFG clocks to ensure BSEC data accesses */
+  __HAL_RCC_BSEC_CLK_ENABLE();
+  __HAL_RCC_SYSCFG_CLK_ENABLE();
+
+  status = HAL_BSEC_OTP_Read(&sBsecHandler, OTP_BOOTROM_CONFIG_9, &otp_value);
+  if (status != HAL_OK)
+  {
+    return status;
+  }
+
+  *secure_boot = otp_value & 0x00000003;
+  *prov_done = (otp_value & 0x000001C0) >> 5;
+
+  return HAL_OK;
+}
+
+/**
   * @brief Read DA password hash from OTP words.
   *
   * This function reads the One-Time Programmable (OTP) memory to retrieve
@@ -289,7 +331,7 @@ static HAL_StatusTypeDef OTP_Get_Password_Hash(uint32_t* hash)
   __HAL_RCC_SYSCFG_CLK_ENABLE();
 
   /* Read password hash located in OTP */
-  for (i = 0; i < 8; i++)
+  for (i = 0; i < SHA256_LEN_WORDS; i++)
   {
     status = HAL_BSEC_OTP_Read(&sBsecHandler, OTP_DEBUG_AUTH_PASSWORD_HASH_NUMBER + i, &otp_value);
     if (status != HAL_OK)
@@ -307,43 +349,6 @@ static HAL_StatusTypeDef OTP_Get_Password_Hash(uint32_t* hash)
       da_password_provisioned = 1;
     }
   }
-
-  return HAL_OK;
-}
-
-/**
- * @brief Retrieve Lifecycle Status
- *
- * This function reads the One-Time Programmable (OTP) memory to determine
- * the lifecycle status of the device.
- *
- * @param[out] secure_boot Pointer to a variable where the secure boot status will be stored.
- *                         - 0: Secure boot is not enabled
- *                         - > 0: Secure boot is enabled
- * @param[out] prov_done   Pointer to a variable where the provisioning status will be stored.
- *                         - 0: Provisioning is not done
- *                         - > 0: Provisioning is done
- *
- * @return HAL_StatusTypeDef - status of the operation.
- */
-static HAL_StatusTypeDef OTP_Get_Lifecycle_Status(uint8_t* secure_boot, uint8_t* prov_done)
-{
-  BSEC_HandleTypeDef sBsecHandler = {.Instance = BSEC};
-  HAL_StatusTypeDef status = HAL_ERROR;
-  uint32_t otp_value = 0;
-
-  /* Enable BSEC & SYSCFG clocks to ensure BSEC data accesses */
-  __HAL_RCC_BSEC_CLK_ENABLE();
-  __HAL_RCC_SYSCFG_CLK_ENABLE();
-
-  status = HAL_BSEC_OTP_Read(&sBsecHandler, OTP_BOOTROM_CONFIG_9, &otp_value);
-  if (status != HAL_OK)
-  {
-    return status;
-  }
-
-  *secure_boot = otp_value & 0x00000003;
-  *prov_done = (otp_value & 0x000001C0) >> 5;
 
   return HAL_OK;
 }

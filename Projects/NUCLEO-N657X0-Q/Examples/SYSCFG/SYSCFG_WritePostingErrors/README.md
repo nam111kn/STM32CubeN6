@@ -61,7 +61,9 @@ The expected behaviour is described in Error capture in write posting buffer sec
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
  This example requires a reset of the device. Therefore it can only be run in boot from flash mode due to RAM erase on reset.

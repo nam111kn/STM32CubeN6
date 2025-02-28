@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    stm32n6xx_it.h 
+  * @file    stm32n6xx_it.h
   * @author  GPM Application Team
   * @brief   This file contains the headers of the interrupt handlers.
   ******************************************************************************

@@ -1,4 +1,3 @@
-
 ## <b>Ux_Device_HID_CDC_ACM Application Description</b>
 
 This application provides an example of Azure RTOS USBX stack usage on NUCLEO-N657X0-Q board,
@@ -48,10 +47,15 @@ In CDC_ACM application, two requests are implemented:
 #### <b>Expected success behavior</b>
 
 When plugged to PC host, the NUCLEO-N657X0-Q must be properly enumerated a composite device as an HID ,USB Serial device and an STlink COM port.
+
 During the enumeration phase, device provides host with the requested descriptors (device descriptor, configuration descriptor, string descriptors).
+
 Those descriptors are used by host driver to identify the device capabilities.
+
 Once NUCLEO-N657X0-Q device successfully completed the enumeration phase:
+
   - Connect USB cable to Host , Open two hyperterminals (USB com port and UART com port) to send/receive data to/from host to/from device.
+
   - When USER_Button is pressed, the device sends an HID report. Each report sent should move the PC host machine mouse cursor by one step.
 
 #### <b>Error behaviors</b>
@@ -83,6 +87,28 @@ None.
      ```
      place in RAM_region    { last section FREE_MEM };
      ```
+    + For MDK-ARM:
+    ```
+    either define the RW_IRAM1 region in the ".sct" file
+    or modify the line below in "tx_initialize_low_level.S to match the memory region being used
+        LDR r1, =|Image$$RW_IRAM1$$ZI$$Limit|
+    ```
+    + For STM32CubeIDE add the following section into the .ld file:
+    ```
+    ._threadx_heap :
+      {
+         . = ALIGN(8);
+         __RAM_segment_used_end__ = .;
+         . = . + 64K;
+         . = ALIGN(8);
+       } >RAM_D1 AT> RAM_D1
+    ```
+
+       The simplest way to provide memory for ThreadX is to define a new section, see ._threadx_heap above.
+       In the example above the ThreadX heap size is set to 64KBytes.
+       The ._threadx_heap must be located between the .bss and the ._user_heap_stack sections in the linker script.
+       Caution: Make sure that ThreadX does not need more than the provided heap memory (64KBytes in this example).
+       Read more in STM32CubeIDE User Guide, chapter: "Linker script".
 
     + The "tx_initialize_low_level.S" should be also modified to enable the "USE_DYNAMIC_MEMORY_ALLOCATION" flag.
 
@@ -118,7 +144,9 @@ RTOS, ThreadX, USBX, Device, USB_OTG, High Speed, CDC, HID, VCP, USART, DMA, Mou
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 
@@ -136,3 +164,6 @@ Next, this program can be run in boot from flash mode. This can be done by follo
  - Next, in resorting again to CubeProgrammer, load the binary and its header (Ux_Device_CDC_ACM-trusted.bin) in Nucleo board external Flash at address 0x7000'0000.
  - Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).
  - Unplug the board then plug it again. The code then executes in boot from external Flash mode.
+
+
+

@@ -79,7 +79,6 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
   ISP_AppliHelpersTypeDef appliHelpers = {0};
-  ISP_StatAreaTypeDef statArea = {0};
   DCMIPP_DecimationConfTypeDef pDecConfig = {0};
   uint32_t pitch_value ; /* Number of bytes per line */
   /* USER CODE END 1 */
@@ -140,12 +139,8 @@ int main(void)
   appliHelpers.SetSensorExposure = SetSensorExposureHelper;
   appliHelpers.GetSensorExposure = GetSensorExposureHelper;
 
-  statArea.X0 = 0;
-  statArea.Y0 = 0;
-  statArea.XSize = 2592;
-  statArea.YSize = 1944;
   /* Initialize the Image Signal Processing middleware */
-  if(ISP_Init(&hcamera_isp, &hdcmipp, 0, &appliHelpers, &statArea, ISP_IQParamCacheInit[0]) != ISP_OK)
+  if(ISP_Init(&hcamera_isp, &hdcmipp, 0, &appliHelpers, ISP_IQParamCacheInit[0]) != ISP_OK)
   {
     Error_Handler();
   }

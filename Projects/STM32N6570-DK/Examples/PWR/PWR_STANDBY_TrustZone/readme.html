@@ -19,8 +19,6 @@
 <body>
 <div class="row">
 <div class="col-sm-12 col-lg-8">
-<div class="row">
-<div class="col-sm-12 col-lg-8">
 <h2 id="pwr_standby_trustzone-example-description"><b>PWR_STANDBY_TrustZone Example Description</b></h2>
 <p>How to enter the Standby mode with a joint secure/non-secure application and wake-up from this mode by using the RTC wakeup timer.</p>
 <h4 id="description"><b>Description</b></h4>
@@ -104,6 +102,7 @@ After power on and bootROM execution,</p>
 <li>Open the View &gt; Images.</li>
 <li>Double-click to deselect the second instance of project.out.</li>
 </ul></li>
+<li><strong>MDK-ARM</strong> : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.</li>
 </ul>
 <h3 id="how-to-use-it"><b>How to use it ?</b></h3>
 <p>In order to make the program work, you must do the following :</p>
@@ -129,8 +128,6 @@ To run the template with boot in development mode,</p>
 </ul>
 <p><br />
 This example is meant to run in development mode only.</p>
-</div>
-</div>
 </div>
 </div>
 </body>

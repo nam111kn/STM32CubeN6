@@ -16,6 +16,18 @@
   ******************************************************************************
   @endverbatim
 
+### 28-January-2025 ###
+========================
+    + Improve installation robustness
+
+### 15-January-2025 ###
+========================
+    + Improve the support of MCE
+
+### 18-December-2024 ###
+========================
+    + Add version logs under MCUBOOT_LOG_VERSION
+
 ### 18-October-2024 ###
 ========================
     + Fix compilation warning for GCC compiler

@@ -93,7 +93,9 @@ Connectivity, SPI, Full-duplex, Interrupt, Transmission, Reception, Master, Slav
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 
@@ -114,3 +116,7 @@ In order to make the program work, you must do the following :
  - Next, in resorting again to CubeProgrammer, load the binary and its header (Project-trusted.bin) in the board external Flash at address 0x7000'0000.
  - Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).
  - Press the reset button. The code then executes in boot from external Flash mode.
+
+
+
+

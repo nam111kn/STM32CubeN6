@@ -74,7 +74,7 @@
                 </option>
                 <option>
                     <name>OGChipSelectEditMenu</name>
-                    <state>STM32N6570-DK	ST STM32N6570-DK</state>
+                    <state>STM32N657X0	ST STM32N657X0</state>
                 </option>
                 <option>
                     <name>GenLowLevelInterface</name>
@@ -120,7 +120,7 @@
                 </option>
                 <option>
                     <name>GFPUDeviceSlave</name>
-                    <state>STM32N6570-DK	ST STM32N6570-DK</state>
+                    <state>STM32N657X0	ST STM32N657X0</state>
                 </option>
                 <option>
                     <name>FPU2</name>
@@ -358,7 +358,6 @@
                 <option>
                     <name>CCIncludePath2</name>
                     <state>$PROJ_DIR$/../Core/Inc</state>
-                    <state>$PROJ_DIR$/../AZURE_RTOS/App</state>
                     <state>$PROJ_DIR$/../USBX/App</state>
                     <state>$PROJ_DIR$/../USBX/Target</state>
                     <state>$PROJ_DIR$/../../../../../../Drivers/CMSIS/Include</state>
@@ -681,7 +680,7 @@
                 </option>
                 <option>
                     <name>OOCOutputFile</name>
-                    <state>Ux_Device_Audio_2.0_Standalone.bin</state>
+                    <state>Ux_Device_Audio_Standalone.bin</state>
                 </option>
                 <option>
                     <name>OOCCommandLineProducer</name>

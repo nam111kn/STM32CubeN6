@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>README</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="../../../../../_htmresc/mini-st_2020.css" />
+</head>
+<body>
+<h2 id="oemurot_boot-application-description"><b>OEMuROT_Boot
+application description</b></h2>
+<p>This project provides an OEMuROT boot example.</p>
+<p>OEMuRoT stands for OEM updatable Root of Trust and acts as a second
+boot stage right after immutable BOOTROM code. OEMuRoT is an example
+based on the MCUboot open-source software provided with STM32N6Cube.
+OEMuRoT offers two services:</p>
+<ul>
+<li>The Secure Boot (root of trust service) is an updatable code, which
+is always executed after BOOTROM code. It activates runtime protections,
+and then verifies the authenticity and integrity of the user application
+code before every execution.</li>
+<li>The Secure Firmware Update application is an updatable code that
+detects new firmware image candidate. It checks its version (version
+downgrade prevention), authenticity, and integrity before installing it
+after decryption.</li>
+</ul>
+<p>Please follow the article <a
+href="https://wiki.st.com/stm32mcu/wiki/Security:How_to_create_ROT_examples_for_STM32N6"><b>How
+to create ROT examples for STM32N6</b></a> to generate this example
+based on
+<code>Firmware/Projects/STM32N6570-DK/Applications/ROT/OEMuROT_Boot</code>
+project.</p>
+</body>
+</html>

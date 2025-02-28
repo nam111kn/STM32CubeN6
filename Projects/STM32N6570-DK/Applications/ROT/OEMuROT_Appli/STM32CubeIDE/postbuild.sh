@@ -6,10 +6,12 @@ signing=$1
 # arg2 is the config type (Debug, Release)
 config=$2
 
+# arg3 is the project name
+projname=$3
+
 # Getting ROT provisioning path
 SCRIPT=$(readlink -f $0)
 project_dir=`dirname $SCRIPT`
-
 cd "$project_dir/../../../../ROT_Provisioning"
 provisioningdir=$(pwd)
 cd "$project_dir"
@@ -36,12 +38,12 @@ ns_app_xml=$provisioningdir/OEMuROT/Images/OEMuROT_NS_Code_Image.xml
 
 bin_dest_dir=../../../$oemurot_appli_path_project/Binary
 
-s_app_bin_cube=$project_dir/AppliSecure/$config/STM32N6570-DK_OEMuROT_Appli_S.bin
+s_app_bin_cube=$project_dir/AppliSecure/$config/$projname.bin
 s_app_bin=$bin_dest_dir/rot_tz_s_app.bin
 s_app_init_sign_bin=$bin_dest_dir/rot_tz_s_app_init_enc_sign.bin
 s_app_sign_bin=$bin_dest_dir/rot_tz_s_app_enc_sign.bin
 
-ns_app_bin_cube=$project_dir/AppliNonSecure/$config/STM32N6570-DK_OEMuROT_Appli_NS.bin
+ns_app_bin_cube=$project_dir/AppliNonSecure/$config/$projname.bin
 ns_app_bin=$bin_dest_dir/rot_tz_ns_app.bin
 ns_app_init_sign_bin=$bin_dest_dir/rot_tz_ns_app_init_enc_sign.bin
 ns_app_sign_bin=$bin_dest_dir/rot_tz_ns_app_enc_sign.bin
@@ -61,25 +63,25 @@ else
 fi
 
 if  [ $signing == "secure" ]; then
-  echo "Copy generated binary to binaries folder" > "$current_log_file"
-  cp "$s_app_bin_cube" ../Binary/rot_tz_s_app.bin >> "$current_log_file" 2>&1
+  echo "Copy generated binary to binaries folder" > $current_log_file
+  cp "$s_app_bin_cube" ../Binary/rot_tz_s_app.bin >> $current_log_file 2>&1
   if [ $? != 0 ]; then error; fi
 
   echo "Creating secure signed image"  >> "$current_log_file"
 	# update xml file : input file
-	"$python$applicfg" xmlval -v "$s_app_bin" --string -n "Firmware binary input file" "$s_app_init_xml" --vb >> "$current_log_file" 2>&1
+	$python$applicfg xmlval -v "$s_app_bin" --string -n "Firmware binary input file" "$s_app_init_xml" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 	
 	# update xml file : input file
-	"$python$applicfg" xmlval -v "$s_app_bin" --string -n "Firmware binary input file" "$s_app_xml" --vb >> "$current_log_file" 2>&1
+	$python$applicfg xmlval -v "$s_app_bin" --string -n "Firmware binary input file" "$s_app_xml" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
 	# update xml file : output file
-	"$python$applicfg" xmlval -v "$s_app_init_sign_bin" --string -n "Image output file" "$s_app_init_xml" --vb >> "$current_log_file" 2>&1
+	$python$applicfg xmlval -v "$s_app_init_sign_bin" --string -n "Image output file" "$s_app_init_xml" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
 	# update xml file : output file
-	"$python$applicfg" xmlval -v "$s_app_sign_bin" --string -n "Image output file" "$s_app_xml" --vb >> "$current_log_file" 2>&1
+	$python$applicfg xmlval -v "$s_app_sign_bin" --string -n "Image output file" "$s_app_xml" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
 	# Creating signed/encrypted image
@@ -96,19 +98,19 @@ if  [ $signing == "nonsecure" ]; then
 
   echo "Creating non secure signed image"  >> "$current_log_file"
 	# Update xml file : input file
-	"$python$applicfg" xmlval -v "$ns_app_bin" --string -n "Firmware binary input file" "$ns_app_init_xml" --vb >> "$current_log_file" 2>&1
+	$python$applicfg xmlval -v "$ns_app_bin" --string -n "Firmware binary input file" "$ns_app_init_xml" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
 	# update xml file : input file
-	"$python$applicfg" xmlval -v "$ns_app_bin" --string -n "Firmware binary input file" "$ns_app_xml" --vb >> "$current_log_file" 2>&1
+	$python$applicfg xmlval -v "$ns_app_bin" --string -n "Firmware binary input file" "$ns_app_xml" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 
 	# update xml file : output file
-	"$python$applicfg" xmlval -v "$ns_app_init_sign_bin" --string -n "Image output file" "$ns_app_init_xml" --vb >> "$current_log_file" 2>&1
+	$python$applicfg xmlval -v "$ns_app_init_sign_bin" --string -n "Image output file" "$ns_app_init_xml" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 	
 	# update xml file : output file
-	"$python$applicfg" xmlval -v "$ns_app_sign_bin" --string -n "Image output file" "$ns_app_xml" --vb >> "$current_log_file" 2>&1
+	$python$applicfg xmlval -v "$ns_app_sign_bin" --string -n "Image output file" "$ns_app_xml" --vb >> "$current_log_file" 2>&1
   if [ $? != 0 ]; then error; fi
 	# Creating signed/encrypted image
 	"$stm32tpccli" -pb "$ns_app_init_xml" >> "$current_log_file" 2>&1

@@ -15,7 +15,7 @@ set stm32ExtOTPInterace=%stm32tool_path%\ExternalLoader\OTP_FUSES_STM32N6xx.stld
 set imgtool=%stm32tool_path%\Utilities\Windows\imgtool.exe
 
 :: ==============================================================================
-::                                OEMiROT bootpath
+::                                OEMuROT bootpath
 :: ==============================================================================
 :: Select application project below
 set oemurot_boot_path_project=Applications\ROT\OEMuROT_Boot

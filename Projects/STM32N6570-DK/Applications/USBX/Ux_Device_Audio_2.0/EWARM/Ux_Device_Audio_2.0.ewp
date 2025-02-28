@@ -74,7 +74,7 @@
                 </option>
                 <option>
                     <name>OGChipSelectEditMenu</name>
-                    <state>STM32N6570-DK	ST STM32N6570-DK</state>
+                    <state>STM32N657X0	ST STM32N657X0</state>
                 </option>
                 <option>
                     <name>GenLowLevelInterface</name>
@@ -120,7 +120,7 @@
                 </option>
                 <option>
                     <name>GFPUDeviceSlave</name>
-                    <state>STM32N6570-DK	ST STM32N6570-DK</state>
+                    <state>STM32N657X0	ST STM32N657X0</state>
                 </option>
                 <option>
                     <name>FPU2</name>
@@ -693,7 +693,7 @@
                 </option>
                 <option>
                     <name>OOCOutputFile</name>
-                    <state>Ux_Device_Audio_2.0.bin</state>
+                    <state>Ux_Device_Audio.bin</state>
                 </option>
                 <option>
                     <name>OOCCommandLineProducer</name>
@@ -711,7 +711,7 @@
             <data>
                 <extensions></extensions>
                 <cmdline></cmdline>
-                <hasPrio>1</hasPrio>
+                <hasPrio>96</hasPrio>
                 <buildSequence>inputOutputBased</buildSequence>
             </data>
         </settings>

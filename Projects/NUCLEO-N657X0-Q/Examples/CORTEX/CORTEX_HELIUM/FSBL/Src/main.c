@@ -42,6 +42,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 
+UART_HandleTypeDef huart1;
+
 /* USER CODE BEGIN PV */
  uint8_t array_a[65536];
  uint8_t array_b[65536];
@@ -50,6 +52,8 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -110,12 +114,12 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-#if !defined(TERMINAL_IO)
-  MX_USART1_UART_Init();
-#endif /* TERMINAL_IO */
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
   /* Initialize the input buffers to arbitrary values */
@@ -289,13 +293,6 @@ void SystemClock_Config(void)
   }
 }
 
-/* USER CODE BEGIN 4 */
-#if !defined(TERMINAL_IO)
-/**
-  * @brief USART1 Initialization Function
-  * @param None
-  * @retval None
-  */
 /**
   * @brief USART1 Initialization Function
   * @param None
@@ -343,6 +340,26 @@ static void MX_USART1_UART_Init(void)
   /* USER CODE END USART1_Init 2 */
 
 }
+
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+/* USER CODE BEGIN MX_GPIO_Init_1 */
+/* USER CODE END MX_GPIO_Init_1 */
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOE_CLK_ENABLE();
+
+/* USER CODE BEGIN MX_GPIO_Init_2 */
+/* USER CODE END MX_GPIO_Init_2 */
+}
+
+/* USER CODE BEGIN 4 */
+#if !defined(TERMINAL_IO)
 
 #if defined(__ICCARM__)
 size_t __write(int file, unsigned char const *ptr, size_t len)

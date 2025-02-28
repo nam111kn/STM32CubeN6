@@ -29,7 +29,7 @@
 <p>Each time the USER push-button is pressed, External line 13 interrupt is generated and the ISR enables the LSE when it is off, disables it when it is on.</p>
 <ul>
 <li>when LSE is off, LED1 is toggling (every 300 ms)</li>
-<li>when LSE is on, LED2 is toggling (every 300 ms)</li>
+<li>when LSE is on, LED3 is toggling (every 300 ms)</li>
 </ul>
 <p>LSE clock waveform is available on the MCO2 pin PC.09 and can be captured on an oscilloscope.</p>
 <p>In case of configuration error, LED2 is On.</p>
@@ -61,6 +61,7 @@
 <li>Open the View &gt; Images.</li>
 <li>Double-click to deselect the second instance of project.out.</li>
 </ul></li>
+<li><p><strong>MDK-ARM</strong> : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.</p></li>
 </ul>
 <h3 id="how-to-use-it"><b>How to use it ?</b></h3>
 <p>In order to make the program work, you must do the following : - Set the boot mode in development mode (BOOT1 switch position is 2-3, BOOT0 switch position doesn’t matter). - Open your preferred toolchain - Rebuild all files and load your image into target memory. Code can be executed in this mode for debugging purposes.</p>

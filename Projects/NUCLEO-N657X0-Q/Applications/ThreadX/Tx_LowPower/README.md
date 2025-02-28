@@ -1,12 +1,3 @@
-
----
-pagetitle: Readme
-lang: en
----
-::: {.row}
-::: {.col-sm-12 .col-lg-8}
-
-
 ## <b>Tx_LowPower Application Description</b>
 
 This application provides an example of Azure RTOS ThreadX stack usage, it shows how to develop an application using ThreadX LowPower feature.
@@ -88,6 +79,12 @@ For keeping track of time while in low power mode, there are two possibilities:
      ```
 	 place in RAM_region    { last section FREE_MEM };
 	 ```
+	+ For MDK-ARM:
+	```
+    either define the RW_IRAM1 region in the ".sct" file
+    or modify the line below in "tx_initialize_low_level.S to match the memory region being used
+        LDR r1, =|Image$$RW_IRAM1$$ZI$$Limit|
+	```
     + For STM32CubeIDE add the following section into the .ld file:
 	```
     ._threadx_heap :
@@ -138,6 +135,6 @@ Next, this program can be run in boot from flash mode. This can be done by follo
  - Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).
  - Press the reset button. The code then executes in boot from external Flash mode.
 
-:::
-:::
+
+
 

@@ -69,7 +69,6 @@
 /** @addtogroup STM32N6xx_System_Private_Defines
   * @{
   */
-/* --------------- FPGA values --------------- */
 #if !defined  (HSE_VALUE)
   #define HSE_VALUE    48000000UL /*!< Value of the High-Speed External oscillator in Hz */
 #endif /* HSE_VALUE */
@@ -205,15 +204,15 @@ void SystemInit(void)
   *           - If SYSCLK source is PLL, SystemCoreClock will contain the HSI_VALUE(*)
   *             or CSI_VALUE(**) or HSE_VALUE(***) multiplied/divided by the PLL factors.
   *
-  *         (*) HSI_VALUE is a constant defined in stm32v7xx_hal.h file (default value
+  *         (*) HSI_VALUE is a constant defined in stm32n6xx_hal.h file (default value
   *              64 MHz) but the real value may vary depending on the variations
   *              in voltage and temperature.
   *
-  *         (**) CSI_VALUE is a constant defined in stm32v7xx_hal.h file (default value
+  *         (**) CSI_VALUE is a constant defined in stm32n6xx_hal.h file (default value
   *             4 MHz) but the real value may vary depending on the variations
   *             in voltage and temperature.
   *
-  *         (***) HSE_VALUE is a constant defined in stm32v7xx_hal.h file (default value
+  *         (***) HSE_VALUE is a constant defined in stm32n6xx_hal.h file (default value
   *              16 MHz), user has to ensure that HSE_VALUE is same as the real
   *              frequency of the crystal used. Otherwise, this function may
   *              have wrong result.

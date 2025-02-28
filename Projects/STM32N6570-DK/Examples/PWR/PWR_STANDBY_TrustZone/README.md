@@ -1,11 +1,3 @@
----
-pagetitle: Readme
-lang: en
----
-::: {.row}
-::: {.col-sm-12 .col-lg-8}
-
-
 ## <b>PWR_STANDBY_TrustZone Example Description</b>
 
 How to enter the Standby mode with a joint secure/non-secure application and wake-up from this mode by using the RTC wakeup timer.
@@ -117,7 +109,9 @@ For the following runs, select NO_OTP_FUSE option by default using the preproces
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 
@@ -143,5 +137,8 @@ In order to make the program work, you must do the following :
 \
 This example is meant to run in development mode only.
 
-:::
-:::
+
+
+
+
+

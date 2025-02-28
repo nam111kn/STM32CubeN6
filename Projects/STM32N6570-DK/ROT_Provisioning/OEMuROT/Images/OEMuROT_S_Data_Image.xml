@@ -24,7 +24,7 @@
 		<Type>File</Type>
 		<Command>-E</Command>
 		<Hidden>1</Hidden>
-		<Default>../Keys/OEMuRoT_Encryption.pem</Default>
+		<Default>../Keys/OEMuROT_Encryption.pem</Default>
 	</Param>
     <Param>
 		<Name>Public key format</Name>
@@ -62,7 +62,7 @@
 		<Default></Default>
 	</Param>
 	<Param>
-		<Name>Dependency with other image</Name>
+		<Name>Dependency with S code image</Name>
 		<Value>0,1.0.0</Value>
 		<Type>Dependency</Type>
 		<Command>-d</Command>

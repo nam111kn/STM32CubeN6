@@ -1,10 +1,3 @@
----
-pagetitle: Readme
-lang: en
----
-::: {.row}
-::: {.col-sm-12 .col-lg-8}
-
 
 ## <b>DCMIPP_SnapshotDecimationMode Example Description</b>
 
@@ -70,6 +63,8 @@ Graphic, DCMIPP, CSI, Pipe, Virtual Channel, Serial Mode, Snapshot Mode, Pitch, 
     - Open the View > Images.
     - Double-click to deselect the second instance of project.out.
 
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
+
 ### <b>How to use it ?</b>
 
 In order to make the program work, you must do the following :
@@ -89,10 +84,10 @@ In order to make the program work, you must do the following :
 
 
 
-:::
-:::
 
 
-:::
-:::
+
+
+
+
 

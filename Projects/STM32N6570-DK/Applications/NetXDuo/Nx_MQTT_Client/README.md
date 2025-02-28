@@ -138,14 +138,77 @@ void MX_ETH_Init(void)
    This requires changes in the linker files to expose this memory location.
     + For EWARM add the following section into the .icf file:
      ```
-	 place in RAM_region    { last section FREE_MEM };
-	 ```
+     place in RAM_region    { last section FREE_MEM };
+     ```
+    + For MDK-ARM:
+    ```
+    either define the RW_IRAM1 region in the ".sct" file
+    or modify the line below in "tx_initialize_low_level.S to match the memory region being used
+        LDR r1, =|Image$$RW_IRAM1$$ZI$$Limit|
+    ```
+    + For STM32CubeIDE add the following section into the .ld file:
+    ```
+    ._threadx_heap :
+      {
+         . = ALIGN(8);
+         __RAM_segment_used_end__ = .;
+         . = . + 64K;
+         . = ALIGN(8);
+       } >RAM_D1 AT> RAM_D1
+    ```
+
+       The simplest way to provide memory for ThreadX is to define a new section, see ._threadx_heap above.
+       In the example above the ThreadX heap size is set to 64KBytes.
+       The ._threadx_heap must be located between the .bss and the ._user_heap_stack sections in the linker script.
+       Caution: Make sure that ThreadX does not need more than the provided heap memory (64KBytes in this example).
+       Read more in STM32CubeIDE User Guide, chapter: "Linker script".
 
     + The "tx_initialize_low_level.S" should be also modified to enable the "USE_DYNAMIC_MEMORY_ALLOCATION" flag.
 
 #### <b>NetX Duo usage hints</b>
 
 - Depending on the application scenario, the total TX and RX descriptors may need to be increased by updating respectively  the "ETH_TX_DESC_CNT" and "ETH_RX_DESC_CNT" in the "stm32n6xx_hal_conf.h", to guarantee the application correct behaviour, but this will cost extra memory to allocate.
+- The NetXDuo application needs to allocate the <b> <i> NX_PACKET </i> </b> pool in a dedicated section.
+Below is an example of the section declaration for different IDEs.
+   + For EWARM ".icf" file
+   ```
+   define symbol __ICFEDIT_region_NXDATA_start__ = 0x341EC000;
+   define symbol __ICFEDIT_region_NXDATA_end__   = 0x341FFFFF;
+   define region NXApp_region  = mem:[from __ICFEDIT_region_NXDATA_start__ to __ICFEDIT_region_NXDATA_end__];
+   place in NXApp_region { section .NetXPoolSection};
+   ```
+   + For MDK-ARM
+   ```
+   RW_NXDriverSection 0x341EC000 0x14000 {
+   *(.NetXPoolSection)
+   }
+   ```
+   + For STM32CubeIDE ".ld" file
+   ```
+   .nx_data (NOLOAD):
+   {
+    . = ABSOLUTE(0x341EC000);
+    *(.NetXPoolSection)
+   } >RAM AT> ROM
+   ```
+  This section is then used in the <code> app_azure_rtos.c</code> file to force the <code>nx_byte_pool_buffer</code> allocation.
+
+```
+/* USER CODE BEGIN NX_Pool_Buffer */
+
+#if defined ( ICCARM ) / IAR Compiler /
+#pragma location = ".NetXPoolSection"
+
+#else /* GNU and AC6 compilers */
+__attribute__((section(".NetXPoolSection")))
+
+#endif
+
+/* USER CODE END NX_Pool_Buffer */
+static UCHAR  nx_byte_pool_buffer[NX_APP_MEM_POOL_SIZE];
+static TX_BYTE_POOL nx_app_byte_pool;
+```
+For more details about the MPU configuration please refer to the [AN4838](https://www.st.com/resource/en/application_note/dm00272912-managing-memory-protection-unit-in-stm32-mcus-stmicroelectronics.pdf)
 
 ### <b>Keywords</b>
 

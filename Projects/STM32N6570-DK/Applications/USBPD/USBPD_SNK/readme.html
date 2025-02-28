@@ -19,7 +19,7 @@
 <body>
 <div class="row">
 <div class="col-sm-12 col-lg-8">
-<h2 id="usbpd_src-application-description"><b>USBPD_SRC Application Description</b></h2>
+<h2 id="usbpd_snk-application-description"><b>USBPD_SNK Application Description</b></h2>
 <p>This application is a USBPD type C Provider using Azure RTOS. USBPD Provider: This application initialize the type C port 1 in source mode with only one PDO at 5V.</p>
 <h4 id="expected-success-behavior"><b>Expected success behavior</b></h4>
 <p>Connect UCPD cube Monitor on the VCP associated to our board (only available if USB cable is connected) The UCPD Cube Monitor will be used to trace all the messages exchange between the ports partner.</p>
@@ -82,6 +82,7 @@ Read more in STM32CubeIDE User Guide, chapter: &quot;Linker script&quot;.</code>
 <li>Open the View &gt; Images.</li>
 <li>Double-click to deselect the second instance of project.out.</li>
 </ul></li>
+<li><p><strong>MDK-ARM</strong> : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.</p></li>
 </ul></li>
 </ul>
 <h3 id="how-to-use-it"><b>How to use it ?</b></h3>

@@ -46,8 +46,8 @@
 
 MDF_HandleTypeDef MdfHandle0;
 MDF_FilterConfigTypeDef MdfFilterConfig0;
-DMA_NodeTypeDef pNode_GPDMACH6 __NON_CACHEABLE;
-DMA_QListTypeDef pQueueLinkList_GPDMACH6;
+DMA_NodeTypeDef Node_GPDMA1_Channel6 __NON_CACHEABLE;
+DMA_QListTypeDef List_GPDMA1_Channel6;
 DMA_HandleTypeDef handle_GPDMA1_Channel6;
 
 /* USER CODE BEGIN PV */
@@ -187,8 +187,8 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  /** Configure the System Power Supply
-  */
+    /** Configure the System Power Supply
+    */
   if (HAL_PWREx_ConfigSupply(PWR_EXTERNAL_SOURCE_SUPPLY) != HAL_OK)
   {
     Error_Handler();
@@ -208,9 +208,9 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-  /** Get current CPU/System buses clocks configuration and if necessary switch
+    /** Get current CPU/System buses clocks configuration and if necessary switch
  to intermediate HSI clock to ensure target clock can be set
-  */
+    */
   HAL_RCC_GetClockConfig(&RCC_ClkInitStruct);
   if ((RCC_ClkInitStruct.CPUCLKSource == RCC_CPUCLKSOURCE_IC1) ||
      (RCC_ClkInitStruct.SYSCLKSource == RCC_SYSCLKSOURCE_IC2_IC6_IC11))
@@ -225,9 +225,9 @@ void SystemClock_Config(void)
     }
   }
 
-  /** Initializes the RCC Oscillators according to the specified parameters
+    /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
-  */
+    */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_NONE;
   RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL1.PLLSource = RCC_PLLSOURCE_HSI;
@@ -250,8 +250,8 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-  /** Initializes the CPU, AHB and APB buses clocks
-  */
+    /** Initializes the CPU, AHB and APB buses clocks
+    */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_CPUCLK|RCC_CLOCKTYPE_HCLK
                               |RCC_CLOCKTYPE_SYSCLK|RCC_CLOCKTYPE_PCLK1
                               |RCC_CLOCKTYPE_PCLK2|RCC_CLOCKTYPE_PCLK5
@@ -286,8 +286,8 @@ void PeriphCommonClock_Config(void)
 {
   RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
 
-  /** Initializes the peripherals clock
-  */
+    /** Initializes the peripherals clock
+    */
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_TIM;
   PeriphClkInitStruct.TIMPresSelection = RCC_TIMPRES_DIV1;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
@@ -340,9 +340,9 @@ static void MX_MDF1_Init(void)
 
   /* USER CODE END MDF1_Init 1 */
 
-  /**
+    /**
     MdfHandle0 structure initialization and HAL_MDF_Init function call
-  */
+    */
   MdfHandle0.Instance = MDF1_Filter0;
   MdfHandle0.Init.CommonParam.InterleavedFilters = 0;
   MdfHandle0.Init.CommonParam.ProcClockDivider = 2;
@@ -360,11 +360,11 @@ static void MX_MDF1_Init(void)
     Error_Handler();
   }
 
-  /**
+    /**
     MdfFilterConfig0, MdfOldConfig0 and/or MdfScdConfig0 structures initialization
 
     WARNING : only structures are filled, no specific init function call for filter
-  */
+    */
   MdfFilterConfig0.DataSource = MDF_DATA_SOURCE_BSMX;
   MdfFilterConfig0.Delay = 0;
   MdfFilterConfig0.CicMode = MDF_ONE_FILTER_SINC4;

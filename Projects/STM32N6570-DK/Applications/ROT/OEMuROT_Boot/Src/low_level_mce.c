@@ -38,7 +38,9 @@ typedef struct
 
 /* Private variables ---------------------------------------------------------*/
 static MCE_HandleTypeDef hmce_flash = {.Instance = MCE2};
+#if (OEMUROT_LOAD_AND_RUN == LOAD_AND_RUN_EXT_RAM)
 static MCE_HandleTypeDef hmce_ram = {.Instance = MCE1};
+#endif /* OEMUROT_LOAD_AND_RUN == LOAD_AND_RUN_EXT_RAM */
 
 static MCE_RegionCfg_t MCE_Flash_aRegion[] =
 {
@@ -93,6 +95,7 @@ static MCE_RegionCfg_t MCE_Flash_aRegion[] =
 #endif /* not MCUBOOT_OVERWRITE_ONLY */
 };
 
+#if (OEMUROT_LOAD_AND_RUN == LOAD_AND_RUN_EXT_RAM)
 static MCE_RegionCfg_t MCE_RAM_aRegion[] =
 {
   /* RAM */
@@ -111,6 +114,7 @@ static MCE_RegionCfg_t MCE_RAM_aRegion[] =
 #endif /* FLOW_CONTROL */
   }
 };
+#endif /* OEMUROT_LOAD_AND_RUN == LOAD_AND_RUN_EXT_RAM */
 
 static MCE_AESConfigTypeDef MCE_Flash_AESConfig =
 {
@@ -121,6 +125,7 @@ static MCE_AESConfigTypeDef MCE_Flash_AESConfig =
   .Cipher_Mode = MCE_CONTEXT_STREAM_CIPHER
 };
 
+#if (OEMUROT_LOAD_AND_RUN == LOAD_AND_RUN_EXT_RAM)
 static MCE_AESConfigTypeDef MCE_RAM_AESConfig =
 {
   .Nonce = {0xFF0335AC, 0x751BA2F7},
@@ -129,6 +134,7 @@ static MCE_AESConfigTypeDef MCE_RAM_AESConfig =
   .KeySize = MCE_AES_256,
   .Cipher_Mode = MCE_CONTEXT_STREAM_CIPHER
 };
+#endif /* OEMUROT_LOAD_AND_RUN == LOAD_AND_RUN_EXT_RAM */
 
 /* Private function prototypes -----------------------------------------------*/
 static void Generate_Keys(uint32_t *p_derived_key, uint32_t *p_random_key);
@@ -137,6 +143,9 @@ static int8_t MCE_CheckRegionConfig(MCE_HandleTypeDef *hmce, uint32_t RegionInde
 static int8_t MCE_CheckRegionAESContext(MCE_HandleTypeDef *hmce, uint32_t ContextIndex, uint32_t RegionIndex);
 static int8_t MCE_CheckAESContext(MCE_HandleTypeDef *hmce, const MCE_AESConfigTypeDef  *AESConfig,
                                            uint32_t ContextIndex);
+static HAL_StatusTypeDef MCE_GetLockGlobalConfig(MCE_HandleTypeDef *hmce);
+static HAL_StatusTypeDef MCE_GetLockAESContextConfig(MCE_HandleTypeDef *hmce, uint32_t ContextIndex);
+static HAL_StatusTypeDef MCE_GetLockAESContextKey(MCE_HandleTypeDef *hmce, uint32_t ContextIndex);
 
 /* Functions Definition ------------------------------------------------------*/
 /**
@@ -147,6 +156,7 @@ void mce_init_cfg(void)
 {
   uint32_t i = 0;
 
+  /* Configuration stage */
   if (uFlowStage == FLOW_STAGE_CFG)
   {
     uint32_t a_dkey[8U] = {0U}, a_rkey[8U] = {0U};
@@ -196,6 +206,19 @@ void mce_init_cfg(void)
       FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE1_AES_CFG_EN,
                                            FLOW_CTRL_MCE1_AES_CFG_EN);
     }
+
+    /* Lock AES context key */
+    if (HAL_MCE_LockAESContextKey(&hmce_flash, MCE_CONTEXT1) != HAL_OK)
+    {
+      Error_Handler();
+    }
+    else
+    {
+      FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE1_AES_KEY_LOCK,
+                                           FLOW_CTRL_MCE1_AES_KEY_LOCK);
+    }
+
+    /* Enable AES context */
     if (HAL_MCE_EnableAESContext(&hmce_flash, MCE_CONTEXT1) != HAL_OK)
     {
       Error_Handler();
@@ -206,6 +229,17 @@ void mce_init_cfg(void)
                                            FLOW_CTRL_MCE1_AES_EN);
     }
 
+    /* Lock AES context configuration */
+    if (HAL_MCE_LockAESContextConfig(&hmce_flash, MCE_CONTEXT1) != HAL_OK)
+    {
+      Error_Handler();
+    }
+    else
+    {
+      FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE1_AES_CFG_LOCK,
+                                           FLOW_CTRL_MCE1_AES_CFG_LOCK);
+    }
+#if (OEMUROT_LOAD_AND_RUN == LOAD_AND_RUN_EXT_RAM)
     /* Initialize MCE2 */
     if (HAL_MCE_Init(&hmce_ram) != HAL_OK)
     {
@@ -247,6 +281,19 @@ void mce_init_cfg(void)
       FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE2_AES_CFG_EN,
                                            FLOW_CTRL_MCE2_AES_CFG_EN);
     }
+
+    /* Lock AES context key */
+    if (HAL_MCE_LockAESContextKey(&hmce_ram, MCE_CONTEXT2) != HAL_OK)
+    {
+      Error_Handler();
+    }
+    else
+    {
+      FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE2_AES_KEY_LOCK,
+                                           FLOW_CTRL_MCE2_AES_KEY_LOCK);
+    }
+
+    /* Enable AES context */
     if (HAL_MCE_EnableAESContext(&hmce_ram, MCE_CONTEXT2) != HAL_OK)
     {
       Error_Handler();
@@ -256,7 +303,26 @@ void mce_init_cfg(void)
       FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE2_AES_EN,
                                            FLOW_CTRL_MCE2_AES_EN);
     }
+
+    /* Lock AES context configuration */
+    if (HAL_MCE_LockAESContextConfig(&hmce_ram, MCE_CONTEXT2) != HAL_OK)
+    {
+      Error_Handler();
+    }
+    else
+    {
+      FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE2_AES_CFG_LOCK,
+                                           FLOW_CTRL_MCE2_AES_CFG_LOCK);
+    }
+
+    /* Lock global configuration */
+    HAL_MCE_LockGlobalConfig(&hmce_ram);
+
+    FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE2_AES_LOCK,
+                                         FLOW_CTRL_MCE2_AES_LOCK);
+#endif /* OEMUROT_LOAD_AND_RUN == LOAD_AND_RUN_EXT_RAM */
   }
+  /* Verification stage */
   else
   {
     /* Check regions configuration */
@@ -295,6 +361,29 @@ void mce_init_cfg(void)
                                            FLOW_CTRL_MCE1_AES_CFG_CH);
     }
 
+    /* Check AES context key lock state */
+    if (MCE_GetLockAESContextKey(&hmce_flash, MCE_CONTEXT1) != HAL_OK)
+    {
+      Error_Handler();
+    }
+    else
+    {
+      FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE1_AES_KEY_LOCK_CH,
+                                           FLOW_CTRL_MCE1_AES_KEY_LOCK_CH);
+    }
+
+    /* Check AES context configuration lock state */
+    if (MCE_GetLockAESContextConfig(&hmce_flash, MCE_CONTEXT1) != HAL_OK)
+    {
+      Error_Handler();
+    }
+    else
+    {
+      FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE1_AES_CFG_LOCK_CH,
+                                           FLOW_CTRL_MCE1_AES_CFG_LOCK_CH);
+    }
+
+#if (OEMUROT_LOAD_AND_RUN == LOAD_AND_RUN_EXT_RAM)
     /* Check regions configuration */
     for (i = 0; i < ARRAY_SIZE(MCE_RAM_aRegion); i++)
     {
@@ -330,65 +419,71 @@ void mce_init_cfg(void)
       FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE2_AES_CFG_CH,
                                            FLOW_CTRL_MCE2_AES_CFG_CH);
     }
+
+    /* Check AES context key lock state */
+    if (MCE_GetLockAESContextKey(&hmce_ram, MCE_CONTEXT2) != HAL_OK)
+    {
+      Error_Handler();
+    }
+    else
+    {
+      FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE2_AES_KEY_LOCK_CH,
+                                           FLOW_CTRL_MCE2_AES_KEY_LOCK_CH);
+    }
+
+    /* Check AES context configuration lock state */
+    if (MCE_GetLockAESContextConfig(&hmce_ram, MCE_CONTEXT2) != HAL_OK)
+    {
+      Error_Handler();
+    }
+    else
+    {
+      FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE2_AES_CFG_LOCK_CH,
+                                           FLOW_CTRL_MCE2_AES_CFG_LOCK_CH);
+    }
+
+    /* Check MCE AES lock state */
+    if (MCE_GetLockGlobalConfig(&hmce_ram) != HAL_OK)
+    {
+      Error_Handler();
+    }
+    else
+    {
+      FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE2_AES_LOCK_CH,
+                                           FLOW_CTRL_MCE2_AES_LOCK_CH);
+    }
+#endif /* OEMUROT_LOAD_AND_RUN == LOAD_AND_RUN_EXT_RAM */
   }
 }
 
 /**
- * @brief Generate Derived and Random Keys
- *
- * This function generates 2 keys : derived key and a random key.
- *
- * @param[out] p_derived_key Pointer to the variable where the derived key will be stored.
- * @param[out] p_random_key  Pointer to the variable where the random key will be stored.
- */
-static void Generate_Keys(uint32_t *p_derived_key, uint32_t *p_random_key)
+  * @brief  Lock external flash MCE configuration
+  * @retval None
+  */
+void mce_lock_cfg(void)
 {
-  CRYP_HandleTypeDef hcryp = { 0U };
-  uint32_t a_Magic[4U] = {0xA3B21441U, 0x9B345FFEU, 0xC03655FBU, 0x87AB0F67U};
-  size_t magic_length = 0xFFFF;
-
-  /* Set the SAES parameters */
-  hcryp.Instance            = SAES;
-  hcryp.Init.DataType       = CRYP_NO_SWAP;
-  hcryp.Init.Algorithm      = CRYP_AES_ECB;
-  hcryp.Init.KeySelect      = CRYP_KEYSEL_HW;
-  hcryp.Init.KeyMode        = CRYP_KEYMODE_NORMAL;
-  hcryp.Init.KeySize        = CRYP_KEYSIZE_256B;
-
-  /* Enable RNG clock */
-  __HAL_RCC_RNG_CLK_ENABLE();
-  /* Enable SAES clock */
-  __HAL_RCC_SAES_CLK_ENABLE();
-
-  /* Initialize SAES */
-  if (HAL_CRYP_Init(&hcryp) != HAL_OK)
+  /* Configuration stage */
+  if (uFlowStage == FLOW_STAGE_CFG)
   {
-    Error_Handler();
+    /* Lock global configuration */
+    HAL_MCE_LockGlobalConfig(&hmce_flash);
+
+    FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE1_AES_LOCK,
+                                         FLOW_CTRL_MCE1_AES_LOCK);
   }
-
-  /* Generate key by encrypting magic with DHUK */
-  if (HAL_CRYP_Encrypt(&hcryp, (uint32_t *)a_Magic, 8, p_derived_key, 100) != HAL_OK)
+  /* Verification stage */
+  else
   {
-    Error_Handler();
-  }
-
-  /* Generate random magic */
-  RNG_GetBytes((uint8_t *)a_Magic, sizeof(a_Magic), &magic_length);
-  if (magic_length != sizeof(a_Magic))
-  {
-    Error_Handler();
-  }
-
-  /* Generate key by encrypting random magic with DHUK */
-  if (HAL_CRYP_Encrypt(&hcryp, (uint32_t *)a_Magic, 8, p_random_key, 100) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /* Deinitialize SAES */
-  if (HAL_CRYP_DeInit(&hcryp) != HAL_OK)
-  {
-    Error_Handler();
+    /* Check MCE AES lock state */
+    if (MCE_GetLockGlobalConfig(&hmce_flash) != HAL_OK)
+    {
+      Error_Handler();
+    }
+    else
+    {
+      FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_MCE1_AES_LOCK_CH,
+                                           FLOW_CTRL_MCE1_AES_LOCK_CH);
+    }
   }
 }
 
@@ -451,6 +546,65 @@ bool LL_MCE_IsBufferInCodePrimaryRegion(const uint8_t *pBuffer, size_t Length)
     return true;
   }
   return false;
+}
+
+/**
+ * @brief Generate Derived and Random Keys
+ *
+ * This function generates 2 keys : derived key and a random key.
+ *
+ * @param[out] p_derived_key Pointer to the variable where the derived key will be stored.
+ * @param[out] p_random_key  Pointer to the variable where the random key will be stored.
+ */
+static void Generate_Keys(uint32_t *p_derived_key, uint32_t *p_random_key)
+{
+  CRYP_HandleTypeDef hcryp = { 0U };
+  uint32_t a_Magic[4U] = {0xA3B21441U, 0x9B345FFEU, 0xC03655FBU, 0x87AB0F67U};
+  size_t magic_length = 0xFFFF;
+
+  /* Set the SAES parameters */
+  hcryp.Instance            = SAES;
+  hcryp.Init.DataType       = CRYP_NO_SWAP;
+  hcryp.Init.Algorithm      = CRYP_AES_ECB;
+  hcryp.Init.KeySelect      = CRYP_KEYSEL_HW;
+  hcryp.Init.KeyMode        = CRYP_KEYMODE_NORMAL;
+  hcryp.Init.KeySize        = CRYP_KEYSIZE_256B;
+
+  /* Enable RNG clock */
+  __HAL_RCC_RNG_CLK_ENABLE();
+  /* Enable SAES clock */
+  __HAL_RCC_SAES_CLK_ENABLE();
+
+  /* Initialize SAES */
+  if (HAL_CRYP_Init(&hcryp) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /* Generate key by encrypting magic with DHUK */
+  if (HAL_CRYP_Encrypt(&hcryp, (uint32_t *)a_Magic, 8, p_derived_key, 100) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /* Generate random magic */
+  RNG_GetBytes((uint8_t *)a_Magic, sizeof(a_Magic), &magic_length);
+  if (magic_length != sizeof(a_Magic))
+  {
+    Error_Handler();
+  }
+
+  /* Generate key by encrypting random magic with DHUK */
+  if (HAL_CRYP_Encrypt(&hcryp, (uint32_t *)a_Magic, 8, p_random_key, 100) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /* Deinitialize SAES */
+  if (HAL_CRYP_DeInit(&hcryp) != HAL_OK)
+  {
+    Error_Handler();
+  }
 }
 
 static int8_t MCE_CheckRegionConfig(MCE_HandleTypeDef *hmce, uint32_t RegionIndex,
@@ -521,4 +675,65 @@ static int8_t MCE_CheckAESContext(MCE_HandleTypeDef *hmce, const MCE_AESConfigTy
   }
 
   return -1;
+}
+
+static HAL_StatusTypeDef MCE_GetLockGlobalConfig(MCE_HandleTypeDef *hmce)
+{
+  /* Check the parameters */
+  assert_param(IS_MCE_ALL_INSTANCE(hmce->Instance));
+
+  /* Locked */
+  if ((hmce->Instance->CR & MCE_CR_GLOCK) == MCE_CR_GLOCK)
+  {
+    return HAL_OK;
+  }
+
+  /* Unlocked */
+  return HAL_ERROR;
+}
+
+static HAL_StatusTypeDef MCE_GetLockAESContextConfig(MCE_HandleTypeDef *hmce, uint32_t ContextIndex)
+{
+  MCE_Context_TypeDef *p_context;
+  __IO uint32_t address;
+
+  /* Check the parameters */
+  assert_param(IS_MCE_ALL_INSTANCE(hmce->Instance));
+  assert_param(IS_MCE_CONTEXT(hmce->Instance, ContextIndex));
+
+  address = (__IO uint32_t)((uint32_t)hmce->Instance + 0x240UL + \
+                            (0x30UL * ((ContextIndex - MCE_CONTEXT1) >> MCE_REGCR_CTXID_Pos)));
+  p_context = (MCE_Context_TypeDef *)address;
+
+  /* Locked */
+  if ((p_context->CCCFGR & MCE_CCCFGR_CCLOCK) == MCE_CCCFGR_CCLOCK)
+  {
+    return HAL_OK;
+  }
+
+  /* Unlocked */
+  return HAL_ERROR;
+}
+
+static HAL_StatusTypeDef MCE_GetLockAESContextKey(MCE_HandleTypeDef *hmce, uint32_t ContextIndex)
+{
+  MCE_Context_TypeDef *p_context;
+  __IO uint32_t address;
+
+  /* Check the parameters */
+  assert_param(IS_MCE_ALL_INSTANCE(hmce->Instance));
+  assert_param(IS_MCE_CONTEXT(hmce->Instance, ContextIndex));
+
+  address = (__IO uint32_t)((uint32_t)hmce->Instance + 0x240UL + \
+                            (0x30UL * ((ContextIndex - MCE_CONTEXT1) >> MCE_REGCR_CTXID_Pos)));
+  p_context = (MCE_Context_TypeDef *)address;
+
+  /* Locked */
+  if ((p_context->CCCFGR & MCE_CCCFGR_KEYLOCK) == MCE_CCCFGR_KEYLOCK)
+  {
+    return HAL_OK;
+  }
+
+  /* Unlocked */
+  return HAL_ERROR;
 }

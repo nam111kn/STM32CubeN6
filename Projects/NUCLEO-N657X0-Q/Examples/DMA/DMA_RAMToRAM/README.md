@@ -67,7 +67,9 @@ File | Description
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 
@@ -87,10 +89,10 @@ In order to make the program work, you must do the following :
  - Press the reset button. The code then executes in boot from external Flash mode.
 
 
-:::
-:::
 
 
-:::
-:::
+
+
+
+
 

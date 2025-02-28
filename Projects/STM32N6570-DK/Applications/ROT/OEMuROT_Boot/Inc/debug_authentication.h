@@ -26,7 +26,8 @@ extern "C" {
 #endif
 
 /* Exported functions ------------------------------------------------------- */
-void debug_authentication(void);
+HAL_StatusTypeDef debug_authentication(void);
+HAL_StatusTypeDef OTP_Get_Lifecycle_Status(uint8_t* secure_boot, uint8_t* prov_done);
 
 #ifdef __cplusplus
 }

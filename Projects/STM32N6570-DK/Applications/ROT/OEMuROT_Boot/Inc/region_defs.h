@@ -83,10 +83,11 @@
 #define BL2_OFFSET                          (0x80000)
 #define BL2_CODE_OFFSET                     (BL2_OFFSET + BOOTROM_HEADER_SIZE)
 #define BL2_CODE_START                      (S_RAM_ALIAS(BL2_CODE_OFFSET))
-#define BL2_CODE_SIZE                       (FLASH_AREA_BL2_SIZE - BL2_JUMP_CODE_SIZE)
+#define BL2_CODE_SIZE                       (FLASH_AREA_BL2_SIZE - BL2_JUMP_CODE_SIZE \
+                                                                 - BOOTROM_HEADER_SIZE)
 #define BL2_CODE_LIMIT                      (BL2_CODE_START + BL2_CODE_SIZE - 1)
 
-#define BL2_JUMP_CODE_SIZE                  (0x1000)
+#define BL2_JUMP_CODE_SIZE                  (0x2600)
 #define BL2_JUMP_CODE_OFFSET                (BL2_CODE_OFFSET + BL2_CODE_SIZE)
 #define BL2_JUMP_CODE_START                 (S_RAM_ALIAS(BL2_JUMP_CODE_OFFSET))
 #define BL2_JUMP_CODE_LIMIT                 (BL2_JUMP_CODE_START + BL2_JUMP_CODE_SIZE - 1)
@@ -117,12 +118,12 @@
 #elif (OEMUROT_LOAD_AND_RUN == LOAD_AND_RUN_EXT_RAM)
 /* Secure regions */
 #define S_CODE_START                        (EXT_RAM_ALIAS(0))
-#define S_DATA_START                        (EXT_RAM_ALIAS(0xF0000))
-#define S_DATA2_START                       (EXT_RAM_ALIAS(0x100000))
+#define S_DATA_START                        (EXT_RAM_ALIAS(0xFE0000))
+#define S_DATA2_START                       (EXT_RAM_ALIAS(0xFF0000))
 /* Non-secure regions */
-#define NS_CODE_START                       (EXT_RAM_ALIAS(0x180000))
-#define NS_DATA_START                       (EXT_RAM_ALIAS(0x1F0000))
-#define NS_DATA2_START                      (EXT_RAM_ALIAS(0x200000))
+#define NS_CODE_START                       (EXT_RAM_ALIAS(0x1000000))
+#define NS_DATA_START                       (EXT_RAM_ALIAS(0x1FE0000))
+#define NS_DATA2_START                      (EXT_RAM_ALIAS(0x1FF0000))
 #else
 #error "Unknown OEMUROT_LOAD_AND_RUN"
 #endif /* OEMUROT_LOAD_AND_RUN == NO_LOAD_AND_RUN */

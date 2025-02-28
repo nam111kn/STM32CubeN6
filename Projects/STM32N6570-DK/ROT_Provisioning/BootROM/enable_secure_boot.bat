@@ -10,7 +10,7 @@ set bootrom_config_9_otp=18
 set hconf1_value=0x100000
 set bootrom_config_9_value=0x1FF
 
-set connect_no_reset=-c port=SWD ap=1 mode=Hotplug
+set connect_no_reset=-c port=SWD ap=1
 
 set command="%stm32programmercli%" %connect_no_reset% -el "%stm32ExtOTPInterace%" -otp write word=%hconf1_otp% value=%hconf1_value% word=%bootrom_config_9_otp% value=%bootrom_config_9_value%
 !command!

@@ -4,10 +4,10 @@
         <path>$WS_DIR$\FSBL\FSBL.ewp</path>
     </project>
     <project>
-        <path>$WS_DIR$\AppliSecure\Tx_SecureLEDToggle_TrustZone_s.ewp</path>
+        <path>$WS_DIR$\AppliSecure\Tx_SecureLEDToggle_TrustZone_S.ewp</path>
     </project>
     <project>
-        <path>$WS_DIR$\AppliNonSecure\Tx_SecureLEDToggle_TrustZone_ns.ewp</path>
+        <path>$WS_DIR$\AppliNonSecure\Tx_SecureLEDToggle_TrustZone_NS.ewp</path>
     </project>
     <batchBuild />
 </workspace>

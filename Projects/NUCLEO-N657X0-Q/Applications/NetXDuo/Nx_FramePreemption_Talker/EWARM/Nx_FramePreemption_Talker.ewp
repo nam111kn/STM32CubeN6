@@ -74,7 +74,7 @@
                 </option>
                 <option>
                     <name>OGChipSelectEditMenu</name>
-                    <state>STM32N6570-NUCLEO	ST STM32N6570-NUCLEO</state>
+                    <state>STM32N657X0	ST STM32N657X0</state>
                 </option>
                 <option>
                     <name>GenLowLevelInterface</name>
@@ -120,7 +120,7 @@
                 </option>
                 <option>
                     <name>GFPUDeviceSlave</name>
-                    <state>STM32N6570-NUCLEO	ST STM32N6570-NUCLEO</state>
+                    <state>STM32N657X0	ST STM32N657X0</state>
                 </option>
                 <option>
                     <name>FPU2</name>

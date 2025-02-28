@@ -19,19 +19,13 @@
 <body>
 <div class="row">
 <div class="col-sm-12 col-lg-8">
-<h2 id="oemurot_appli-application-description"><b>OEMuROT_Appli Application Description</b></h2>
-<p>This project provides a OEMuROT boot path application example. Boot is performed through OEMuROT boot path after authenticity and the integrity checks of the project firmware and project data images.</p>
-<p>This project is composed of two sub-projects:</p>
-<ul>
-<li>One for the secure application part (Project_s)</li>
-<li>One for the non-secure application part (Project_ns).</li>
-</ul>
-<p>Please remember that the system always boots in secure and the secure application is responsible for launching the non-secure application. When the secure application is started the MPU is already configured (by OEMuROT) to limit the execution area to the project firmware execution slot. This is done in order to avoid any malicious code execution from an unauthorised area (RAM, out of execution slot in user flash …). Once started, it is up to the secure application to adapt the security configuration to its needs.</p>
-<p>This project mainly shows how to switch from secure application to non-secure application thanks to the system isolation performed to split the external flash and SRAM memories. The split of the external flash depends on OEMuROT configuration done through the provisioning steps. The split of the SRAM memories is independent from provisioning process and can be updated at any time before compilation steps.</p>
-<p>The non-secure application will display a menu on the console allowing to download a new version of the application firmware and the application data images. At next reset, the OEMuROT will decrypt and install these new versions after successful check of the authenticity and the integrity of each image.</p>
-<h3 id="keywords"><strong>Keywords</strong></h3>
-<p>OEMuROT, TrustZone, boot path, Root Of Trust, MPU</p>
-<h3 id="directory-contents"><strong>Directory contents</strong></h3>
+<h2 id="oemurot_appli-application-description"><b>OEMuROT_Appli application description</b></h2>
+<p>This project provides an OEMuROT application example. This application will display a menu on the console that allows the download of a new versions of applications and data images.</p>
+<p>At next reset, the OEMuROT will decrypt and install these new versions after successfully checking the authenticity and integrity of the images.</p>
+<p>The system clock frequency is the one configured by OEMuROT.</p>
+<h3 id="keywords"><b>Keywords</b></h3>
+<p>OEMuROT, Root Of Trust, MPU</p>
+<h3 id="directory-contents"><b>Directory contents</b></h3>
 <table>
 <colgroup>
 <col style="width: 50%"></col>
@@ -45,116 +39,124 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td>ROT/OEMuROT_Appli/Secure/Src/low_level_device.c</td>
-<td>Secure Low level device configuration</td>
+<td>ROT/OEMuROT_Appli/AppliSecure/Src/low_level_device.c</td>
+<td>Secure low level device configuration</td>
 </tr>
 <tr class="even">
-<td>ROT/OEMuROT_Appli/Secure/Src/low_level_ext_flash.c</td>
-<td>Secure Low level external flash driver</td>
+<td>ROT/OEMuROT_Appli/AppliSecure/Src/low_level_ext_flash.c</td>
+<td>Secure low level external flash driver</td>
 </tr>
 <tr class="odd">
-<td>ROT/OEMuROT_Appli/Secure/Src/main.c</td>
-<td>Secure Main program</td>
+<td>ROT/OEMuROT_Appli/AppliSecure/Src/main.c</td>
+<td>Secure main program</td>
 </tr>
 <tr class="even">
-<td>ROT/OEMuROT_Appli/Secure/Src/secure_nsc.c</td>
+<td>ROT/OEMuROT_Appli/AppliSecure/Src/secure_nsc.c</td>
 <td>Secure Non-Secure Callable (NSC) module</td>
 </tr>
 <tr class="odd">
-<td>ROT/OEMuROT_Appli/Secure/Src/stm32n6xx_hal_msp.c</td>
+<td>ROT/OEMuROT_Appli/AppliSecure/Src/stm32n6xx_hal_msp.c</td>
 <td>Secure HAL MSP module</td>
 </tr>
 <tr class="even">
-<td>ROT/OEMuROT_Appli/Secure/Src/stm32n6xx_it.c</td>
-<td>Secure Interrupt handlers</td>
+<td>ROT/OEMuROT_Appli/AppliSecure/Src/stm32n6xx_it.c</td>
+<td>Secure interrupt handlers</td>
 </tr>
 <tr class="odd">
-<td>ROT/OEMuROT_Appli/Secure/Src/system_stm32n6xx_s.c</td>
+<td>ROT/OEMuROT_Appli/AppliSecure/Src/system_stm32n6xx_s.c</td>
 <td>Secure STM32N6xx system clock configuration file</td>
 </tr>
 <tr class="even">
-<td>ROT/OEMuROT_Appli/Secure/Inc/low_level_ext_flash.h</td>
-<td>Secure Header file for low_level_ext_flash.c</td>
+<td>ROT/OEMuROT_Appli/AppliSecure/Inc/main.h</td>
+<td>Secure main program header file</td>
 </tr>
 <tr class="odd">
-<td>ROT/OEMuROT_Appli/Secure/Inc/main.h</td>
-<td>Secure Main program header file</td>
+<td>ROT/OEMuROT_Appli/AppliSecure/Inc/stm32_extmem_conf.h</td>
+<td>Secure header configuration for extmem module</td>
 </tr>
 <tr class="even">
-<td>ROT/OEMuROT_Appli/Secure/Inc/stm32_extmem_conf.h</td>
-<td>Secure Header configuration for extmem module</td>
-</tr>
-<tr class="odd">
-<td>ROT/OEMuROT_Appli/Secure/Inc/stm32n6xx_hal_conf.h</td>
+<td>ROT/OEMuROT_Appli/AppliSecure/Inc/stm32n6xx_hal_conf.h</td>
 <td>Secure HAL Configuration file</td>
 </tr>
-<tr class="even">
-<td>ROT/OEMuROT_Appli/Secure/Inc/stm32n6xx_it.h</td>
-<td>Secure Interrupt handlers header file</td>
-</tr>
 <tr class="odd">
-<td>ROT/OEMuROT_Appli/Secure/nsclib/appli_flash_layout.h</td>
+<td>ROT/OEMuROT_Appli/AppliSecure/Inc/stm32n6xx_it.h</td>
+<td>Secure unterrupt handlers header file</td>
+</tr>
+<tr class="even">
+<td>ROT/OEMuROT_Appli/AppliSecure/nsclib/appli_flash_layout.h</td>
 <td>Flash layout header file</td>
 </tr>
+<tr class="odd">
+<td>ROT/OEMuROT_Appli/AppliSecure/nsclib/low_level_ext_flash.h</td>
+<td>Device definition for low_level_flash_ext driver</td>
+</tr>
 <tr class="even">
-<td>ROT/OEMuROT_Appli/Secure/nsclib/secure_nsc.h</td>
+<td>ROT/OEMuROT_Appli/AppliSecure/nsclib/secure_nsc.h</td>
 <td>Secure Non-Secure Callable (NSC) module header file</td>
 </tr>
 <tr class="odd">
-<td>ROT/OEMuROT_Appli/NonSecure/Src/com.c</td>
-<td>Non-secure Communication</td>
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Src/com.c</td>
+<td>Non-secure communication</td>
 </tr>
 <tr class="even">
-<td>ROT/OEMuROT_Appli/NonSecure/Src/common.c</td>
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Src/common.c</td>
 <td>Non-secure common</td>
 </tr>
 <tr class="odd">
-<td>ROT/OEMuROT_Appli/NonSecure/Src/fw_update_app.c</td>
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Src/fw_update_app.c</td>
 <td>Non-Secure firmware update service</td>
 </tr>
 <tr class="even">
-<td>ROT/OEMuROT_Appli/NonSecure/Src/main.c</td>
-<td>Non-secure Main program</td>
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Src/main.c</td>
+<td>Non-secure main program</td>
 </tr>
 <tr class="odd">
-<td>ROT/OEMuROT_Appli/NonSecure/Src/ns_data.c</td>
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Src/ns_data.c</td>
 <td>Non-secure data display module</td>
 </tr>
 <tr class="even">
-<td>ROT/OEMuROT_Appli/NonSecure/Src/stm32n6xx_it.c</td>
-<td>Non-secure Interrupt handlers</td>
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Src/stm32n6xx_it.c</td>
+<td>Non-secure interrupt handlers</td>
 </tr>
 <tr class="odd">
-<td>ROT/OEMuROT_Appli/NonSecure/Src/system/stm32n6xx_ns.c</td>
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Src/system/stm32n6xx_ns.c</td>
 <td>Non-secure STM32N6xx system clock configuration file</td>
 </tr>
 <tr class="even">
-<td>ROT/OEMuROT_Appli/NonSecure/Src/ymodem.c</td>
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Src/ymodem.c</td>
 <td>Non-secure YModem module</td>
 </tr>
 <tr class="odd">
-<td>ROT/OEMuROT_Appli/NonSecure/Src/com.h</td>
-<td>Non-secure Communication header file</td>
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Src/com.h</td>
+<td>Non-secure communication header file</td>
 </tr>
 <tr class="even">
-<td>ROT/OEMuROT_Appli/NonSecure/Src/common.h</td>
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Src/common.h</td>
 <td>Non-secure common header file</td>
 </tr>
 <tr class="odd">
-<td>ROT/OEMuROT_Appli/NonSecure/Src/low_level_flash.h</td>
-<td>Non-Secure Low level flash driver header file</td>
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Src/fw_update_app.h</td>
+<td>Non-Secure definitions for Firmware Update module</td>
 </tr>
 <tr class="even">
-<td>ROT/OEMuROT_Appli/NonSecure/Inc/main.h</td>
-<td>Non-secure Main program header file</td>
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Inc/main.h</td>
+<td>Non-secure main program header file</td>
 </tr>
 <tr class="odd">
-<td>ROT/OEMuROT_Appli/NonSecure/Inc/stm32n6xx_hal_conf.h</td>
-<td>Non-secure HAL Configuration file</td>
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Inc/ns_data.h</td>
+<td>Non-secure definitions for ns_data example</td>
 </tr>
 <tr class="even">
-<td>ROT/OEMuROT_Appli/NonSecure/Inc/stm32n6xx_it.h</td>
-<td>Non-secure Interrupt handlers header file</td>
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Inc/stm32n6xx_hal_conf.h</td>
+<td>Non-secure HAL Configuration file</td>
+</tr>
+<tr class="odd">
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Inc/stm32n6xx_it.h</td>
+<td>Non-secure interrupt handlers header file</td>
+</tr>
+<tr class="even">
+<td>ROT/OEMuROT_Appli/AppliNonSecure/Inc/ymodem.h</td>
+<td>Non-secure definitions for Ymodem functionalities</td>
 </tr>
 <tr class="odd">
 <td>ROT/OEMuROT_Appli/Binary</td>
@@ -162,23 +164,20 @@
 </tr>
 </tbody>
 </table>
-<h3 id="hardware-and-software-environment"><strong>Hardware and Software environment</strong></h3>
+<h3 id="hardware-and-software-environment"><b>Hardware and Software environment</b></h3>
 <ul>
-<li>This example runs on STM32N657xx devices.</li>
-<li>This example has been tested with STMicroelectronics STM32N6570-DK (MB1939) board and can be easily tailored to any other supported device and development board.</li>
-<li>To print the application menu in your UART console you have to configure it using these parameters: Speed: 115200, Data: 8bits, Parity: None, stop bits: 1, Flow control: none.</li>
+<li><p>This example runs on STM32N657xx devices.</p></li>
+<li><p>This example has been tested with STMicroelectronics STM32N6570-DK (MB1939) board and can be easily tailored for STM32N6xx devices by following these steps (more details in the wiki article <a href="https://wiki.st.com/stm32mcu/wiki/Security:How_to_create_ROT_examples_for_STM32N6"><b>How to create ROT examples for STM32N6</b></a>).</p></li>
+<li><p>To print the application menu in your UART console you have to configure it using these parameters: Speed: 115200, Data: 8bits, Parity: None, stop bits: 1, Flow control: none.</p></li>
 </ul>
-<h3 id="how-to-use-it"><strong>How to use it ?</strong></h3>
-<p>This project is targeted to boot through <strong>OEMuROT boot path</strong>.</p>
-<p>Before compiling the project, you should first start the provisioning process. During the provisioning process, the linker files of Project_s and Project_ns as well as the postbuild commands will be automatically updated.</p>
-<p>Before starting the provisioning process, select the application project to use (application example or template), through oemurot_appli_path_project variable in ROT_Provisioning/env.bat or env.sh. Then start provisioning process by running ROT_Provisioning/OEMuROT/provisioning.bat or .sh, and follow its instructions.</p>
-<p>For more details, refer to Wiki article available here : <a href="https://wiki.st.com/stm32mcu/wiki/Category:Security">Link to Security Wiki</a></p>
+<h3 id="how-to-use-it"><b>How to use it ?</b></h3>
+<p><u>Before compiling the project, you should first start the provisioning process</u>. During the provisioning process, the linker files will be automatically updated.</p>
+<p>Before starting the provisioning process, select the application project to use (application example or template), through oemurot_boot_path_project variable in ROT_Provisioning/env.bat or env.sh. Then start provisioning process by running provisioning.bat (.sh) from ROT_Provisioning/OEMuROT, and follow its instructions. Refer to ROT_Provisioning/OEMuROT readme for more information on the provisioning process.</p>
 <p>After application startup, check in your “UART console” the menu is well displayed:</p>
 <pre><code>=================== Main Menu ============================
  Non-Secure Data --------------------------------------- 1
  New Fw Image ------------------------------------------ 2
- Selection :
-</code></pre>
+ Selection :</code></pre>
 <p>To update the application firmware and/or the application data image version, you must:</p>
 <ul>
 <li>Select the function “New Fw Image”</li>
@@ -187,18 +186,13 @@
 <li>Reset the board</li>
 <li>After authenticity and intergrity checks the new images are decrypted and installed.</li>
 </ul>
-<h4 id="notes"><strong>Notes:</strong></h4>
-<ol type="1">
-<li><p>Two versions of ROT_AppliConfig are available: windows executable and python version. By default, the windows executable is selected. It is possible to switch to python version by:</p>
+<p>For more details, refer to STM32N6 Wiki articles:</p>
 <ul>
-<li>installing python (Python 3.10 or newer) with the required modules listed in requirements.txt.</li>
+<li><a href="https://wiki.st.com/stm32mcu/wiki/Security:OEMuRoT_for_STM32N6">OEMuRoT for STM32N6</a>.</li>
+<li><a href="https://wiki.st.com/stm32mcu/wiki/Security:How_to_start_with_OEMuRoT_on_STM32N6_MCUs">How to start with OEMuRoT on STM32N6</a>.</li>
 </ul>
-<pre><code>pip install -r requirements.txt</code></pre>
-<ul>
-<li>having python in execution path variable</li>
-<li>deleting main.exe in Utilities_Software_AppliConfig</li>
-</ul></li>
-</ol>
+<h4 id="note"><b>Note:</b></h4>
+<p>Be aware that a default MPU configuration is already applied by OEMuRoT when jumping in your application. To ensure the security of the device, the MPU is configured to allow only the user application code area to be executed, minimizing the risk of unauthorized code execution. It is the user application responsibility to reconfigure the MPU to fit with its security needs.</p>
 </div>
 </div>
 </body>

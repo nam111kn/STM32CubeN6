@@ -170,6 +170,10 @@ Next, this program can be run in boot from flash mode. This is done by following
  - Press the reset button. The code then executes in boot from external Flash mode.
 
 
+
+
+
+
 :::
 :::
 

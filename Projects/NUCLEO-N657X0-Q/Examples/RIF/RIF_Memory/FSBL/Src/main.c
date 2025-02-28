@@ -56,6 +56,7 @@ RISAF_IllegalAccess_t illegal_access;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void SystemIsolation_Config(void);
 /* USER CODE BEGIN PFP */
 void MPU_Config(void);
 /* USER CODE END PFP */
@@ -111,12 +112,9 @@ int main(void)
 
   BSP_LED_Init(LED_BLUE);
   BSP_LED_Init(LED_GREEN);
-  /* USER CODE END SysInit */
 
-  /* Initialize all configured peripherals */
-  /* USER CODE BEGIN 2 */
 
-  /* 1- Primary region: secure and privileged CPU access */
+   /* 1- Primary region: secure and privileged CPU access */
   protected_buf[0] = 0xFFFFFFFFU;
   protected_buf[0] = 0x0U;
 
@@ -128,17 +126,13 @@ int main(void)
     Error_Handler();
   }
 
+  /* USER CODE END SysInit */
+
+  /* Initialize all configured peripherals */
+  SystemIsolation_Config();
+  /* USER CODE BEGIN 2 */
+
   /* 2- Base region: data accessible only by non-secure master */
-  risaf_base_config.Filtering = RISAF_FILTER_ENABLE;
-  risaf_base_config.Secure = RIF_ATTRIBUTE_NSEC;
-  risaf_base_config.PrivWhitelist = RIF_CID_NONE;
-  risaf_base_config.WriteWhitelist = RIF_CID_NONE;
-  risaf_base_config.ReadWhitelist = RIF_CID_NONE;
-  risaf_base_config.StartAddress = protected_address_start;
-  risaf_base_config.EndAddress = protected_address_end;
-
-  HAL_RIF_RISAF_ConfigBaseRegion(RISAF2, RISAF_REGION_1, &risaf_base_config);
-
   protected_buf[0] = 0xFFFFFFFFU;
   protected_buf[0] = 0x0U;
 
@@ -164,7 +158,14 @@ int main(void)
   }
 
   /* Set base region filtering to secure access only */
+  risaf_base_config.Filtering = RISAF_FILTER_ENABLE;
   risaf_base_config.Secure = RIF_ATTRIBUTE_SEC;
+  risaf_base_config.PrivWhitelist = RIF_CID_NONE;
+  risaf_base_config.WriteWhitelist = RIF_CID_NONE;
+  risaf_base_config.ReadWhitelist = RIF_CID_NONE;
+  risaf_base_config.StartAddress = protected_address_start;
+  risaf_base_config.EndAddress = protected_address_end;
+
   HAL_RIF_RISAF_ConfigBaseRegion(RISAF2, RISAF_REGION_1, &risaf_base_config);
 
   /* 3- Subregion:  data accessible only by non-secure master */
@@ -383,6 +384,45 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief RIF Initialization Function
+  * @param None
+  * @retval None
+  */
+  static void SystemIsolation_Config(void)
+{
+
+  /* USER CODE BEGIN RIF_Init 0 */
+
+  /* USER CODE END RIF_Init 0 */
+
+  /* set all required IPs as secure privileged */
+  __HAL_RCC_RIFSC_CLK_ENABLE();
+
+  /* RISAF Config */
+  RISAF_BaseRegionConfig_t risaf_base_config;
+  __HAL_RCC_RISAF_CLK_ENABLE();
+
+  /* set up base region configuration for CPUAXI_RAM0*/
+  /* region 1 is non-secure */
+  risaf_base_config.EndAddress = 0x64fff;
+  risaf_base_config.Filtering = RISAF_FILTER_ENABLE;
+  risaf_base_config.ReadWhitelist = RIF_CID_NONE;
+  risaf_base_config.WriteWhitelist = RIF_CID_NONE;
+  risaf_base_config.Secure = RIF_ATTRIBUTE_NSEC;
+  risaf_base_config.PrivWhitelist = RIF_CID_NONE;
+  risaf_base_config.StartAddress = 0x0000;
+  HAL_RIF_RISAF_ConfigBaseRegion(RISAF2, RISAF_REGION_1, &risaf_base_config);
+
+  /* USER CODE BEGIN RIF_Init 1 */
+
+  /* USER CODE END RIF_Init 1 */
+  /* USER CODE BEGIN RIF_Init 2 */
+
+  /* USER CODE END RIF_Init 2 */
+
 }
 
 /* USER CODE BEGIN 4 */

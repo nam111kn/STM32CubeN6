@@ -329,7 +329,7 @@
         </option>
         <option>
           <name>CCRequirePrototypes</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCDiagWarnAreErr</name>
@@ -1146,9 +1146,6 @@
     <group>
       <name>STM32N6xx_HAL_Driver</name>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\STM32N6xx_HAL_Driver\Src\stm32n6xx_hal_bsec.c</name>
-      </file>
-      <file>
         <name>$PROJ_DIR$/../../../../../../../Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_adc.c</name>
       </file>
       <file>
@@ -1183,6 +1180,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$/../../../../../../../Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_exti.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\STM32N6xx_HAL_Driver\Src\stm32n6xx_hal_bsec.c</name>
       </file>
     </group>
   </group>

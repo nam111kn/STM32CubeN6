@@ -56,6 +56,7 @@ HCD_HandleTypeDef hhcd_USB1_OTG_HS;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void PeriphCommonClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_GPDMA1_Init(void);
 static void MX_UCPD1_Init(void);
@@ -133,6 +134,9 @@ int main(void)
 
   /* Configure the system clock */
   SystemClock_Config();
+
+/* Configure the peripherals common clocks */
+  PeriphCommonClock_Config();
 
   RISAF_Config();
 
@@ -282,6 +286,24 @@ void SystemClock_Config(void)
   }
 }
 
+/**
+  * @brief Peripherals Common Clock Configuration
+  * @retval None
+  */
+void PeriphCommonClock_Config(void)
+{
+  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
+
+  /** Initializes the peripherals clock
+  */
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_TIM;
+  PeriphClkInitStruct.TIMPresSelection = RCC_TIMPRES_DIV1;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
 /* USER CODE BEGIN 4 */
 void MPU_Config(void)
 {
@@ -302,7 +324,7 @@ void MPU_Config(void)
   /*Normal memory type, code execution allowed */
   default_config.Enable = MPU_REGION_ENABLE;
   default_config.Number = MPU_REGION_NUMBER0;
-  default_config.BaseAddress = 0x341F2300;
+  default_config.BaseAddress = 0x341F0300;
   default_config.LimitAddress =  0x341FFFFF;
   default_config.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
   default_config.AccessPermission = MPU_REGION_ALL_RW;
@@ -422,7 +444,7 @@ static void MX_UCPD1_Init(void)
   LL_DMA_Init(GPDMA1, LL_DMA_CHANNEL_2, &DMA_InitStruct);
 
   /* UCPD1 interrupt Init */
-  NVIC_SetPriority(UCPD1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),7, 0));
+  NVIC_SetPriority(UCPD1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
   NVIC_EnableIRQ(UCPD1_IRQn);
 
   /* USER CODE BEGIN UCPD1_Init 1 */

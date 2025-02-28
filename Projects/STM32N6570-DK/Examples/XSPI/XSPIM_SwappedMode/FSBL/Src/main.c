@@ -484,14 +484,14 @@ static void MX_XSPI2_Init(void)
   hxspi2.Init.MemoryMode = HAL_XSPI_SINGLE_MEM;
   hxspi2.Init.MemoryType = HAL_XSPI_MEMTYPE_APMEM_16BITS;
   hxspi2.Init.MemorySize = HAL_XSPI_SIZE_256MB;
-  hxspi2.Init.ChipSelectHighTimeCycle = 1;
+  hxspi2.Init.ChipSelectHighTimeCycle = 5;
   hxspi2.Init.FreeRunningClock = HAL_XSPI_FREERUNCLK_DISABLE;
   hxspi2.Init.ClockMode = HAL_XSPI_CLOCK_MODE_0;
   hxspi2.Init.WrapSize = HAL_XSPI_WRAP_NOT_SUPPORTED;
   hxspi2.Init.ClockPrescaler = 1;
   hxspi2.Init.SampleShifting = HAL_XSPI_SAMPLE_SHIFT_NONE;
   hxspi2.Init.DelayHoldQuarterCycle = HAL_XSPI_DHQC_DISABLE;
-  hxspi2.Init.ChipSelectBoundary = HAL_XSPI_BONDARYOF_NONE;
+  hxspi2.Init.ChipSelectBoundary = HAL_XSPI_BONDARYOF_16KB;
   hxspi2.Init.MaxTran = 0;
   hxspi2.Init.Refresh = 0;
   hxspi2.Init.MemorySelect = HAL_XSPI_CSSEL_NCS1;
@@ -519,16 +519,16 @@ static void MX_XSPI2_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
+  /* USER CODE BEGIN MX_GPIO_Init_1 */
+  /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOP_CLK_ENABLE();
   __HAL_RCC_GPIOO_CLK_ENABLE();
   __HAL_RCC_GPION_CLK_ENABLE();
 
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
+  /* USER CODE BEGIN MX_GPIO_Init_2 */
+  /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */

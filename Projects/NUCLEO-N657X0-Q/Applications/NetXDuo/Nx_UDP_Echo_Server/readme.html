@@ -104,9 +104,23 @@ Reply from 192.168.1.2:6000, time 47 ms OK
 <ul>
 <li>For EWARM add the following section into the .icf file:</li>
 </ul>
-<pre><code>place in RAM_region    { last section FREE_MEM };
-+ For STM32CubeIDE add the following section into the .ld file:</code></pre>
-<p>._threadx_heap : { . = ALIGN(8); <strong>RAM_segment_used_end</strong> = .; . = . + 64K; . = ALIGN(8); } &gt;RAM AT&gt; RAM ```</p>
+<pre><code>place in RAM_region    { last section FREE_MEM };</code></pre>
+<ul>
+<li>For MDK-ARM:</li>
+</ul>
+<pre><code>either define the RW_IRAM1 region in the &quot;.sct&quot; file
+or modify the line below in &quot;tx_initialize_low_level.S to match the memory region being used
+    LDR r1, =|Image$$RW_IRAM1$$ZI$$Limit|</code></pre>
+<ul>
+<li>For STM32CubeIDE add the following section into the .ld file:</li>
+</ul>
+<pre><code>._threadx_heap :
+  {
+     . = ALIGN(8);
+     __RAM_segment_used_end__ = .;
+     . = . + 64K;
+     . = ALIGN(8);
+   } &gt;RAM AT&gt; RAM</code></pre>
 <pre><code>The simplest way to provide memory for ThreadX is to define a new section, see ._threadx_heap above.
 In the example above the ThreadX heap size is set to 64KBytes.
 The ._threadx_heap must be located between the .bss and the ._user_heap_stack sections in the linker script.
@@ -121,8 +135,26 @@ Read more in STM32CubeIDE User Guide, chapter: &quot;Linker script&quot;.</code>
 <li>Depending on the application scenario, the total TX and RX descriptors may need to be increased by updating respectively the “ETH_TX_DESC_CNT” and “ETH_RX_DESC_CNT” in the “stm32n6xx_hal_conf.h”, to guarantee the application correct behaviour, but this will cost extra memory to allocate.</li>
 <li>The NetXDuo application needs to allocate the <b> <i> NX_PACKET </i> </b> pool in a dedicated section. Below is an example of the section declaration for different IDEs.
 <ul>
-<li>For EWARM “.icf” file ``` define symbol <strong>ICFEDIT_region_NXDATA_start</strong> = 0x341F8400; define symbol <strong>ICFEDIT_region_NXDATA_end</strong> = 0x341FFC00; define region NXApp_region = mem:[from <strong>ICFEDIT_region_NXDATA_start</strong> to <strong>ICFEDIT_region_NXDATA_end</strong>]; place in NXApp_region { section .NetXPoolSection};</li>
+<li>For EWARM “.icf” file</li>
 </ul>
+<pre><code>define symbol __ICFEDIT_region_NXDATA_start__ = 0x341F8800;
+define symbol __ICFEDIT_region_NXDATA_end__   = 0x341FFC00;
+define region NXApp_region  = mem:[from __ICFEDIT_region_NXDATA_start__ to __ICFEDIT_region_NXDATA_end__];
+place in NXApp_region { section .NetXPoolSection};</code></pre>
+<ul>
+<li>For MDK-ARM</li>
+</ul>
+<pre><code> RW_NXDriverSection 0x341F8800 0x7800 {
+  *(.NetXPoolSection)
+ }</code></pre>
+<ul>
+<li>For STM32CubeIDE “.ld” file</li>
+</ul>
+<pre><code> .nx_data (NOLOAD):
+{
+   . = ABSOLUTE(0x341F8800);
+   *(.NetXPoolSection)
+} &gt;RAM AT&gt; ROM</code></pre>
 This section is then used in the <code> app_azure_rtos.c</code> file to force the <code>nx_byte_pool_buffer</code> allocation.</li>
 </ul>
 <pre><code>/* USER CODE BEGIN NX_Pool_Buffer */
@@ -159,6 +191,9 @@ static TX_BYTE_POOL nx_app_byte_pool;</code></pre>
 <li>Open the View &gt; Images.</li>
 <li>Double-click to deselect the second instance of project.out.</li>
 </ul></li>
+<li><p><strong>MDK-ARM</strong> : To monitor a variable in the live
+watch window, you must comment out SCB_EnableDCache() in main()
+function.</p></li>
 </ul>
 <h3 id="how-to-use-it"><b>How to use it ?</b></h3>
 <p>In order to make the program work, you must do the following :</p>

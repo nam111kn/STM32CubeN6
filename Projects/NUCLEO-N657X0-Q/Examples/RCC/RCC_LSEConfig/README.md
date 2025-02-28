@@ -14,7 +14,7 @@ Each time the USER push-button is pressed, External line 13 interrupt is generat
 enables the LSE when it is off, disables it when it is on.
 
 - when LSE is off, LED1 is toggling (every 300 ms)
-- when LSE is on, LED2 is toggling (every 300 ms)
+- when LSE is on, LED3 is toggling (every 300 ms)
 
 LSE clock waveform is available on the MCO2 pin PC.09 and can be captured
 on an oscilloscope.
@@ -59,7 +59,9 @@ System, RCC, PLL, PLLCLK, SYSCLK, LSE, Clock, Oscillator,
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 

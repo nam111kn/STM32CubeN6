@@ -57,7 +57,9 @@ USBXDevice, USB_OTG, High speed, SAI, Audio, Streaming, PCM
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 
@@ -70,9 +72,9 @@ In order to make the program work, you must do the following :
 
  Next, this program can be run in boot from flash mode. This is done by following the instructions below:
 
- - Resort to CubeProgrammer to add a header to the generated binary Ux_Device_Audio_2.0_Standalone.bin with the following command
-   - *STM32_SigningTool_CLI.exe -bin Ux_Device_Audio_2.0_Standalone.bin -nk -of 0x80000000 -t fsbl -o Ux_Device_Audio_2.0_Standalone-trusted.bin -hv 2.3 -dump Ux_Device_Audio_2.0_Standalone-trusted.bin*
-       - The resulting binary is Ux_Device_Audio_2.0_Standalone-trusted.bin.
- - Next, in resorting again to CubeProgrammer, load the binary and its header (Ux_Device_Audio_2.0_Standalone-trusted.bin) in DK board external Flash at address 0x7000'0000.
+ - Resort to CubeProgrammer to add a header to the generated binary Ux_Device_Audio_Standalone.bin with the following command
+   - *STM32_SigningTool_CLI.exe -bin Ux_Device_Audio_Standalone.bin -nk -of 0x80000000 -t fsbl -o Ux_Device_Audio_Standalone-trusted.bin -hv 2.3 -dump Ux_Device_Audio_Standalone-trusted.bin*
+       - The resulting binary is Ux_Device_Audio_Standalone-trusted.bin.
+ - Next, in resorting again to CubeProgrammer, load the binary and its header (Ux_Device_Audio_Standalone-trusted.bin) in DK board external Flash at address 0x7000'0000.
  - Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).
  - Press the reset button. The code then executes in boot from external Flash mode.

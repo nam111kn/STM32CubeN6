@@ -81,6 +81,7 @@
 <ul>
 <li>VDDIO3_HSLV=1 I/O XSPIM_P2 High speed option enabled</li>
 </ul></li>
+<li><p>To ensure the project runs properly, the SD card must be formatted in FAT32.</p>
 </ul>
 <p><strong>WARNING</strong></p>
 <p>When OTP fuses are set, they can not be reset. The NO_OTP_FUSE option is selected by default using the Preprocessor definition in the IDE. XSPI speed will however be limited to 50MHz. To use the full XSPI speed, delete the NO_OTP_FUSE definition.</p>
@@ -91,6 +92,7 @@
 <li>Open the View &gt; Images.</li>
 <li>Double-click to deselect the second instance of project.out.</li>
 </ul></li>
+<li><strong>MDK-ARM</strong> : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.</li>
 </ul>
 <h3 id="how-to-use-it"><b>How to use it ?</b></h3>
 <p>The example can be run either in development mode or in Load &amp; Run mode.</p>

@@ -59,6 +59,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
+uint32_t GetTimerCLKFreq(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -106,10 +107,11 @@ In this example TIM1 input clock TIM1CLK is set to TIMPRE clock.
       As TIMPRE pre-scaler is equal to 1, and since AHB pre-scaler is equal to 2,
       => TIM1CLK = SystemBusClock (400 MHz)
   */
-  tim_prescaler = __LL_TIM_CALC_PSC(SystemCoreClock, 10000);
+  TimOutClock = GetTimerCLKFreq();
+  tim_prescaler = __LL_TIM_CALC_PSC(TimOutClock, 10000);
 
   /* TIM1CLK = SystemCoreClock / (APB prescaler & multiplier)              */
-  TimOutClock = SystemCoreClock/1;
+  TimOutClock = TimOutClock;
   tim_period = __LL_TIM_CALC_ARR(TimOutClock, tim_prescaler, 10);
   /* USER CODE END SysInit */
 
@@ -282,8 +284,8 @@ static void MX_GPIO_Init(void)
 {
   LL_EXTI_InitTypeDef EXTI_InitStruct = {0};
   LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
+  /* USER CODE BEGIN MX_GPIO_Init_1 */
+  /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   LL_AHB4_GRP1_EnableClock(LL_AHB4_GRP1_PERIPH_GPIOC);
@@ -320,8 +322,51 @@ static void MX_GPIO_Init(void)
   NVIC_SetPriority(EXTI13_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
   NVIC_EnableIRQ(EXTI13_IRQn);
 
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
+  /* USER CODE BEGIN MX_GPIO_Init_2 */
+  /* USER CODE END MX_GPIO_Init_2 */
+}
+
+/* USER CODE BEGIN 4 */
+
+/**
+  * @brief Return the timer 1 kernel clock frequency (tim_ker_ck).
+  * @param None
+  * @retval Timer kernel clock frequency
+  */
+uint32_t GetTimerCLKFreq(void)
+{
+  uint32_t timer_clock_freq = 0; /* Timer clock frequency result */
+  uint32_t TIMPRE_prescaler = 0;   /* APB2 prescaler */
+  LL_RCC_ClocksTypeDef rcc_clocks = {0};
+
+  /* Retrieve RCC clocks frequencies */
+  LL_RCC_GetSystemClocksFreq(&rcc_clocks);
+
+  /* Retrieve TIM_PRESCALER prescaler */
+  TIMPRE_prescaler = LL_RCC_GetTIMPrescaler();
+
+  if (TIMPRE_prescaler == LL_RCC_TIM_PRESCALER_1)
+  {
+    /* If TIM_PRESCALER prescaler (TIMPRE) is equal to 1 */
+    timer_clock_freq = rcc_clocks.SYSCLK_Frequency;
+  }
+  else if (TIMPRE_prescaler == LL_RCC_TIM_PRESCALER_2)
+  {
+    /* If TIM_PRESCALER prescaler (TIMPRE) is equal to 2 */
+    timer_clock_freq = rcc_clocks.SYSCLK_Frequency / 2;
+  }
+  else if (TIMPRE_prescaler == LL_RCC_TIM_PRESCALER_4)
+  {
+    /* If TIM_PRESCALER prescaler (TIMPRE) is equal to 4 */
+  }
+  else if (TIMPRE_prescaler == LL_RCC_TIM_PRESCALER_8)
+  {
+    /* If TIM_PRESCALER prescaler (TIMPRE) is equal to 2 */
+    timer_clock_freq = rcc_clocks.SYSCLK_Frequency / 8;
+  }
+
+
+  return timer_clock_freq;
 }
 
 /* USER CODE BEGIN 4 */

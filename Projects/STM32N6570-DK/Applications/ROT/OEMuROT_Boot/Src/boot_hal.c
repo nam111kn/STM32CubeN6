@@ -115,8 +115,6 @@ static int boot_compute_run_img_hash(void);
 /* Place code in a specific section */
 #if defined(__ICCARM__)
 #pragma default_function_attributes = @ ".BL2_Jump_Code"
-#elif defined(__CC_ARM)
-#pragma arm section code = ".BL2_Jump_Code"
 #else
 __attribute__((section(".BL2_Jump_Code")))
 #endif /* __ICCARM__ */
@@ -181,25 +179,18 @@ void boot_clear_bl2_ram_area(void)
     pt[index] = 0;
   }
 
-  /* Disable the BL2 CODE region execution */
-  MPU->RNR = MPU_REGION_NUMBER3;
-  SET_BIT(MPU->RBAR, MPU_RBAR_XN_Msk);
-
-  /* Enable the S CODE Region execution */
-#if (OEMUROT_LOAD_AND_RUN == NO_LOAD_AND_RUN)
-  MPU->RNR = MPU_REGION_NUMBER2;
-#else
-  MPU->RNR = MPU_REGION_NUMBER6;
-#endif /* OEMUROT_LOAD_AND_RUN == NO_LOAD_AND_RUN */
-  CLEAR_BIT(MPU->RBAR, MPU_RBAR_XN_Msk);
+  /* Clean AHBSRAM2 */
+  pt = (uint32_t *)SRAM2_AHB_BASE_S;
+  for (index = 0; index < (SRAM2_AHB_SIZE / 4); index++)
+  {
+    pt[index] = 0;
+  }
 }
 
-/* Stop placing data in specified section */
-#if defined(__ICCARM__)
-#pragma default_function_attributes =
-#elif defined(__CC_ARM)
-#pragma arm section code
-#endif /* __ICCARM__ */
+/* Continue to place code in a specific section */
+#if defined(__GNUC__)
+__attribute__((section(".BL2_Jump_Code")))
+#endif /* __GNUC__ */
 
 /**
   * @brief This function manage the jump to secure application.
@@ -282,8 +273,20 @@ void boot_platform_quit(struct boot_arm_vector_table *vector)
 
   RNG_DeInit();
 
+#ifdef OEMUROT_CACHE_ENABLE
+  /* Disable I-Cache */
   SCB_DisableICache();
+
+  /* Disable D-Cache */
   SCB_DisableDCache();
+#endif /* OEMUROT_CACHE_ENABLE */
+
+#if (OEMUROT_LOAD_AND_RUN != NO_LOAD_AND_RUN)
+  if (EXT_FLASH_DEV_NAME.Uninitialize() != ARM_DRIVER_OK)
+  {
+    Error_Handler();
+  }
+#endif /* OEMUROT_LOAD_AND_RUN != NO_LOAD_AND_RUN */
 
   /* Update run time protections for application execution */
   LL_SECU_UpdateRunTimeProtections();
@@ -297,13 +300,6 @@ void boot_platform_quit(struct boot_arm_vector_table *vector)
 
   /* Check Flow control for dynamic protections */
   FLOW_CONTROL_CHECK(uFlowProtectValue, FLOW_CTRL_STAGE_4);
-
-#if (OEMUROT_LOAD_AND_RUN != NO_LOAD_AND_RUN)
-  if (EXT_FLASH_DEV_NAME.Uninitialize() != ARM_DRIVER_OK)
-  {
-    Error_Handler();
-  }
-#endif /* OEMUROT_LOAD_AND_RUN != NO_LOAD_AND_RUN */
 
   /* Set the secure vector */
   SCB->VTOR = (uint32_t)vt;
@@ -322,6 +318,11 @@ void boot_platform_quit(struct boot_arm_vector_table *vector)
   while (1);
 #endif /* !defined(__ICCARM__) */
 }
+
+/* Stop placing data in specified section */
+#if defined(__ICCARM__)
+#pragma default_function_attributes =
+#endif /* __ICCARM__ */
 
 #if defined(MCUBOOT_USE_HASH_REF)
 /**
@@ -757,6 +758,14 @@ int32_t boot_platform_init(void)
   stdio_init();
 #endif /*  MCUBOOT_HAVE_LOGGING */
 
+#ifdef OEMUROT_CACHE_ENABLE
+  /* Enable I-Cache */
+  SCB_EnableICache();
+
+  /* Enable D-Cache */
+  SCB_EnableDCache();
+#endif /* OEMUROT_CACHE_ENABLE */
+
   /* Start HW randomization */
   RNG_Init();
   (void)fih_delay_init();
@@ -786,6 +795,8 @@ int32_t boot_platform_init(void)
 
   /* Apply Run time Protection */
   LL_SECU_ApplyRunTimeProtections();
+  /* Check static protections */
+  LL_SECU_CheckStaticProtections();
 
   /* Check Flow control state */
   FLOW_CONTROL_CHECK(uFlowProtectValue, FLOW_CTRL_STAGE_1);
@@ -796,6 +807,8 @@ int32_t boot_platform_init(void)
 
   /* Apply Run time Protection */
   LL_SECU_ApplyRunTimeProtections();
+  /* Check static protections */
+  LL_SECU_CheckStaticProtections();
 
 #if defined(MCUBOOT_USE_HASH_REF)
   /* Load all images hash references (for mcuboot) */
@@ -839,16 +852,23 @@ int32_t boot_platform_init(void)
   * @retval None
   */
 #ifdef OEMUROT_ERROR_HANDLER_STOP_EXEC
+/* Place code in a specific section */
+#if defined(__ICCARM__)
+#pragma default_function_attributes = @ ".BL2_Error_Code"
+#else
+__attribute__((section(".BL2_Error_Code")))
+#endif /* __ICCARM__ */
 void Error_Handler(void)
 {
-  BOOT_LOG_ERR("Error_Handler");
   while(1);
 }
 #else /* OEMUROT_ERROR_HANDLER_STOP_EXEC */
 /* Place code in a specific section */
 #if defined(__ICCARM__)
+#pragma default_function_attributes = @ ".BL2_Error_Code"
 __NO_RETURN void Error_Handler(void)
 #else /* not __ICCARM__ */
+__attribute__((section(".BL2_Error_Code")))
 void Error_Handler(void)
 #endif /* __ICCARM__ */
 {

@@ -24,7 +24,11 @@
 <p>The application is designed to execute file operations on the SRAM-Disk device, it provides all required software code for properly managing it.</p>
 <p>The application’s main calls the MX_FileX_Init() function in order to Initialize FileX, format the SRAM memory as FAT and open the sram_disk driver. The resulting file system is a FAT32 compatible, with 512 bytes per sector.</p>
 <p>Upon successful opening of the created SRAM-Disk media, FileX continues with creating a file called “STM32.TXT” into the root directory by calling MX_FileX_Process(VOID *arg) function, then writes into it some predefined data. The file is re-opened in read only mode and content is checked.</p>
-<p>To use FileX in standalone mode the following flag must be defined in fx_user.h. #define FX_STANDALONE_ENABLE</p>
+<p>As stated earlier, the present application runs in standalone mode without ThreadX, for this reason, the standalone variant of FileX is used, plus the following flags need to be set in fx_user.h:</p>
+<ul>
+<li>#define FX_SINGLE_THREAD</li>
+<li>#define FX_STANDALONE_ENABLE</li>
+</ul>
 <h4 id="expected-success-behavior"><b>Expected success behavior</b></h4>
 <p>Successful operation is marked by a toggling green led light.</p>
 <p>Also, information regarding executing operation on the SRAM-Disk is printed to the serial port.</p>
@@ -60,6 +64,7 @@
 <li>Open the View &gt; Images.</li>
 <li>Double-click to deselect the second instance of project.out.</li>
 </ul></li>
+<li><p><strong>MDK-ARM</strong> : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.</p></li>
 </ul>
 <h3 id="how-to-use-it"><b>How to use it ?</b></h3>
 <p>In order to make the program work, you must do the following :</p>

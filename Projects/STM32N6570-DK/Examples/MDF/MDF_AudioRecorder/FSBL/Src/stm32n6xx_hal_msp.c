@@ -23,9 +23,9 @@
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
-extern DMA_NodeTypeDef pNode_GPDMACH6;
+extern DMA_NodeTypeDef Node_GPDMA1_Channel6;
 
-extern DMA_QListTypeDef pQueueLinkList_GPDMACH6;
+extern DMA_QListTypeDef List_GPDMA1_Channel6;
 
 extern DMA_HandleTypeDef handle_GPDMA1_Channel6;
 
@@ -84,24 +84,24 @@ void HAL_MspInit(void)
 }
 
 /**
-* @brief MDF MSP Initialization
-* This function configures the hardware resources used in this example
-* @param hmdf: MDF handle pointer
-* @retval None
-*/
+  * @brief MDF MSP Initialization
+  * This function configures the hardware resources used in this example
+  * @param hmdf: MDF handle pointer
+  * @retval None
+  */
 void HAL_MDF_MspInit(MDF_HandleTypeDef* hmdf)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-  DMA_NodeConfTypeDef nodeconfig;
+  DMA_NodeConfTypeDef NodeConfig;
   RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
   if(IS_MDF_INSTANCE(hmdf->Instance))
   {
-  /* USER CODE BEGIN MDF1_MspInit 0 */
+    /* USER CODE BEGIN MDF1_MspInit 0 */
 
-  /* USER CODE END MDF1_MspInit 0 */
+    /* USER CODE END MDF1_MspInit 0 */
 
-  /** Initializes the peripherals clock
-  */
+    /** Initializes the peripherals clock
+    */
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_MDF1;
     PeriphClkInitStruct.Mdf1ClockSelection = RCC_MDF1CLKSOURCE_IC8;
     PeriphClkInitStruct.ICSelection[RCC_IC8].ClockSelection = RCC_ICCLKSOURCE_PLL3;
@@ -128,35 +128,35 @@ void HAL_MDF_MspInit(MDF_HandleTypeDef* hmdf)
 
     /* MDF1 DMA Init */
     /* GPDMA1_REQUEST_MDF1_FLT0 Init */
-    nodeconfig.NodeType = DMA_GPDMA_LINEAR_NODE;
-    nodeconfig.Init.Request = GPDMA1_REQUEST_MDF1_FLT0;
-    nodeconfig.Init.BlkHWRequest = DMA_BREQ_SINGLE_BURST;
-    nodeconfig.Init.Direction = DMA_PERIPH_TO_MEMORY;
-    nodeconfig.Init.SrcInc = DMA_SINC_FIXED;
-    nodeconfig.Init.DestInc = DMA_DINC_INCREMENTED;
-    nodeconfig.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_HALFWORD;
-    nodeconfig.Init.DestDataWidth = DMA_DEST_DATAWIDTH_HALFWORD;
-    nodeconfig.Init.SrcBurstLength = 1;
-    nodeconfig.Init.DestBurstLength = 1;
-    nodeconfig.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0|DMA_DEST_ALLOCATED_PORT1;
-    nodeconfig.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
-    nodeconfig.Init.Mode = DMA_NORMAL;
-    nodeconfig.TriggerConfig.TriggerPolarity = DMA_TRIG_POLARITY_MASKED;
-    nodeconfig.DataHandlingConfig.DataExchange = DMA_EXCHANGE_NONE;
-    nodeconfig.DataHandlingConfig.DataAlignment = DMA_DATA_RIGHTALIGN_ZEROPADDED;
-    nodeconfig.SrcSecure = DMA_CHANNEL_SRC_SEC;
-    nodeconfig.DestSecure = DMA_CHANNEL_DEST_SEC;
-    if (HAL_DMAEx_List_BuildNode(&nodeconfig, &pNode_GPDMACH6) != HAL_OK)
+    NodeConfig.NodeType = DMA_GPDMA_LINEAR_NODE;
+    NodeConfig.Init.Request = GPDMA1_REQUEST_MDF1_FLT0;
+    NodeConfig.Init.BlkHWRequest = DMA_BREQ_SINGLE_BURST;
+    NodeConfig.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    NodeConfig.Init.SrcInc = DMA_SINC_FIXED;
+    NodeConfig.Init.DestInc = DMA_DINC_INCREMENTED;
+    NodeConfig.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_HALFWORD;
+    NodeConfig.Init.DestDataWidth = DMA_DEST_DATAWIDTH_HALFWORD;
+    NodeConfig.Init.SrcBurstLength = 1;
+    NodeConfig.Init.DestBurstLength = 1;
+    NodeConfig.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0|DMA_DEST_ALLOCATED_PORT1;
+    NodeConfig.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
+    NodeConfig.Init.Mode = DMA_NORMAL;
+    NodeConfig.TriggerConfig.TriggerPolarity = DMA_TRIG_POLARITY_MASKED;
+    NodeConfig.DataHandlingConfig.DataExchange = DMA_EXCHANGE_NONE;
+    NodeConfig.DataHandlingConfig.DataAlignment = DMA_DATA_RIGHTALIGN_ZEROPADDED;
+    NodeConfig.SrcSecure = DMA_CHANNEL_SRC_SEC;
+    NodeConfig.DestSecure = DMA_CHANNEL_DEST_SEC;
+    if (HAL_DMAEx_List_BuildNode(&NodeConfig, &Node_GPDMA1_Channel6) != HAL_OK)
     {
       Error_Handler();
     }
 
-    if (HAL_DMAEx_List_InsertNode(&pQueueLinkList_GPDMACH6, NULL, &pNode_GPDMACH6) != HAL_OK)
+    if (HAL_DMAEx_List_InsertNode(&List_GPDMA1_Channel6, NULL, &Node_GPDMA1_Channel6) != HAL_OK)
     {
       Error_Handler();
     }
 
-    if (HAL_DMAEx_List_SetCircularMode(&pQueueLinkList_GPDMACH6) != HAL_OK)
+    if (HAL_DMAEx_List_SetCircularMode(&List_GPDMA1_Channel6) != HAL_OK)
     {
       Error_Handler();
     }
@@ -172,14 +172,15 @@ void HAL_MDF_MspInit(MDF_HandleTypeDef* hmdf)
       Error_Handler();
     }
 
-    if (HAL_DMAEx_List_LinkQ(&handle_GPDMA1_Channel6, &pQueueLinkList_GPDMACH6) != HAL_OK)
+    if (HAL_DMAEx_List_LinkQ(&handle_GPDMA1_Channel6, &List_GPDMA1_Channel6) != HAL_OK)
     {
       Error_Handler();
     }
 
     __HAL_LINKDMA(hmdf, hdma, handle_GPDMA1_Channel6);
 
-    if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel6, DMA_CHANNEL_PRIV|DMA_CHANNEL_SEC) != HAL_OK)
+    if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel6, DMA_CHANNEL_PRIV|DMA_CHANNEL_SEC
+                              |DMA_CHANNEL_SRC_SEC|DMA_CHANNEL_DEST_SEC) != HAL_OK)
     {
       Error_Handler();
     }
@@ -187,27 +188,27 @@ void HAL_MDF_MspInit(MDF_HandleTypeDef* hmdf)
     /* MDF1 interrupt Init */
     HAL_NVIC_SetPriority(MDF1_FLT0_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(MDF1_FLT0_IRQn);
-  /* USER CODE BEGIN MDF1_MspInit 1 */
+    /* USER CODE BEGIN MDF1_MspInit 1 */
 
-  /* USER CODE END MDF1_MspInit 1 */
+    /* USER CODE END MDF1_MspInit 1 */
 
   }
 
 }
 
 /**
-* @brief MDF MSP De-Initialization
-* This function freeze the hardware resources used in this example
-* @param hmdf: MDF handle pointer
-* @retval None
-*/
+  * @brief MDF MSP De-Initialization
+  * This function freeze the hardware resources used in this example
+  * @param hmdf: MDF handle pointer
+  * @retval None
+  */
 void HAL_MDF_MspDeInit(MDF_HandleTypeDef* hmdf)
 {
   if(IS_MDF_INSTANCE(hmdf->Instance))
   {
-  /* USER CODE BEGIN MDF1_MspDeInit 0 */
+    /* USER CODE BEGIN MDF1_MspDeInit 0 */
 
-  /* USER CODE END MDF1_MspDeInit 0 */
+    /* USER CODE END MDF1_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_MDF1_CLK_DISABLE();
 
@@ -222,9 +223,9 @@ void HAL_MDF_MspDeInit(MDF_HandleTypeDef* hmdf)
 
     /* MDF1 interrupt DeInit */
     HAL_NVIC_DisableIRQ(MDF1_FLT0_IRQn);
-  /* USER CODE BEGIN MDF1_MspDeInit 1 */
+    /* USER CODE BEGIN MDF1_MspDeInit 1 */
 
-  /* USER CODE END MDF1_MspDeInit 1 */
+    /* USER CODE END MDF1_MspDeInit 1 */
   }
 
 }

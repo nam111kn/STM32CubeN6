@@ -87,7 +87,7 @@ EXTMEM_DefinitionTypeDef extmem_list_config[1] =
     .ConfigType = EXTMEM_LINK_CONFIG_8LINES,
     .NorSfdpObject =    
     {
-      0
+      {0}
     }
   },
 //////////  /* MEMORY_PSRAM_0 */

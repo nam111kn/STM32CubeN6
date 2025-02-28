@@ -55,8 +55,8 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern DMA_NodeTypeDef pNode_GPDMACH6;
-extern DMA_QListTypeDef pQueueLinkList_GPDMACH6;
+extern DMA_NodeTypeDef Node_GPDMA1_Channel6;
+extern DMA_QListTypeDef List_GPDMA1_Channel6;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel6;
 extern MDF_HandleTypeDef MdfHandle0;
 /* USER CODE BEGIN EV */

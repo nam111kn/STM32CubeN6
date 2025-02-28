@@ -48,41 +48,41 @@ static void rev_memcpy(uint32_t *dest, const uint32_t *src, size_t n);
 void OTP_InitKeys(void)
 {
   BSEC_HandleTypeDef sBsecHandler = {0};
-  uint32_t otp_value[8] = {0};
+  uint32_t otp_value[SHA256_LENGTH / 4] = {0};
   uint32_t i = 0;
 
   sBsecHandler.Instance = BSEC;
 
   /* Read secure authentication public key hash located in OTP 268-275 */
-  for (i = 0; i < 8; i++)
+  for (i = 0; i < (SHA256_LENGTH / 4); i++)
   {
     if (HAL_BSEC_OTP_Read(&sBsecHandler, S_AUTH_PUB_KEY_HASH_OTP_NUMBER + i, &(otp_value[i])) != HAL_OK)
     {
       Error_Handler();
     }
   }
-  rev_memcpy((uint32_t*)Secure_Authentication_Public_Key_HASH, otp_value, 8);
+  rev_memcpy((uint32_t*)Secure_Authentication_Public_Key_HASH, otp_value, SHA256_LENGTH / 4);
 
   /* Read non-secure authentication public key hash located in OTP 276-283 */
-  for (i = 0; i < 8; i++)
+  for (i = 0; i < (SHA256_LENGTH / 4); i++)
   {
     if (HAL_BSEC_OTP_Read(&sBsecHandler, NS_AUTH_PUB_KEY_HASH_OTP_NUMBER + i, &(otp_value[i])) != HAL_OK)
     {
       Error_Handler();
     }
   }
-  rev_memcpy((uint32_t*)NonSecure_Authentication_Public_Key_HASH, otp_value, 8);
+  rev_memcpy((uint32_t*)NonSecure_Authentication_Public_Key_HASH, otp_value, SHA256_LENGTH / 4);
 
 
   /* Read encryption private key located in OTP 284-291 */
-  for (i = 0; i < 8; i++)
+  for (i = 0; i < (ECDSA_256_PRIV_KEY_LENGTH / 4); i++)
   {
     if (HAL_BSEC_OTP_Read(&sBsecHandler, ENC_PRIV_KEY_OTP_NUMBER + i, &(otp_value[i])) != HAL_OK)
     {
       Error_Handler();
     }
   }
-  rev_memcpy((uint32_t*)Encryption_Private_Key, otp_value, 8);
+  rev_memcpy((uint32_t*)Encryption_Private_Key, otp_value, SHA256_LENGTH / 4);
 }
 
 /**
@@ -129,7 +129,7 @@ void OTP_Lock(void)
     FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_OTP_DA_EN, FLOW_CTRL_OTP_DA_EN);
 
     /* Lock secure authentication public key OTP */
-    for (i = 0; i < 8; i++)
+    for (i = 0; i < (SHA256_LENGTH / 4); i++)
     {
       if (HAL_BSEC_OTP_Lock(&sBsecHandler, S_AUTH_PUB_KEY_HASH_OTP_NUMBER + i, HAL_BSEC_FUSE_RELOAD_LOCKED) != HAL_OK)
       {
@@ -139,7 +139,7 @@ void OTP_Lock(void)
     FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_OTP_S_PBK_EN, FLOW_CTRL_OTP_S_PBK_EN);
 
     /* Lock non-secure authentication public key OTP */
-    for (i = 0; i < 8; i++)
+    for (i = 0; i < (SHA256_LENGTH / 4); i++)
     {
       if (HAL_BSEC_OTP_Lock(&sBsecHandler, NS_AUTH_PUB_KEY_HASH_OTP_NUMBER + i, HAL_BSEC_FUSE_RELOAD_LOCKED) != HAL_OK)
       {
@@ -149,7 +149,7 @@ void OTP_Lock(void)
     FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_OTP_NS_PBK_EN, FLOW_CTRL_OTP_NS_PBK_EN);
 
     /* Lock encryption private key OTP */
-    for (i = 0; i < 8; i++)
+    for (i = 0; i < (ECDSA_256_PRIV_KEY_LENGTH / 4); i++)
     {
       if (HAL_BSEC_OTP_Lock(&sBsecHandler, ENC_PRIV_KEY_OTP_NUMBER + i, HAL_BSEC_FUSE_RELOAD_LOCKED) != HAL_OK)
       {
@@ -192,7 +192,7 @@ void OTP_Lock(void)
     FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_OTP_DA_CH, FLOW_CTRL_OTP_DA_CH);
 
     /* Verify OTP : secure authentication public key */
-    for (i = 0; i < 8; i++)
+    for (i = 0; i < (SHA256_LENGTH / 4); i++)
     {
       if (HAL_BSEC_OTP_GetState(&sBsecHandler, S_AUTH_PUB_KEY_HASH_OTP_NUMBER + i, &State) != HAL_OK)
       {
@@ -209,7 +209,7 @@ void OTP_Lock(void)
     FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_OTP_S_PBK_CH, FLOW_CTRL_OTP_S_PBK_CH);
 
     /* Verify OTP : non-secure authentication public key */
-    for (i = 0; i < 8; i++)
+    for (i = 0; i < (SHA256_LENGTH / 4); i++)
     {
       if (HAL_BSEC_OTP_GetState(&sBsecHandler, NS_AUTH_PUB_KEY_HASH_OTP_NUMBER + i, &State) != HAL_OK)
       {
@@ -226,7 +226,7 @@ void OTP_Lock(void)
     FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_OTP_NS_PBK_CH, FLOW_CTRL_OTP_NS_PBK_CH);
 
     /* Verify OTP : encryption private key */
-    for (i = 0; i < 8; i++)
+    for (i = 0; i < (ECDSA_256_PRIV_KEY_LENGTH / 4); i++)
     {
       if (HAL_BSEC_OTP_GetState(&sBsecHandler, ENC_PRIV_KEY_OTP_NUMBER + i, &State) != HAL_OK)
       {

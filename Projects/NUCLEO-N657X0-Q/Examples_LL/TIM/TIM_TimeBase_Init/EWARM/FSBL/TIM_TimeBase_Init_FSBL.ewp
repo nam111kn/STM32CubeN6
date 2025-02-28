@@ -212,7 +212,6 @@
           <name>CCDefines</name>
           <state>STM32N657xx</state>
           <state>USE_FULL_LL_DRIVER</state>
-          <state>HSE_VALUE=24000000</state>
           <state>HSE_STARTUP_TIMEOUT=100</state>
           <state>LSE_STARTUP_TIMEOUT=5000</state>
           <state>LSE_VALUE=32768</state>
@@ -221,6 +220,7 @@
           <state>HSI_VALUE=64000000</state>
           <state>LSI_VALUE=32000</state>
           <state>VDD_VALUE=3300</state>
+          <state>HSE_VALUE=48000000</state>
           <state></state>
         </option>
         <option>
@@ -1097,6 +1097,12 @@
   <group>
     <name>Drivers</name>
     <group>
+      <name>CMSIS</name>
+      <file>
+        <name>$PROJ_DIR$/../../FSBL/Src/system_stm32n6xx_fsbl.c</name>
+      </file>
+    </group>
+    <group>
       <name>STM32N6xx_HAL_Driver</name>
       <file>
         <name>$PROJ_DIR$/../../../../../../../Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_ll_exti.c</name>
@@ -1118,12 +1124,6 @@
       </file>
       <file>
         <name>$PROJ_DIR$/../../../../../../../Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_ll_pwr.c</name>
-      </file>
-    </group>
-    <group>
-      <name>CMSIS</name>
-      <file>
-        <name>$PROJ_DIR$/../../FSBL/Src/system_stm32n6xx_fsbl.c</name>
       </file>
     </group>
   </group>

@@ -16,10 +16,10 @@
 ******************************************************************************
 */
 
-/* ########### HEADER GENERATED AUTOMATICALLY, DO NOT EDIT ########### */
-
 #ifndef __APPLI_FLASH_LAYOUT_H__
 #define __APPLI_FLASH_LAYOUT_H__
+
+/* ########### HEADER GENERATED AUTOMATICALLY, DO NOT EDIT ########### */
 
 #define MCUBOOT_OVERWRITE_ONLY 0x1  /* Overwrite option */
 #define S_DATA_IMAGE_NUMBER    0x1  /* Number of secure data */
@@ -28,15 +28,15 @@
 
 #define NS_DATA_ADDRESS                0x240F0400  /* Non secure data address */
 
-#define S_APPLI_OFFSET                 0x20000  /* Secure application primary slot offset */
-#define NS_APPLI_OFFSET                0x40000  /* Non secure application primary slot offset */
-#define S_DATA_OFFSET                  0x30000  /* Secure data primary slot offset */
-#define NS_DATA_OFFSET                 0x60000  /* Non secure data primary slot offset */
+#define S_APPLI_OFFSET                 0x80000  /* Secure application primary slot offset */
+#define NS_APPLI_OFFSET                0xA0000  /* Non secure application primary slot offset */
+#define S_DATA_OFFSET                  0x90000  /* Secure data primary slot offset */
+#define NS_DATA_OFFSET                 0xC0000  /* Non secure data primary slot offset */
 
-#define S_APPLI_SECONDARY_OFFSET       0x70000  /* Secure application secondary slot offset */
-#define NS_APPLI_SECONDARY_OFFSET      0x90000  /* Non secure application secondary slot offset */
-#define S_DATA_SECONDARY_OFFSET        0x80000  /* Secure data secondary slot offset */
-#define NS_DATA_SECONDARY_OFFSET       0xB0000  /* Non secure data secondary slot offset */
+#define S_APPLI_SECONDARY_OFFSET       0xD0000  /* Secure application secondary slot offset */
+#define NS_APPLI_SECONDARY_OFFSET      0xF0000  /* Non secure application secondary slot offset */
+#define S_DATA_SECONDARY_OFFSET        0xE0000  /* Secure data secondary slot offset */
+#define NS_DATA_SECONDARY_OFFSET       0x110000  /* Non secure data secondary slot offset */
 
 #define S_APPLI_PARTITION_SIZE         0x10000  /* Secure application partition size */
 #define NS_APPLI_PARTITION_SIZE        0x20000  /* Non secure application partition size */

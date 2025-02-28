@@ -101,6 +101,8 @@ To use the full XSPI speed, delete the NO_OTP_FUSE definition.
     - Open the View > Images.
     - Double-click to deselect the second instance of project.out.
 
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
+
 ### <b>How to use it ?</b>
 
 The example can be run either in development mode or in Load & Run mode.

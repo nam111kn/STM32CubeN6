@@ -82,7 +82,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
 
   /* USER CODE END 1 */
 
@@ -105,17 +104,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-  /* Enable HSE */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_NONE;
-  RCC_OscInitStruct.PLL2.PLLState = RCC_PLL_NONE;
-  RCC_OscInitStruct.PLL3.PLLState = RCC_PLL_NONE;
-  RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_NONE;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -370,6 +359,7 @@ static void SystemClockPLL1HSE_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
 
+
   /* 1 - Select HSI output as System CPU clock source and System bus clock source  - To be able to reconfigure PLL */
   /* Configure the HCLK, PCLK1, PCLK2, PCLK4 and PCLK5 clocks dividers */
   RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_CPUCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK |
@@ -386,7 +376,22 @@ static void SystemClockPLL1HSE_Config(void)
     Error_Handler();
   }
 
-  /* 2 - Configure PLL1 with HSE as clock source */
+  /* 2 - Enable HSE */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL2.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL3.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_NONE;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  
+  /* Wait HSE stabilization time before its selection as PLL source */
+  HAL_Delay(HSE_STARTUP_TIMEOUT);
+
+  /* 3 - Configure PLL1 with HSE as clock source */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_NONE;
   RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL1.PLLSource = RCC_PLLSOURCE_HSE;
@@ -403,7 +408,7 @@ static void SystemClockPLL1HSE_Config(void)
     Error_Handler();
   }
 
-  /* 3 - Select PLL1 output as System CPU clock source and System bus clock source */
+  /* 4 - Select PLL1 output as System CPU clock source and System bus clock source */
   /* Configure the HCLK, PCLK1, PCLK2, PCLK4 and PCLK5 clocks dividers */
   RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_CPUCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK |
                                  RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2 | RCC_CLOCKTYPE_PCLK4 | RCC_CLOCKTYPE_PCLK5);
@@ -428,7 +433,7 @@ static void SystemClockPLL1HSE_Config(void)
     Error_Handler();
   }
 
-  /* 4 - Optional: Disable HSI Oscillator (if HSI is no more needed by the application)*/
+  /* 5 - Optional: Disable HSI Oscillator (if HSI is no more needed by the application)*/
   RCC_OscInitStruct.OscillatorType  = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
   RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_NONE;
@@ -527,7 +532,18 @@ static void SystemClockPLL2HSI_Config(void)
   RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    /* Initialization Error */
+    Error_Handler();
+  }
+
+  /* 4 - Optional: Disable HSE Oscillator (if HSE is no more needed by the application)*/
+  RCC_OscInitStruct.OscillatorType  = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_OFF;
+  RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL2.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL3.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_NONE;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
     Error_Handler();
   }
 }
@@ -577,9 +593,24 @@ static void SystemClockPLL2HSE_Config(void)
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct) != HAL_OK)
   {
     Error_Handler();
+  }  
+  
+  /* 2 - Enable HSE */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL2.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL3.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_NONE;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
   }
+  
+  /* Wait HSE stabilization time before its selection as PLL source */
+  HAL_Delay(HSE_STARTUP_TIMEOUT);
 
-  /* 2 - Configure PLL2 with HSE as clock source */
+  /* 3 - Configure PLL2 with HSE as clock source */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_NONE;
   RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_NONE;
   RCC_OscInitStruct.PLL2.PLLState = RCC_PLL_ON;
@@ -596,7 +627,7 @@ static void SystemClockPLL2HSE_Config(void)
     Error_Handler();
   }
 
-  /* 3 - Select PLL2 output as System CPU clock source and System bus clock source */
+  /* 4 - Select PLL2 output as System CPU clock source and System bus clock source */
   /* Configure the HCLK, PCLK1, PCLK2, PCLK4 and PCLK5 clocks dividers */
   RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_CPUCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK |
                                  RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2 | RCC_CLOCKTYPE_PCLK4 | RCC_CLOCKTYPE_PCLK5);
@@ -621,7 +652,7 @@ static void SystemClockPLL2HSE_Config(void)
     Error_Handler();
   }
 
-  /* 4 - Optional: Disable HSI Oscillator (if the HSI is no more needed by the application)*/
+  /* 5 - Optional: Disable HSI Oscillator (if the HSI is no more needed by the application)*/
   RCC_OscInitStruct.OscillatorType  = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
   RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_NONE;
@@ -630,7 +661,6 @@ static void SystemClockPLL2HSE_Config(void)
   RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    /* Initialization Error */
     Error_Handler();
   }
 }
@@ -671,7 +701,6 @@ static void SystemClockHSI_Config(void)
   RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    /* Initialization Error */
     Error_Handler();
   }
 
@@ -688,7 +717,6 @@ static void SystemClockHSI_Config(void)
   RCC_ClkInitStruct.APB5CLKDivider = RCC_APB5_DIV1;
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct) != HAL_OK)
   {
-    /* Initialization Error */
     Error_Handler();
   }
 
@@ -700,7 +728,18 @@ static void SystemClockHSI_Config(void)
   RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    /* Initialization Error */
+    Error_Handler();
+  }
+
+  /* 4 - Optional: Disable HSE Oscillator (if HSE is no more needed by the application)*/
+  RCC_OscInitStruct.OscillatorType  = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_OFF;
+  RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL2.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL3.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_NONE;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
     Error_Handler();
   }
 }
@@ -729,7 +768,22 @@ static void SystemClockHSE_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
 
-  /* 1 - Select HSE output as System CPU clock source and System bus clock source */
+  /* 1 - Enable HSE */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL2.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL3.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_NONE;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /* Wait HSE stabilization time before its selection as PLL source */
+  HAL_Delay(HSE_STARTUP_TIMEOUT);
+
+  /* 2 - Select HSE output as System CPU clock source and System bus clock source */
   /* Configure the HCLK, PCLK1, PCLK2, PCLK4 and PCLK5 clocks dividers */
   RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_CPUCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK |
                                  RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2 | RCC_CLOCKTYPE_PCLK4 | RCC_CLOCKTYPE_PCLK5);
@@ -742,11 +796,10 @@ static void SystemClockHSE_Config(void)
   RCC_ClkInitStruct.APB5CLKDivider = RCC_APB5_DIV1;
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct) != HAL_OK)
   {
-    /* Initialization Error */
     Error_Handler();
   }
 
-  /* 2 - Optional: Disable HSI Oscillator (if the HSI is no more needed by the application)*/
+  /* 3 - Optional: Disable HSI Oscillator (if the HSI is no more needed by the application)*/
   RCC_OscInitStruct.OscillatorType  = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
   RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_NONE;
@@ -755,7 +808,6 @@ static void SystemClockHSE_Config(void)
   RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    /* Initialization Error */
     Error_Handler();
   }
 }
@@ -832,6 +884,18 @@ static void SystemClockPLL1HSI_Config(void)
   RCC_ClkInitStruct.IC11Selection.ClockDivider = 3;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /* 3 - Optional: Disable HSE Oscillator (if HSE are no more needed by the application)*/
+  RCC_OscInitStruct.OscillatorType  = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_OFF;
+  RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL2.PLLState = RCC_PLL_BYPASS;
+  RCC_OscInitStruct.PLL3.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_NONE;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
   }

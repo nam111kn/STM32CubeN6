@@ -75,7 +75,9 @@ Power, PWR, Standby mode, Wakeup, Low Power
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 
@@ -90,7 +92,7 @@ In order to make the program work, you must do the following :
  - Resort to CubeProgrammer to add a header to the generated Appli binary Project.bin with the following command
    - *STM32_SigningTool_CLI.exe -bin Project.bin -nk -of 0x80000000 -t fsbl -o Project-trusted.bin -hv 2.3 -dump Project-trusted.bin*
    - The resulting binary is Project-trusted.bin.
- - Next, in resorting again to CubeProgrammer, load the Appli binary and its header (Project-trusted.bin) in Nucleo board external Flash at address 0x7002'0000.
+ - Next, in resorting again to CubeProgrammer, load the Appli binary and its header (Project-trusted.bin) in Nucleo board external Flash at address 0x7010'0000.
  - Load the FSBL binary in internal RAM using the IDE
  - Run the example
 

@@ -31,7 +31,7 @@ else
 fi
 
 #==============================================================================
-#                               OEMiROT bootpath
+#                               OEMuROT bootpath
 #==============================================================================
 # Select application project below
 oemurot_boot_path_project=Applications/ROT/OEMuROT_Boot

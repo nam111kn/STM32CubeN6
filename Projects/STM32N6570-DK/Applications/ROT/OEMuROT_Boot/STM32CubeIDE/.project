@@ -96,6 +96,11 @@
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Src/low_level_security.c</locationURI>
 		</link>
+    <link>
+			<name>Application/User/sha256_alt.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Src/sha256_alt.c</locationURI>
+		</link>
 		<link>
 			<name>Application/User/stm32n6xx_hal_msp.c</name>
 			<type>1</type>

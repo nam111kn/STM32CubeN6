@@ -2,7 +2,7 @@
 <project>
     <fileVersion>4</fileVersion>
     <configuration>
-        <name>Tx_SecureLEDToggle_TrustZone_s</name>
+        <name>Tx_SecureLEDToggle_TrustZone_S</name>
         <toolchain>
             <name>ARM</name>
         </toolchain>
@@ -16,19 +16,19 @@
                 <debug>1</debug>
                 <option>
                     <name>BrowseInfoPath</name>
-                    <state>Tx_SecureLEDToggle_TrustZone_s\BrowseInfo</state>
+                    <state>Tx_SecureLEDToggle_TrustZone_S\BrowseInfo</state>
                 </option>
                 <option>
                     <name>ExePath</name>
-                    <state>Tx_SecureLEDToggle_TrustZone_s\Exe</state>
+                    <state>Tx_SecureLEDToggle_TrustZone_S\Exe</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
-                    <state>Tx_SecureLEDToggle_TrustZone_s\Obj</state>
+                    <state>Tx_SecureLEDToggle_TrustZone_S\Obj</state>
                 </option>
                 <option>
                     <name>ListPath</name>
-                    <state>Tx_SecureLEDToggle_TrustZone_s\List</state>
+                    <state>Tx_SecureLEDToggle_TrustZone_S\List</state>
                 </option>
                 <option>
                     <name>GEndianMode</name>
@@ -201,7 +201,7 @@
                 </option>
                 <option>
                     <name>BuildFilesPath</name>
-                    <state>Tx_SecureLEDToggle_TrustZone_s\</state>
+                    <state>Tx_SecureLEDToggle_TrustZone_S\</state>
                 </option>
                 <option>
                     <name>PointerAuthentication</name>
@@ -667,7 +667,7 @@
                 </option>
                 <option>
                     <name>OOCOutputFile</name>
-                    <state>Tx_SecureLEDToggle_TrustZone_s.bin</state>
+                    <state>Tx_SecureLEDToggle_TrustZone_S.bin</state>
                 </option>
                 <option>
                     <name>OOCCommandLineProducer</name>
@@ -706,7 +706,7 @@
                 </option>
                 <option>
                     <name>IlinkOutputFile</name>
-                    <state>Tx_SecureLEDToggle_TrustZone_s.out</state>
+                    <state>Tx_SecureLEDToggle_TrustZone_S.out</state>
                 </option>
                 <option>
                     <name>IlinkDebugInfoEnable</name>
@@ -1096,6 +1096,18 @@
         </settings>
     </configuration>
     <group>
+        <name>Application</name>
+        <file>
+            <name>$PROJ_DIR$\..\..\AppliSecure\Src\main.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\AppliSecure\Src\secure_nsc.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\AppliSecure\Src\stm32n6xx_it.c</name>
+        </file>
+    </group>
+    <group>
         <name>Drivers</name>
         <group>
             <name>BSP</name>
@@ -1130,17 +1142,5 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\STM32N6xx_HAL_Driver\Src\stm32n6xx_hal_rif.c</name>
             </file>
         </group>
-    </group>
-    <group>
-        <name>Example</name>
-        <file>
-            <name>$PROJ_DIR$\..\..\AppliSecure\Src\main.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\AppliSecure\Src\secure_nsc.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\AppliSecure\Src\stm32n6xx_it.c</name>
-        </file>
     </group>
 </project>

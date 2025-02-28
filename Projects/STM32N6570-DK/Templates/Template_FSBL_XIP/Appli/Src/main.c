@@ -33,6 +33,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 void Error_Handler(void);
+void MPU_Config(void);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -42,14 +43,14 @@ void Error_Handler(void);
 int main(void)
 {
 
+  /* Enable and set up the MPU------------------------------------------------*/
+  MPU_Config();
+
   /* Enable I-Cache---------------------------------------------------------*/
   SCB_EnableICache();
 
   /* Enable D-Cache---------------------------------------------------------*/
   SCB_EnableDCache();
-
-  /* System clock already configured, simply SystemCoreClock init */
-  SystemCoreClockUpdate();
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -76,6 +77,42 @@ int main(void)
     BSP_LED_Toggle(LED_GREEN);
     HAL_Delay(250);
   }
+}
+
+void MPU_Config(void){
+  MPU_Region_InitTypeDef default_config = {0};
+  MPU_Attributes_InitTypeDef attr_config = {0};
+  uint32_t primask_bit = __get_PRIMASK();
+  __disable_irq();
+
+  /* disable the MPU */
+  HAL_MPU_Disable();
+
+  /* create an attribute configuration for the MPU */
+  attr_config.Attributes = INNER_OUTER(MPU_NOT_CACHEABLE);
+  /* Set attributes 1 because attributes 0 are set in the FSBL */
+  attr_config.Number = MPU_ATTRIBUTES_NUMBER1;
+
+  HAL_MPU_ConfigMemoryAttributes(&attr_config);
+
+  /* Create a non cacheable region */
+  /*Normal memory type, code execution allowed */
+  default_config.Enable = MPU_REGION_ENABLE;
+  /* Set region 1 because region 0 is set in the FSBL */
+  default_config.Number = MPU_REGION_NUMBER1;
+  default_config.BaseAddress = __NON_CACHEABLE_SECTION_BEGIN;
+  default_config.LimitAddress =  __NON_CACHEABLE_SECTION_END;
+  default_config.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+  default_config.AccessPermission = MPU_REGION_ALL_RW;
+  default_config.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
+  default_config.AttributesIndex = MPU_ATTRIBUTES_NUMBER1;
+  HAL_MPU_ConfigRegion(&default_config);
+
+  /* enable the MPU */
+  HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+
+  /* Exit critical section to lock the system and avoid any issue around MPU mechanisme */
+  __set_PRIMASK(primask_bit);
 }
 
 /**

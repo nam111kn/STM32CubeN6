@@ -44,7 +44,7 @@
 #endif
 /* Headers for mbedtls_kwe opaque driver */
 #if defined(PSA_KWE_DRIVER_ENABLED)
-#include "../../../ST/key_wrap_engine/interface/kwe_psa_driver_interface.h"
+#include "../../../ST/mbedtls_key_wrap_engine/interface/kwe_psa_driver_interface.h"
 
 #endif
 

@@ -1,11 +1,3 @@
-
----
-pagetitle: Readme
-lang: en
----
-::: {.row}
-::: {.col-sm-12 .col-lg-8}
-
 ## <b>JPEG_DecodingFromOSPI_DMA Example Description</b>
 
 This project demonstrates how to decode a JPEG image using using the JPEG HW decoder in DMA mode.
@@ -85,7 +77,9 @@ For the following runs, select NO_OTP_FUSE option by default using the preproces
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 
@@ -113,6 +107,6 @@ In order to make the program work, you must do the following :
  - Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).
  - Press the reset button. The code then executes in boot from external Flash mode.
 
-:::
-:::
+
+
 

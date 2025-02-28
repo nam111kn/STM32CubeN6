@@ -1,4 +1,3 @@
-
 ## <b>Nx_TCP_Echo_Server Application Description</b>
 
 This application provides an example of Azure RTOS NetX/NetXDuo stack usage .
@@ -91,7 +90,14 @@ None
    This requires changes in the linker files to expose this memory location.
     + For EWARM add the following section into the .icf file:
      ```
-	 place in RAM_region    { last section FREE_MEM };
+     place in RAM_region    { last section FREE_MEM };
+     ```
+    + For MDK-ARM:
+    ```
+    either define the RW_IRAM1 region in the ".sct" file
+    or modify the line below in "tx_initialize_low_level.S to match the memory region being used
+        LDR r1, =|Image$$RW_IRAM1$$ZI$$Limit|
+    ```
     + For STM32CubeIDE add the following section into the .ld file:
     ```
     ._threadx_heap :
@@ -101,7 +107,7 @@ None
          . = . + 64K;
          . = ALIGN(8);
        } >RAM AT> RAM
-	```
+    ```
 
        The simplest way to provide memory for ThreadX is to define a new section, see ._threadx_heap above.
        In the example above the ThreadX heap size is set to 64KBytes.
@@ -118,11 +124,25 @@ None
 Below is an example of the section declaration for different IDEs.
    + For EWARM ".icf" file
    ```
-   define symbol __ICFEDIT_region_NXDATA_start__ = 0x341F8400;
+   define symbol __ICFEDIT_region_NXDATA_start__ = 0x341F7800;
    define symbol __ICFEDIT_region_NXDATA_end__   = 0x341FFC00;
    define region NXApp_region  = mem:[from __ICFEDIT_region_NXDATA_start__ to __ICFEDIT_region_NXDATA_end__];
    place in NXApp_region { section .NetXPoolSection};
-
+   ```
+   + For MDK-ARM
+   ```
+    RW_NXDriverSection 0x341F7800 0x8800  {
+      *(.NetXPoolSection)
+    }
+   ```
+   + For STM32CubeIDE ".ld" file
+   ```
+   .nx_data (NOLOAD):
+   {
+      . = ABSOLUTE(0x341F7800);
+      *(.NetXPoolSection)
+   } >RAM AT> ROM
+   ```
   This section is then used in the <code> app_azure_rtos.c</code> file to force the <code>nx_byte_pool_buffer</code> allocation.
 
 ```
@@ -163,6 +183,8 @@ RTOS, Network, ThreadX, NetXDuo, TCP, UART
     - Open the View > Images.
     - Double-click to deselect the second instance of project.out.
 
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
+
 ### <b>How to use it ?</b>
 
 In order to make the program work, you must do the following :
@@ -186,3 +208,7 @@ Next, this program can be run in boot from flash mode. This can be done by follo
  - Next, in resorting again to CubeProgrammer, load the binary and its header (Nx_TCP_Echo_Server-trusted.bin) in Nucleo board external Flash at address 0x7000'0000.
  - Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).
  - Press the reset button. The code then executes in boot from external Flash mode.
+
+
+
+

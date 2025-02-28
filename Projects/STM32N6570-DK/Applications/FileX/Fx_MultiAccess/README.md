@@ -47,6 +47,12 @@ None
      ```
      place in RAM_region    { last section FREE_MEM };
      ```
+    + For MDK-ARM:
+    ```
+    either define the RW_IRAM1 region in the ".sct" file
+    or modify the line below in "tx_initialize_low_level.S to match the memory region being used
+        LDR r1, =|Image$$RW_IRAM1$$ZI$$Limit|
+    ```
     + For STM32CubeIDE add the following section into the .ld file:
 	```
     ._threadx_heap :
@@ -84,6 +90,8 @@ RTOS, ThreadX, FileX, File system, SDMMC, SDIO, FAT32
     - Start a debugging session.
     - Open the View > Images.
     - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 

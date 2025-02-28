@@ -19,17 +19,18 @@
 <body>
 <div class="row">
 <div class="col-sm-12 col-lg-8">
-<h2 id="oemurot_boot-application-description"><b>OEMuROT_Boot Application Description</b></h2>
-<p>This project provides an OEMuROT example. OEMuROT boot path performs authenticity and the integrity checks of the project firmware and data images.</p>
-<p>The core function of this application relies on the mcuboot middleware and the mbed-crypto middleware.</p>
-<p>It relies on cryptography hardware peripherals for optimal performances (PKA, SAE, HASH, RNG).</p>
-<p>This project is full secure.</p>
-<p>This project shows how to implement an OEMuROT.</p>
-<p>To ease the development process, a prebuild command and postbuild command are integrated in the project. The prebuild command is in charge of preparing the OEMuROT_Boot scatter file according to flash layout description. The postbuild command is in charge of preparing the provisioning scripts and the application image (firmware application managed by OEMuROT) configuration files in ROT_Provisioning/OEMuROT folder, according to the flash layout and OEMuROT configuration.</p>
-<p>The maximum system clock frequency at 600Mhz is configured.</p>
-<h3 id="keywords"><strong>Keywords</strong></h3>
+<h2 id="oemurot_boot-application-description"><b>OEMuROT_Boot application description</b></h2>
+<p>This project provides an OEMuROT boot example.</p>
+<p>OEMuRoT stands for OEM updatable Root of Trust and acts as a second boot stage right after immutable BOOTROM code. OEMuRoT is an example based on the MCUboot open-source software provided with STM32N6Cube. OEMuRoT offers two services:</p>
+<ul>
+<li>The Secure Boot (root of trust service) is an updatable code, which is always executed after BOOTROM code. It activates runtime protections, and then verifies the authenticity and integrity of the user application code before every execution.</li>
+<li>The Secure Firmware Update application is an updatable code that detects new firmware image candidate. It checks its version (version downgrade prevention), authenticity, and integrity before installing it after decryption.</li>
+</ul>
+<p>To ease the development process, a prebuild command and postbuild command are integrated in the project. The prebuild command is in charge of preparing the OEMuROT_Boot scatter file according to flash layout description. The postbuild command is in charge of preparing the provisioning scripts and images configuration files in ROT_Provisioning/OEMuROT folder, according to the flash layout and OEMuROT configuration.</p>
+<p>The maximum system clock frequency 600Mhz is configured.</p>
+<h3 id="keywords"><b>Keywords</b></h3>
 <p>OEMuROT, TrustZone, Root Of Trust, Security, mcuboot</p>
-<h3 id="directory-contents"><strong>Directory contents</strong></h3>
+<h3 id="directory-contents"><b>Directory contents</b></h3>
 <table>
 <colgroup>
 <col style="width: 50%"></col>
@@ -71,44 +72,52 @@
 <td>Header file for CMSIS</td>
 </tr>
 <tr class="even">
-<td>OEMuROT_Boot/Inc/config-boot.h</td>
-<td>Mbed-crypto configuration file</td>
-</tr>
-<tr class="odd">
 <td>OEMuROT_Boot/Inc/debug_authentication.h</td>
 <td>Header file for debug_authentication.c</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>OEMuROT_Boot/Inc/flash_layout.h</td>
 <td>Flash mapping</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>OEMuROT_Boot/Inc/low_level_ext_flash.h</td>
 <td>Header file for low_level_ext_flash.c</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>OEMuROT_Boot/Inc/low_level_ext_ram.h</td>
 <td>Header file for low_level_ext_ram.c</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>OEMuROT_Boot/Inc/low_level_mce.h</td>
 <td>Header file for low_level_mce.c</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>OEMuROT_Boot/Inc/low_level_otp.h</td>
 <td>Header file for low_level_otp.c</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>OEMuROT_Boot/Inc/low_level_rng.h</td>
 <td>Header file for low_level_rng.c</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>OEMuROT_Boot/Inc/low_level_security.h</td>
 <td>Header file for low_level_security.c</td>
 </tr>
+<tr class="even">
+<td>OEMuROT_Boot/Inc/mbedtls_alt_config.h</td>
+<td>Config file for mbedtls_alt middleware</td>
+</tr>
 <tr class="odd">
+<td>OEMuROT_Boot/Inc/mbedtls_config.h</td>
+<td>Minimal configuration for using TLS in the bootloader</td>
+</tr>
+<tr class="even">
 <td>OEMuROT_Boot/Inc/region_defs.h</td>
 <td>RAM and FLASH regions definitions</td>
+</tr>
+<tr class="odd">
+<td>OEMuROT_Boot/Inc/sha256_alt.h</td>
+<td>Header file for sha256_alt.c</td>
 </tr>
 <tr class="even">
 <td>OEMuROT_Boot/Inc/stm32_extmem_conf.h</td>
@@ -156,7 +165,7 @@
 </tr>
 <tr class="odd">
 <td>OEMuROT_Boot/Inc/low_level_ext_ram.c</td>
-<td>External ram low level interface</td>
+<td>External RAM low level interface</td>
 </tr>
 <tr class="even">
 <td>OEMuROT_Boot/Inc/low_level_extmem_device.c</td>
@@ -176,11 +185,11 @@
 </tr>
 <tr class="even">
 <td>OEMuROT_Boot/Src/low_level_security.c</td>
-<td>Security Low level services</td>
+<td>Security low level services</td>
 </tr>
 <tr class="odd">
-<td>OEMuROT_Boot/Src/mpu_armv8m_drv.c</td>
-<td>Mpu low level interface</td>
+<td>OEMuROT_Boot/Src/sha256_alt.c</td>
+<td>Implementation of mbedtls_alt SHA256 module</td>
 </tr>
 <tr class="even">
 <td>OEMuROT_Boot/Src/stm32n6xx_hal_msp.c</td>
@@ -196,19 +205,26 @@
 </tr>
 </tbody>
 </table>
-<h3 id="hardware-and-software-environment"><strong>Hardware and Software environment</strong></h3>
+<h3 id="hardware-and-software-environment"><b>Hardware and Software environment</b></h3>
 <ul>
 <li>This example runs on STM32N657xx devices.</li>
 <li>This example has been tested with STMicroelectronics STM32N6570-DK (MB1939) board and can be easily tailored to any other supported device and development board.</li>
 <li>To get debug print in your UART console you have to configure it using these parameters: Speed: 115200, Data: 8bits, Parity: None, stop bits: 1, Flow control: none.</li>
 </ul>
-<h3 id="how-to-use-it"><strong>How to use it ?</strong></h3>
-<p>In order to build the OEMuROT_Boot project, you must do the following:</p>
+<h3 id="how-to-use-it"><b>How to use it ?</b></h3>
+<p><u>Before compiling the project, you should first start the provisioning process</u>.</p>
+<p>Before starting the provisioning process, select the application project to use (application example or template), through oemurot_boot_path_project variable in ROT_Provisioning/env.bat or env.sh. Then start provisioning process by running provisioning.bat (.sh) from ROT_Provisioning/OEMuROT, and follow its instructions. Refer to ROT_Provisioning/OEMuROT readme for more information on the provisioning process.</p>
+<p>Refer to OEMuROT_Appli readme for example of application booted through OEMuROT boot path.</p>
+<p>For more details, refer to STM32N6 Wiki articles:</p>
 <ul>
-<li>Open your preferred toolchain</li>
-<li>Rebuild the project</li>
+<li><a href="https://wiki.st.com/stm32mcu/wiki/Security:OEMuRoT_for_STM32N6">OEMuRoT for STM32N6</a>.</li>
+<li><a href="https://wiki.st.com/stm32mcu/wiki/Security:How_to_start_with_OEMuRoT_on_STM32N6_MCUs">How to start with OEMuRoT on STM32N6 MCUs</a>.</li>
 </ul>
-<p>Then refer to OEMuROT_Appli readme for example of application booted through OEMuROT boot path.</p>
+<h4 id="notes"><b>Notes:</b></h4>
+<p>By default the anti-tamper is enabled for internal tamper events. It is possible to change this configuration with OEMUROT_TAMPER_ENABLE defined in Inc_hal_cfg.h.</p>
+<pre><code>#define NO_TAMPER            (0)                   /*!&lt; No tamper activated */
+#define INTERNAL_TAMPER_ONLY (1)                   /*!&lt; Only Internal tamper activated */
+#define OEMUROT_TAMPER_ENABLE INTERNAL_TAMPER_ONLY /*!&lt; TAMPER configuration flag  */</code></pre>
 </div>
 </div>
 </body>

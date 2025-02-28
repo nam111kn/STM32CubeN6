@@ -19,33 +19,39 @@ In the main loop, when this flag is set, the next System and buses Clocks source
 
     - If PLL1 with HSI source is selected as CPU and system buses clocks source, the following steps will be followed to switch CPU and system buses clocks to PLL1 with HSE:
          1. Select HSI output as CPU and System bus clocks source (To be able to reconfigure PLL)
-         2. Configure PLL1 with HSE as clock source
-         3. Select PLL1 output as CPU and System bus clocks source
-         4. Disable HSI Oscillator (Optional, if HSI is no more needed by the application)
+         2. Enable HSE
+         3. Configure PLL1 with HSE as clock source         
+         4. Select PLL1 output as CPU and System bus clocks source
+         5. Disable HSI Oscillator (Optional, if HSI is no more needed by the application)
 
     - If PLL1 with HSE source is selected as CPU and system buses clocks source, the following steps will be followed to switch CPU and system buses clocks to PLL2 with HSI:
          1. Enable HSI and Configure PLL2
          2. Select PLL2 output as CPU and System bus clocks source
          3. Disable PLL1 Oscillator (Optional, if PLL1 is no more needed by the application)
+         4. Disable HSE Oscillator (Optional, if HSE is no more needed by the application)
 
     - If PLL2 with HSI source is selected as CPU and system buses clocks source, the following steps will be followed to switch CPU and system buses clocks to PLL2 with HSE:
          1. Select HSI output as CPU and System bus clocks source (To be able to reconfigure PLL)
-         2. Configure PLL2 with HSE as clock source
-         3. Select PLL2 output as CPU and System bus clocks source
-         4. Disable HSI Oscillator (Optional, if HSI is no more needed by the application)
+         2. Enable HSE
+         3. Configure PLL2 with HSE as clock source
+         4. Select PLL2 output as CPU and System bus clocks source
+         5. Disable HSI Oscillator (Optional, if HSI is no more needed by the application)
 
     - If PLL2 with HSE source is selected as CPU and system buses clocks source, the following steps will be followed to switch CPU and system buses clocks to HSI:
          1. Enable HSI
          2. Select HSI output as CPU and System bus clocks source
          3. Disable PLL2 Oscillator (Optional, if PLL2 is no more needed by the application)
+         4. Disable HSE Oscillator (Optional, if HSE is no more needed by the application)
 
     - If HSI source is selected as CPU and system buses clocks source, the following steps will be followed to switch CPU and system buses clocks to HSE:
-         1. Select HSE output as CPU and System bus clocks source
-         2. Disable HSI Oscillator (Optional, if HSI is no more needed by the application)
+         1. Enable HSE
+         2. Select HSE output as CPU and System bus clocks source
+         3. Disable HSI Oscillator (Optional, if HSI is no more needed by the application)
 
     - If HSE source is selected as CPU and system buses clocks source, the following steps will be followed to switch CPU and system buses clocks to PLL1 with HSI:
          1. Enable HSI and Configure PLL1 (Also re-able PLL2 as this was the previous selected source for Icx)
          2. Select PLL1 output as CPU and System bus clocks source
+         3. Disable HSE Oscillator (Optional, if HSE is no more needed by the application)
 
 
 - In this example the CPU clock (sysa_ck) is outputted on the MCO1 pin(PA.08).
@@ -92,7 +98,9 @@ System, CPU, RCC, PLL, PLLCLK, SYSCLK, HSI, HSE, Switch Clock, Oscillator
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 

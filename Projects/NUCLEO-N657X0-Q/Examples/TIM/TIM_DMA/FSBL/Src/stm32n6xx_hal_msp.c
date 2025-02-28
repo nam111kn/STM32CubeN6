@@ -152,7 +152,8 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* htim_pwm)
 
     __HAL_LINKDMA(htim_pwm, hdma[TIM_DMA_ID_CC3], handle_GPDMA1_Channel7);
 
-    if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel7, DMA_CHANNEL_PRIV|DMA_CHANNEL_SEC) != HAL_OK)
+    if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel7, DMA_CHANNEL_PRIV|DMA_CHANNEL_SEC
+                              |DMA_CHANNEL_SRC_SEC|DMA_CHANNEL_DEST_SEC) != HAL_OK)
     {
       Error_Handler();
     }

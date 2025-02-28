@@ -15,7 +15,7 @@ password_bin="$projectdir/Config/DA_password.bin"
 hash_bin="$projectdir/hash.bin"
 da_pw_hash_otp=292
 
-connect_no_reset="-c port=SWD ap=1 mode=Hotplug"
+connect_reset="-c port=SWD ap=1"
 
 applicfg="$cube_fw_path/Utilities/PC_Software/ROT_AppliConfig/dist/AppliCfg.exe"
 uname | grep -i -e windows -e mingw
@@ -35,7 +35,7 @@ fi
 $python$applicfg hashcontent $hash_bin -i $password_bin
 
 # Write password hash in OTP bits
-"$stm32programmercli" "$connect_no_reset" -el "$stm32ExtOTPInterace" -otp fwrite lock "$hash_bin" word=$da_pw_hash_otp
+"$stm32programmercli" "$connect_reset" -el "$stm32ExtOTPInterace" -otp fwrite lock "$hash_bin" word=$da_pw_hash_otp
 if [ $? -ne 0 ]; then
 	rm -f "$hash_bin"
 	echo "Error"

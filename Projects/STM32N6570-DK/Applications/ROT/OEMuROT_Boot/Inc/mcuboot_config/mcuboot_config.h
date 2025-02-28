@@ -58,6 +58,8 @@ extern "C" {
                                      /* Undefined: Image encryption disabled. */
 #define MCUBOOT_BOOTSTRAP            /* Allow initial state with images in secondary slots only (empty primary slots) */
 
+#define MCUBOOT_LOG_VERSION          /* Display version */
+
 /*
  * Cryptographic settings
  */

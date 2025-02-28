@@ -12,8 +12,8 @@ Once started, the <b>MainThread</b> toggle the LED_GREEN before sleeping for 1s.
 This project is composed of three sub-projects:
 
 - one for the First Stage BootLoader (FSBL)
-- one for the secure application part (Tx_SecureLEDToggle_TrustZone_s)
-- one for the non-secure application part (Tx_SecureLEDToggle_TrustZone_ns).
+- one for the secure application part (Tx_SecureLEDToggle_TrustZone_S)
+- one for the non-secure application part (Tx_SecureLEDToggle_TrustZone_NS).
 
 Please remember that on system with security enabled, the system always boots in secure and the secure application is responsible for launching the non-secure application.
 - the SystemInit() function in secure application sets up the SAU/IDAU, FPU and secure/non-secure interrupts allocations defined in partition_stm32n657xx.h file.
@@ -128,7 +128,7 @@ For the following runs, select NO_OTP_FUSE option by default using the preproces
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
 
 ###  <b>How to use it ?</b>
 
@@ -143,12 +143,12 @@ In order to make the program work, you must do the following :
  - Select the Project_ns workspace
  - Rebuild all files from sub-project Project_ns
  - Resort to CubeProgrammer to add a header to the generated App_Secure binary Project.bin with the following command
-   - *STM32_SigningTool_CLI.exe -bin Tx_SecureLEDToggle_TrustZone_s.bin -nk -of 0x80000000 -t fsbl -o Tx_SecureLEDToggle_TrustZone_s-trusted.bin -hv 2.3 -dump Tx_SecureLEDToggle_TrustZone_s-trusted.bin*
+   - *STM32_SigningTool_CLI.exe -bin Tx_SecureLEDToggle_TrustZone_S.bin -nk -of 0x80000000 -t fsbl -o Tx_SecureLEDToggle_TrustZone_S-trusted.bin -hv 2.3 -dump Tx_SecureLEDToggle_TrustZone_S-trusted.bin*
        - The resulting binary is Project-trusted.bin.
  - Do the same with App_NonSecure
-    - *STM32_SigningTool_CLI.exe -bin Tx_SecureLEDToggle_TrustZone_ns.bin -nk -of 0x80000000 -t fsbl -o Tx_SecureLEDToggle_TrustZone_ns-trusted.bin -hv 2.3 -dump Tx_SecureLEDToggle_TrustZone_ns-trusted.bin*
+    - *STM32_SigningTool_CLI.exe -bin Tx_SecureLEDToggle_TrustZone_NS.bin -nk -of 0x80000000 -t fsbl -o Tx_SecureLEDToggle_TrustZone_NS-trusted.bin -hv 2.3 -dump Tx_SecureLEDToggle_TrustZone_NS-trusted.bin*
        - The resulting binary is Project_ns-trusted.bin.
- - Next, in resorting again to CubeProgrammer, load the secure application binary and its header (Tx_SecureLEDToggle_TrustZone_s-trusted.bin) in Nucleo board external Flash at address 0x7010'0000 and the non-secure application binary and its header (Tx_SecureLEDToggle_TrustZone_ns-trusted.bin) at address 0x7018'0000.
+ - Next, in resorting again to CubeProgrammer, load the secure application binary and its header (Tx_SecureLEDToggle_TrustZone_S-trusted.bin) in Nucleo board external Flash at address 0x7010'0000 and the non-secure application binary and its header (Tx_SecureLEDToggle_TrustZone_NS-trusted.bin) at address 0x7018'0000.
 
 \
  To run the template with boot in development mode,

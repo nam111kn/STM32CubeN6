@@ -19,7 +19,9 @@ During the enumeration phase, device provides host with the requested descriptor
 Those descriptors are used by host driver to identify the device capabilities.
 
 Once the STM32N6570-DK USB device successfully completed the enumeration phase:
+
  1- Open a camera application (Camera, ContaCam or VLC media player) then open the capture device and play the video on the PC host.
+
  2- To test other stream change number of included file "ux_device_video.c":
 
     - stream1 FORMAT : MJPEG and Width = 320, Height = 236.
@@ -56,6 +58,28 @@ None
      ```
      place in RAM_region    { last section FREE_MEM };
      ```
+    + For MDK-ARM:
+    ```
+    either define the RW_IRAM1 region in the ".sct" file
+    or modify the line below in "tx_initialize_low_level.S to match the memory region being used
+        LDR r1, =|Image$$RW_IRAM1$$ZI$$Limit|
+    ```
+    + For STM32CubeIDE add the following section into the .ld file:
+    ```
+    ._threadx_heap :
+      {
+         . = ALIGN(8);
+         __RAM_segment_used_end__ = .;
+         . = . + 64K;
+         . = ALIGN(8);
+       } >RAM_D1 AT> RAM_D1
+    ```
+
+       The simplest way to provide memory for ThreadX is to define a new section, see ._threadx_heap above.
+       In the example above the ThreadX heap size is set to 64KBytes.
+       The ._threadx_heap must be located between the .bss and the ._user_heap_stack sections in the linker script.
+       Caution: Make sure that ThreadX does not need more than the provided heap memory (64KBytes in this example).
+       Read more in STM32CubeIDE User Guide, chapter: "Linker script".
 
     + The "tx_initialize_low_level.S" should be also modified to enable the "USE_DYNAMIC_MEMORY_ALLOCATION" flag.
 
@@ -66,12 +90,14 @@ RTOS, ThreadX, USBX Device, USB_OTG, Full Speed, High Speed, Video, MJPEG.
 ### <b>Hardware and Software environment</b>
 
   - This application runs on STM32N657X0H3QU devices.
-  - This application has been tested with STMicroelectronics SSTM32N6570-DK boards revision MB1939-N6570-C01 and can be easily tailored to any other supported device and development board.
+  - This application has been tested with STMicroelectronics STM32N6570-DK boards revision MB1939-N6570-C01 and can be easily tailored to any other supported device and development board.
 
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 

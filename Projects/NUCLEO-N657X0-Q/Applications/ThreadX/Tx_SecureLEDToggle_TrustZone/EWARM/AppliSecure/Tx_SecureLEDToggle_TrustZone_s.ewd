@@ -2,7 +2,7 @@
 <project>
     <fileVersion>4</fileVersion>
     <configuration>
-        <name>Tx_SecureLEDToggle_TrustZone_s</name>
+        <name>Tx_SecureLEDToggle_TrustZone_S</name>
         <toolchain>
             <name>ARM</name>
         </toolchain>

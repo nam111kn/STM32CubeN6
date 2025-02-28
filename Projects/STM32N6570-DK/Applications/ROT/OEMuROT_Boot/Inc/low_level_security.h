@@ -37,11 +37,12 @@ extern "C" {
 /** @defgroup SECURITY_Exported_Functions Exported Functions
   * @{
   */
-void    LL_SECU_ApplyRunTimeProtections(void);
-void    LL_SECU_UpdateRunTimeProtections(void);
-void    LL_SECU_DisableCleanMpu(void);
+void LL_SECU_ApplyRunTimeProtections(void);
+void LL_SECU_UpdateRunTimeProtections(void);
+void LL_SECU_CheckStaticProtections(void);
+void LL_SECU_DisableCleanMpu(void);
 
-void    TAMP_IRQHandler(void);
+void TAMP_IRQHandler(void);
 
 /**
   * @}

@@ -1,124 +1,78 @@
 ## <b>ROT_Provisioning OEMuROT Description</b>
 
-This section provides available configuration scripts for OEMuROT example.
+This section provides an overview of the available scripts for OEMuROT.
 
+OEMuROT stands for "OEM Updatable Root of Trust" and it provides two services:
 
-To ease the configuration process, da\_programming, flash\_programming, keys\_generation, keys\_programming and provisioning scripts are used.
-The da\_programming script compute the hash of the password located in \Config\DA\_password.bin and program it into OTP 292 - 299.
-The flash\_programming script downloads the images.
-The keys\_generation script generates new OEMuROT keys and store them in \Keys\ folder.
-The keys\_programming script program OEMuROT keys into OTP 268 - 291.
-The provisioning script is in charge of target provisioning.
+  - Secure Boot: Verification of the integrity, and authenticity of the application code before any execution.
+  - Secure Firmware Update: If a new firmware image is available on detection, check of its authenticity.
+                            Once the firmware is decrypted, check of the integrity of the code before installing it.
 
+### <b>Keywords</b>
 
-### **Keywords**
+OEMuROT, Root Of Trust, Security, mcuboot
 
+### <b>Directory contents</b>
 
-OEMuROT, TrustZone, Root Of Trust, Security, mcuboot
+<b>Sub-directories</b>
 
+- OEMuROT/Binary                               Output binaries and generated images.
+- OEMuROT/Config                               OEMuROT configuration files.
+- OEMuROT/Images                               Images configuration files.
+- OEMuROT/Keys                                 Keys for firmware image authentication and encryption.
 
-### **Directory contents**
+<b>Scripts</b>
 
+- OEMuROT/da_programming.bat/.sh               Program DA password hash into OTP.
+- OEMuROT/flash_programming.bat/.sh            Programs images on the device.
+- OEMuROT/keys_generation.bat/.sh              Generate OEMuROT new keys.
+- OEMuROT/keys_programming.bat/.sh             Programs OEMuROT keys into OTP.
+- OEMuROT/provisioning.bat/.sh                 Performs device provisioning process.
 
-* OEMuROT/provisioning.bat/.sh Target provisioning.
-* OEMuROT/keys\_programming.bat/.sh Program OEMuROT keys into OTP.
-* OEMuROT/keys\_generation.bat/.sh Generate OEMuROT new keys.
-* OEMuROT/flash\_programming.bat/.sh Image download.
-* OEMuROT/da\_programming.bat/.sh Program DA password hash into OTP.
-* OEMuROT/Binary It contains data binary files.
-* OEMuROT/Images/OEMuROT\_S\_Code\_Image.xml Configuration file for Secure Firmware image generation.
-* OEMuROT/Images/OEMuROT\_S\_Data\_Image.xml Configuration file for Secure Data image generation.
-* OEMuROT/Images/OEMuROT\_NS\_Code\_Image.xml Configuration file for NonSecure Firmware image generation.
-* OEMuROT/Images/OEMuROT\_NS\_Data\_Image.xml Configuration file for NonSecure Data image generation.
-* OEMuROT/Keys/OEMuROT\_Authentication\_S.pem Private key for secure authentication.
-* OEMuROT/Keys/OEMuROT\_Authentication\_S\_Pub\_Hash.bin Public key hash for secure authentication.
-* OEMuROT/Keys/OEMuROT\_Authentication\_NS.pem Private key for nonsecure authentication.
-* OEMuROT/Keys/OEMuROT\_Authentication\_NS\_Pub\_Hash.bin Public key hash for nonsecure authentication.
-* OEMuROT/Keys/OEMuROT\_Encryption.pem Private key for encryption.
-* OEMuROT/Keys/OEMuROT\_Encryption\_Priv.bin Public key for encryption.
-* OEMuROT/Config/DA\_password.bin Debug Authentication password.
+### <b>Hardware and Software environment</b>
 
+  - This example runs on STM32N657xx devices.
 
-### **Hardware and Software
-environment**
-
-
-* This example runs on STM32N657xx devices.
-* This example has been tested with STMicroelectronics STM32N6570-DK (MB1939)
-board and can be easily tailored to any other supported device and development board.
-
-
-### **How to use it ?**
-
-
-Before compiling the project, you should first start the provisioning process.
-During the provisioning process, the linker files of project as well as the postbuild commands will be automatically updated.
-
-
-All scripts are relying on env.bat for tools path and application path. (ROT\_Provisioning/env.bat)
-
-
-The **provisioning process** (OEMuROT/provisioning.bat) is divided into 3 majors steps :
-
-
-* Step 1 : Configuration management
-
-
-	+ DA password configuration : Set the password of debug opening
-	+ OEMuROT keys configuration : Generate new OEMuROT keys if necessary
-	+ BootROM keys configuration : Generate new BootROM if necessary
-* Step 2 : Image generation
-
-
-	+ Boot firmware image generation : Build the OEMuROT\_Boot project with the preferred toolchain.
-	+ Secure Code firmware image generation : Build the OEMuROT\_Appli\_Secure project with the preferred toolchain.
-	+ Non Secure Code firmware image generation : Build the OEMuROT\_Appli\_NonSecure project with the preferred toolchain.
-	+ Secure Data generation : Secure Data image generation with TrustedPackageCreator, if secure data image enabled.
-	+ Non Secure Data generation : Non Secure Data image generation with TrustedPackageCreator, if non secure data image enabled.
-* Step 3 : Provisioning
-
-
-	+ Flash the images using flash\_programming.bat.
-
-
-The provisioning script is relying on flash\_programming script.
-
-
-It is possible to run flash\_programming.bat directly (advanced mode).
-
-
-The **flash\_programming process** (OEMuROT/flash\_programming.bat) includes :
-
-
-* Erase OEMuROT slots
-* Program Images
-
-
-	+ Download boot image.
-	+ Download secure application image.
-	+ Download non secure application image.
-	+ Download secure data image if enabled.
-	+ Download non secure data image if enabled.
-
-
-Environment Setup
------------------
-
-
-All scripts rely on env.bat for setting the necessary tools path and application path.
-
-
-* File path : ROT\_Provisioning/env.bat.
-* Purpose : Sets the necessary tools path and application path for Windows, Linux and Mac operating system.
-* Usage : Exporting the Environment Variables, Path Configuration, Dependency Setup, Perform initial setup tasks.
-
-
-Additional Resources
---------------------
-
-
-[OEMuROT\_STM32N657](https://wiki.st.com/stm32mcu)
+  - This example has been tested with STMicroelectronics STM32N6570-DK (MB1939) board and can be easily tailored for
+    STM32N6xx devices by following these steps
+    (more details in the wiki article [<b>How to create ROT examples for STM32N6</b>](https://wiki.st.com/stm32mcu/wiki/Security:How_to_create_ROT_examples_for_STM32N6)).
 
 
 
+### <b>How to use it ?</b>
 
+The .bat scripts are designed for Windows, whereas the .sh scripts are designed for Linux and Mac-OS.
+
+During the **provisioning process**, the programming scripts and the application files will
+be automatically updated according to OEMuRoT configuration.
+
+The **provisioning process** (OEMuROT/provisioning.bat/.sh) is divided into 3 majors steps:
+
+- Step 0: Preliminary stage
+- Step 1: Configuration management
+- Step 2: Image generations
+- Step 3: Provisioning
+
+The provisioning script is relying on flash_programming script.
+
+In the /Config/ folder, two password files are provided:
+
+- **DA_password.bin**: This file contains only the password and is used to program the password hash in OTPs.
+- **password.bin**: This file contains the password preceded by a header and is intended for use with
+STM32CubeProgrammer to enable non-secure debug.
+
+For more details, refer to STM32N6 Wiki articles:
+
+  - [OEMuRoT for STM32N6](https://wiki.st.com/stm32mcu/wiki/Security:OEMuRoT_for_STM32N6)
+  - [How to start with OEMuRoT on STM32N6 MCUs](https://wiki.st.com/stm32mcu/wiki/Security:How_to_start_with_OEMuRoT_on_STM32N6_MCUs)
+
+### <b>Notes</b>
+
+Two versions of AppliCfg (used during **provisioning process**) are available: windows executable and python version.<br>
+On Windows environment, the executable is used. On other environment, the python version is automatically used.<br>
+To use Python version, it is needed to:
+
+- have python installed (Python 3.6 or newer) and available in execution path variable
+- have required python modules installed (Utilities/PC_Software/ROT_AppliConfig/requirements.txt):
+
+        pip install -r requirements.txt

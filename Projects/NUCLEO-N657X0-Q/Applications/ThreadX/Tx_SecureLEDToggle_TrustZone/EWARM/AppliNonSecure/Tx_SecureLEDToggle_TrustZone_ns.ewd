@@ -2,7 +2,7 @@
 <project>
     <fileVersion>4</fileVersion>
     <configuration>
-        <name>Tx_SecureLEDToggle_TrustZone_ns</name>
+        <name>Tx_SecureLEDToggle_TrustZone_NS</name>
         <toolchain>
             <name>ARM</name>
         </toolchain>
@@ -120,7 +120,7 @@
                 </option>
                 <option>
                     <name>OCImagesPath1</name>
-                    <state>$PROJ_DIR$/../AppliSecure/Tx_SecureLEDToggle_TrustZone_s/Exe/Project.out</state>
+                    <state>$PROJ_DIR$/../AppliSecure/Tx_SecureLEDToggle_TrustZone_S/Exe/Project.out</state>
                 </option>
                 <option>
                     <name>OCImagesSuppressCheck2</name>

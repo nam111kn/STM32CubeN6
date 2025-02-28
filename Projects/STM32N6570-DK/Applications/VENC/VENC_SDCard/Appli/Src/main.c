@@ -687,8 +687,10 @@ void Error_Handler(void)
 #define HEAP_START   ((uint32_t) __sfb("HEAP"))
 #define HEAP_END      ((uint32_t) __sfe("HEAP"))
 #elif defined(__ARMCC_VERSION)
-extern void *__Vectors;
-#error "Keil unsupported in this application"
+extern uint32_t Image$$ARM_LIB_HEAP$$ZI$$Base;
+extern uint32_t Image$$ARM_LIB_HEAP$$ZI$$Limit;
+#define HEAP_START ((uint32_t) &Image$$ARM_LIB_HEAP$$ZI$$Base)
+#define HEAP_END   ((uint32_t) &Image$$ARM_LIB_HEAP$$ZI$$Limit-1)
 #elif defined(__GNUC__)
 extern uint8_t _end; /* Symbol defined in the linker script */
 extern uint32_t _Min_Heap_Size; /* Symbol defined in the linker script */

@@ -18,7 +18,7 @@ At each trigger signal generation, the triggered channel performs a single data 
 
 NUCLEO-N657X0-Q board's LED can be used to monitor the transfers status:
 
- - LED2 toggle when no error detected.
+ - LED1 toggle when no error detected.
  - LED2 is ON when any error occurred.
 
 #### <b>Notes</b>
@@ -57,7 +57,9 @@ Memory, DMA, Trigger
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 

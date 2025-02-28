@@ -252,34 +252,34 @@ const MPU_Attributes_InitTypeDef mpu_attributes[] =
   /* Peripherals */
   {
     MPU_ATTRIBUTES_NUMBER0,
-    MPU_DEVICE_NGNRNE
+    MPU_DEVICE_GRE
   },
   /* CODE */
   {
     MPU_ATTRIBUTES_NUMBER1,
-    INNER_OUTER(MPU_WRITE_THROUGH | MPU_NON_TRANSIENT | MPU_R_ALLOCATE)
+    INNER_OUTER(MPU_WRITE_THROUGH | MPU_NON_TRANSIENT | MPU_NO_ALLOCATE)
   },
   /* DATA */
   {
     MPU_ATTRIBUTES_NUMBER2,
-    INNER_OUTER(MPU_WRITE_BACK | MPU_NON_TRANSIENT | MPU_RW_ALLOCATE)
+    INNER_OUTER(MPU_WRITE_THROUGH | MPU_NON_TRANSIENT | MPU_RW_ALLOCATE)
   },
   /* DATA NO CACHE */
   {
     MPU_ATTRIBUTES_NUMBER3,
-    INNER_OUTER(MPU_WRITE_BACK | MPU_NON_TRANSIENT | MPU_NO_ALLOCATE)
+    INNER_OUTER(MPU_NO_ALLOCATE)
   },
 };
 
-MPU_Region_Config_t mpu_region_cfg[] = {
+const MPU_Region_Config_t mpu_region_cfg[] = {
   /* Region 0: Allows RW access to peripherals */
   {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER0,
+      MPU_ATTRIBUTE_DEVICE,
       PERIPH_BASE_S,
       PERIPH_BASE_S + 0xFFFFFFF,
-      MPU_ATTRIBUTE_DEVICE,
       MPU_REGION_PRIV_RW,
       MPU_INSTRUCTION_ACCESS_DISABLE,
       MPU_ACCESS_NOT_SHAREABLE,
@@ -296,9 +296,9 @@ MPU_Region_Config_t mpu_region_cfg[] = {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER1,
+      MPU_ATTRIBUTE_DATANOCACHE,
       REVID_BASE_S,
       REVID_BASE_S + 0x1F,
-      MPU_ATTRIBUTE_DATA,
       MPU_REGION_PRIV_RO,
       MPU_INSTRUCTION_ACCESS_DISABLE,
       MPU_ACCESS_NOT_SHAREABLE,
@@ -315,9 +315,9 @@ MPU_Region_Config_t mpu_region_cfg[] = {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER2,
+      MPU_ATTRIBUTE_DATANOCACHE,
       FLASH_AREA_BEGIN_ADDRESS,
       FLASH_AREA_END_ADDRESS - 1,
-      MPU_ATTRIBUTE_DATA,
       MPU_REGION_PRIV_RW,
       MPU_INSTRUCTION_ACCESS_DISABLE,
       MPU_ACCESS_NOT_SHAREABLE,
@@ -329,15 +329,15 @@ MPU_Region_Config_t mpu_region_cfg[] = {
     FLOW_CTRL_MPU_I_CH_R2,
 #endif /* FLOW_CONTROL */
   },
-  /* Region 3: Allows execution and erasing of boot */
+  /* Region 3: Allows execution of boot */
   {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER3,
+      MPU_ATTRIBUTE_CODE,
       BL2_CODE_START - BOOTROM_HEADER_SIZE,
       BL2_CODE_LIMIT,
-      MPU_ATTRIBUTE_CODE,
-      MPU_REGION_PRIV_RW,
+      MPU_REGION_PRIV_RO,
       MPU_INSTRUCTION_ACCESS_ENABLE,
       MPU_ACCESS_NOT_SHAREABLE,
     },
@@ -353,9 +353,9 @@ MPU_Region_Config_t mpu_region_cfg[] = {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER4,
+      MPU_ATTRIBUTE_CODE,
       BL2_JUMP_CODE_START,
       BL2_JUMP_CODE_LIMIT,
-      MPU_ATTRIBUTE_CODE,
       MPU_REGION_PRIV_RO,
       MPU_INSTRUCTION_ACCESS_ENABLE,
       MPU_ACCESS_NOT_SHAREABLE,
@@ -372,9 +372,9 @@ MPU_Region_Config_t mpu_region_cfg[] = {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER5,
+      MPU_ATTRIBUTE_DATA,
       BL2_DATA_START,
       BL2_DATA_LIMIT,
-      MPU_ATTRIBUTE_DATA,
       MPU_REGION_PRIV_RW,
       MPU_INSTRUCTION_ACCESS_DISABLE,
       MPU_ACCESS_NOT_SHAREABLE,
@@ -386,15 +386,14 @@ MPU_Region_Config_t mpu_region_cfg[] = {
     FLOW_CTRL_MPU_I_CH_R5,
 #endif /* FLOW_CONTROL */
   },
-#if (OEMUROT_LOAD_AND_RUN != NO_LOAD_AND_RUN)
-/* Region 6: Allows writing of the secure application in the execution area */
+  /* Region 6: Allows RW access on boot DATA area */
   {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER6,
-      S_CODE_START,
-      S_CODE_LIMIT,
       MPU_ATTRIBUTE_DATA,
+      SRAM2_AHB_BASE_S,
+      SRAM2_AHB_BASE_S + SRAM2_AHB_SIZE - 1,
       MPU_REGION_PRIV_RW,
       MPU_INSTRUCTION_ACCESS_DISABLE,
       MPU_ACCESS_NOT_SHAREABLE,
@@ -406,14 +405,15 @@ MPU_Region_Config_t mpu_region_cfg[] = {
     FLOW_CTRL_MPU_I_CH_R6,
 #endif /* FLOW_CONTROL */
   },
-  /* Region 7: Allows writing of the non secure application in the execution area */
+#if (OEMUROT_LOAD_AND_RUN != NO_LOAD_AND_RUN)
+/* Region 7: Allows writing of the secure application in the execution area */
   {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER7,
-      NS_CODE_START,
-      NS_CODE_LIMIT,
-      MPU_ATTRIBUTE_DATA,
+      MPU_ATTRIBUTE_DATANOCACHE,
+      S_CODE_START,
+      S_CODE_LIMIT,
       MPU_REGION_PRIV_RW,
       MPU_INSTRUCTION_ACCESS_DISABLE,
       MPU_ACCESS_NOT_SHAREABLE,
@@ -425,15 +425,14 @@ MPU_Region_Config_t mpu_region_cfg[] = {
     FLOW_CTRL_MPU_I_CH_R7,
 #endif /* FLOW_CONTROL */
   },
-#if (MCUBOOT_S_DATA_IMAGE_NUMBER == 1)
-  /* Region 8: Allows writing in secure DATA area */
+  /* Region 8: Allows writing of the non secure application in the execution area */
   {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER8,
-      S_DATA2_START,
-      S_DATA2_LIMIT,
-      MPU_ATTRIBUTE_DATA,
+      MPU_ATTRIBUTE_DATANOCACHE,
+      NS_CODE_START,
+      NS_CODE_LIMIT,
       MPU_REGION_PRIV_RW,
       MPU_INSTRUCTION_ACCESS_DISABLE,
       MPU_ACCESS_NOT_SHAREABLE,
@@ -445,16 +444,15 @@ MPU_Region_Config_t mpu_region_cfg[] = {
     FLOW_CTRL_MPU_I_CH_R8,
 #endif /* FLOW_CONTROL */
   },
-#endif /* MCUBOOT_S_DATA_IMAGE_NUMBER == 1 */
-#if (MCUBOOT_NS_DATA_IMAGE_NUMBER == 1)
-  /* Region 9: Allows writing in non secure DATA area */
+#if (MCUBOOT_S_DATA_IMAGE_NUMBER == 1)
+  /* Region 9: Allows writing in secure DATA area */
   {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER9,
-      NS_DATA2_START,
-      NS_DATA2_LIMIT,
-      MPU_ATTRIBUTE_DATA,
+      MPU_ATTRIBUTE_DATANOCACHE,
+      S_DATA2_START,
+      S_DATA2_LIMIT,
       MPU_REGION_PRIV_RW,
       MPU_INSTRUCTION_ACCESS_DISABLE,
       MPU_ACCESS_NOT_SHAREABLE,
@@ -466,11 +464,54 @@ MPU_Region_Config_t mpu_region_cfg[] = {
     FLOW_CTRL_MPU_I_CH_R9,
 #endif /* FLOW_CONTROL */
   },
+#endif /* MCUBOOT_S_DATA_IMAGE_NUMBER == 1 */
+#if (MCUBOOT_NS_DATA_IMAGE_NUMBER == 1)
+  /* Region 10: Allows writing in non secure DATA area */
+  {
+    {
+      MPU_REGION_ENABLE,
+      MPU_REGION_NUMBER10,
+      MPU_ATTRIBUTE_DATANOCACHE,
+      NS_DATA2_START,
+      NS_DATA2_LIMIT,
+      MPU_REGION_PRIV_RW,
+      MPU_INSTRUCTION_ACCESS_DISABLE,
+      MPU_ACCESS_NOT_SHAREABLE,
+    },
+#ifdef FLOW_CONTROL
+    FLOW_STEP_MPU_I_EN_R10,
+    FLOW_CTRL_MPU_I_EN_R10,
+    FLOW_STEP_MPU_I_CH_R10,
+    FLOW_CTRL_MPU_I_CH_R10,
+#endif /* FLOW_CONTROL */
+  },
 #endif /* MCUBOOT_NS_DATA_IMAGE_NUMBER == 1 */
 #endif /* OEMUROT_LOAD_AND_RUN != NO_LOAD_AND_RUN */
 };
 
-MPU_Region_Config_t mpu_region_cfg_appli_s[] = {
+#if defined(__ICCARM__)
+#pragma location=".BL2_Jump_Data"
+#endif
+const MPU_Region_Config_t mpu_region_cfg_appli_s[] __attribute__((section(".BL2_Jump_Data"))) = {
+  /* Region 3: Forbid execution of the boot and allow erase */
+  {
+    {
+      MPU_REGION_ENABLE,
+      MPU_REGION_NUMBER3,
+      MPU_ATTRIBUTE_CODE,
+      BL2_CODE_START - BOOTROM_HEADER_SIZE,
+      BL2_CODE_LIMIT,
+      MPU_REGION_PRIV_RW,
+      MPU_INSTRUCTION_ACCESS_DISABLE,
+      MPU_ACCESS_NOT_SHAREABLE,
+    },
+#ifdef FLOW_CONTROL
+    FLOW_STEP_MPU_S_A_EN_R3,
+    FLOW_CTRL_MPU_S_A_EN_R3,
+    FLOW_STEP_MPU_S_A_CH_R3,
+    FLOW_CTRL_MPU_S_A_CH_R3,
+#endif /* FLOW_CONTROL */
+  },
   /* Region 2/6: Allows execution of application secure */
   {
     {
@@ -478,68 +519,49 @@ MPU_Region_Config_t mpu_region_cfg_appli_s[] = {
 #if (OEMUROT_LOAD_AND_RUN == NO_LOAD_AND_RUN)
       MPU_REGION_NUMBER2,
 #else
-      MPU_REGION_NUMBER6,
+      MPU_REGION_NUMBER7,
 #endif /* OEMUROT_LOAD_AND_RUN == NO_LOAD_AND_RUN */
+      MPU_ATTRIBUTE_CODE,
       S_CODE_START,
       S_CODE_LIMIT,
-      MPU_ATTRIBUTE_CODE,
       MPU_REGION_PRIV_RO,
-      MPU_INSTRUCTION_ACCESS_DISABLE,
+      MPU_INSTRUCTION_ACCESS_ENABLE,
       MPU_ACCESS_NOT_SHAREABLE,
     },
 #ifdef FLOW_CONTROL
-  FLOW_STEP_MPU_S_A_EN_R,
-  FLOW_CTRL_MPU_S_A_EN_R,
-  FLOW_STEP_MPU_S_A_CH_R,
-  FLOW_CTRL_MPU_S_A_CH_R,
+    FLOW_STEP_MPU_S_A_EN_R,
+    FLOW_CTRL_MPU_S_A_EN_R,
+    FLOW_STEP_MPU_S_A_CH_R,
+    FLOW_CTRL_MPU_S_A_CH_R,
 #endif /* FLOW_CONTROL */
   },
-  /* Region 7: Allows reading of the non secure application */
+  /* Region 8: Allows reading of the non secure application */
   {
     {
       MPU_REGION_ENABLE,
-      MPU_REGION_NUMBER7,
+      MPU_REGION_NUMBER8,
+      MPU_ATTRIBUTE_CODE,
       NS_CODE_START,
       NS_CODE_LIMIT,
-      MPU_ATTRIBUTE_DATA,
       MPU_REGION_PRIV_RO,
       MPU_INSTRUCTION_ACCESS_DISABLE,
       MPU_ACCESS_NOT_SHAREABLE,
     },
 #ifdef FLOW_CONTROL
-    FLOW_STEP_MPU_S_A_EN_R7,
-    FLOW_CTRL_MPU_S_A_EN_R7,
-    FLOW_STEP_MPU_S_A_CH_R7,
-    FLOW_CTRL_MPU_S_A_CH_R7,
+    FLOW_STEP_MPU_S_A_EN_R8,
+    FLOW_CTRL_MPU_S_A_EN_R8,
+    FLOW_STEP_MPU_S_A_CH_R8,
+    FLOW_CTRL_MPU_S_A_CH_R8,
 #endif /* FLOW_CONTROL */
   },
-  /* Region 10: Allows RW access on application secure DATA area */
-  {
-    {
-      MPU_REGION_ENABLE,
-      MPU_REGION_NUMBER10,
-      S_DATA_START,
-      S_DATA_LIMIT,
-      MPU_ATTRIBUTE_DATA,
-      MPU_REGION_PRIV_RW,
-      MPU_INSTRUCTION_ACCESS_DISABLE,
-      MPU_ACCESS_NOT_SHAREABLE,
-    },
-#ifdef FLOW_CONTROL
-    FLOW_STEP_MPU_S_A_EN_R10,
-    FLOW_CTRL_MPU_S_A_EN_R10,
-    FLOW_STEP_MPU_S_A_CH_R10,
-    FLOW_CTRL_MPU_S_A_CH_R10,
-#endif /* FLOW_CONTROL */
-  },
-  /* Region 11: Allows RW access on application non secure DATA area */
+  /* Region 11: Allows RW access on application secure DATA area */
   {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER11,
-      NS_DATA_START,
-      NS_DATA_LIMIT,
       MPU_ATTRIBUTE_DATA,
+      S_DATA_START,
+      S_DATA_LIMIT,
       MPU_REGION_PRIV_RW,
       MPU_INSTRUCTION_ACCESS_DISABLE,
       MPU_ACCESS_NOT_SHAREABLE,
@@ -551,17 +573,39 @@ MPU_Region_Config_t mpu_region_cfg_appli_s[] = {
     FLOW_CTRL_MPU_S_A_CH_R11,
 #endif /* FLOW_CONTROL */
   },
+  /* Region 12: Allows RW access on application non secure DATA area */
+  {
+    {
+      MPU_REGION_ENABLE,
+      MPU_REGION_NUMBER12,
+      MPU_ATTRIBUTE_DATA,
+      NS_DATA_START,
+      NS_DATA_LIMIT,
+      MPU_REGION_PRIV_RW,
+      MPU_INSTRUCTION_ACCESS_DISABLE,
+      MPU_ACCESS_NOT_SHAREABLE,
+    },
+#ifdef FLOW_CONTROL
+    FLOW_STEP_MPU_S_A_EN_R12,
+    FLOW_CTRL_MPU_S_A_EN_R12,
+    FLOW_STEP_MPU_S_A_CH_R12,
+    FLOW_CTRL_MPU_S_A_CH_R12,
+#endif /* FLOW_CONTROL */
+  },
 };
 
-MPU_Region_Config_t mpu_region_cfg_appli_ns[] = {
+#if defined(__ICCARM__)
+#pragma location=".BL2_Jump_Data"
+#endif
+const MPU_Region_Config_t mpu_region_cfg_appli_ns[] __attribute__((section(".BL2_Jump_Data"))) = {
   /* Region 0: Allows RW access to peripherals */
   {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER0,
+      MPU_ATTRIBUTE_DEVICE,
       PERIPH_BASE_NS,
       PERIPH_BASE_NS + 0xFFFFFFF,
-      MPU_ATTRIBUTE_DEVICE,
       MPU_REGION_PRIV_RW,
       MPU_INSTRUCTION_ACCESS_DISABLE,
       MPU_ACCESS_NOT_SHAREABLE,
@@ -578,9 +622,9 @@ MPU_Region_Config_t mpu_region_cfg_appli_ns[] = {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER1,
+      MPU_ATTRIBUTE_CODE,
       NS_CODE_START,
       NS_CODE_LIMIT,
-      MPU_ATTRIBUTE_CODE,
       MPU_REGION_PRIV_RO,
       MPU_INSTRUCTION_ACCESS_ENABLE,
       MPU_ACCESS_NOT_SHAREABLE,
@@ -597,9 +641,9 @@ MPU_Region_Config_t mpu_region_cfg_appli_ns[] = {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER2,
+      MPU_ATTRIBUTE_DATA,
       NS_DATA_START,
       NS_DATA_LIMIT,
-      MPU_ATTRIBUTE_DATA,
       MPU_REGION_PRIV_RW,
       MPU_INSTRUCTION_ACCESS_DISABLE,
       MPU_ACCESS_NOT_SHAREABLE,
@@ -617,9 +661,9 @@ MPU_Region_Config_t mpu_region_cfg_appli_ns[] = {
     {
       MPU_REGION_ENABLE,
       MPU_REGION_NUMBER3,
+      MPU_ATTRIBUTE_DATANOCACHE,
       NS_DATA2_START,
       NS_DATA2_LIMIT,
-      MPU_ATTRIBUTE_DATA,
       MPU_REGION_PRIV_RO,
       MPU_INSTRUCTION_ACCESS_DISABLE,
       MPU_ACCESS_NOT_SHAREABLE,
@@ -634,7 +678,7 @@ MPU_Region_Config_t mpu_region_cfg_appli_ns[] = {
 #endif /* MCUBOOT_NS_DATA_IMAGE_NUMBER == 1 */
 };
 
-#ifdef OEMUROT_INTERNAL_TAMPER_ENABLE
+#if (OEMUROT_TAMPER_ENABLE == INTERNAL_TAMPER_ONLY)
 static const RTC_SecureStateTypeDef TamperSecureConf = {
     .rtcSecureFull = RTC_SECURE_FULL_NO,
     .rtcNonSecureFeatures = RTC_NONSECURE_FEATURE_ALL,
@@ -656,7 +700,7 @@ static const RTC_InternalTamperTypeDef InternalTamperConf = {
     .TimeStampOnTamperDetection = RTC_TIMESTAMPONTAMPERDETECTION_DISABLE,
     .NoErase                  = RTC_TAMPER_ERASE_BACKUP_ENABLE
 };
-#endif /* OEMUROT_INTERNAL_TAMPER_ENABLE */
+#endif /* OEMUROT_TAMPER_ENABLE == INTERNAL_TAMPER_ONLY */
 
 #ifdef OEMUROT_DEV_MODE
 extern volatile uint32_t TamperEventCleared;
@@ -697,9 +741,6 @@ static void active_tamper(void);
   */
 void LL_SECU_ApplyRunTimeProtections(void)
 {
-  /* Enable BusFault and SecureFault handlers (HardFault is default) */
-  SCB->SHCSR |= (SCB_SHCSR_BUSFAULTENA_Msk | SCB_SHCSR_SECUREFAULTENA_Msk);
-
   /* Configure and enable SAU */
   sau_init_cfg();
 
@@ -709,12 +750,21 @@ void LL_SECU_ApplyRunTimeProtections(void)
   /* Set MPU to forbid execution outside of immutable code  */
   mpu_init_cfg();
 
+#ifdef MCUBOOT_USE_MCE
   /* Configure and enable MCE */
   mce_init_cfg();
+#endif /* MCUBOOT_USE_MCE */
 
   /* Enable tamper */
   active_tamper();
 }
+
+/* Place code in a specific section */
+#if defined(__ICCARM__)
+#pragma default_function_attributes = @ ".BL2_Jump_Code"
+#else
+__attribute__((section(".BL2_Jump_Code")))
+#endif /* __ICCARM__ */
 
 /**
   * @brief  Update the runtime security protections for application start
@@ -727,11 +777,48 @@ void LL_SECU_UpdateRunTimeProtections(void)
   /* Update MPU config for application execution */
   mpu_appli_cfg();
 
+#ifdef MCUBOOT_USE_MCE
+  /* Lock external flash MCE */
+  mce_lock_cfg();
+#endif /* MCUBOOT_USE_MCE */
+
   /* Lock secret stored in OTP */
   OTP_Lock();
 
   /* Set HDPL to 2 */
   Increase_HDPL();
+}
+
+/* Stop placing data in specified section */
+#if defined(__ICCARM__)
+#pragma default_function_attributes =
+#endif /* __ICCARM__ */
+
+/**
+  * @brief  Check if the Static security protections are applied.
+  * @param  None
+  * @retval None
+  */
+void LL_SECU_CheckStaticProtections(void)
+{
+#ifdef OEMUROT_SECURE_BOOT
+  uint8_t prov_done = 0;
+  uint8_t secure_boot = 0;
+
+  /* Get device lifecycle */
+  if (OTP_Get_Lifecycle_Status(&secure_boot, &prov_done) != HAL_OK)
+  {
+    BOOT_LOG_ERR("Failed to retrieving the device lifecycle status");
+    Error_Handler();
+  }
+
+  /* Check secure_boot flag */
+  if (secure_boot == 0)
+  {
+    BOOT_LOG_ERR("Unexpected value for secure boot");
+    Error_Handler();
+  }
+#endif /* OEMUROT_SECURE_BOOT */
 }
 
 /**
@@ -994,6 +1081,13 @@ static int8_t RIF_RISAF_CheckRegionConfig(RISAF_TypeDef *RISAFx, uint32_t Region
   return -1;
 }
 
+/* Place code in a specific section */
+#if defined(__ICCARM__)
+#pragma default_function_attributes = @ ".BL2_Jump_Code"
+#else
+__attribute__((section(".BL2_Jump_Code")))
+#endif /* __ICCARM__ */
+
 /**
   * @brief  MPU application configuration
   * @param  None
@@ -1058,6 +1152,10 @@ static void mpu_appli_cfg(void)
 }
 
 #ifdef OEMUROT_MPU_PROTECTION
+/* Continue to place code in a specific section */
+#if defined(__GNUC__)
+__attribute__((section(".BL2_Jump_Code")))
+#endif /* __GNUC__ */
 /**
   * @brief Compare with the current mpu memory attributes configuration
   * @param MPUx Pointer to MPU
@@ -1096,6 +1194,10 @@ static int8_t MPU_CheckMemoryAttributes(MPU_Type *MPUx, const MPU_Attributes_Ini
   }
 }
 
+/* Continue to place code in a specific section */
+#if defined(__GNUC__)
+__attribute__((section(".BL2_Jump_Code")))
+#endif /* __GNUC__ */
 /**
   * @brief Compare with the current mpu configuration
   * @param MPUx Pointer to MPU
@@ -1131,6 +1233,11 @@ static int8_t MPU_CheckRegion(MPU_Type *MPUx, const MPU_Region_InitTypeDef *MPU_
 }
 #endif /* OEMUROT_MPU_PROTECTION */
 
+/* Stop placing data in specified section */
+#if defined(__ICCARM__)
+#pragma default_function_attributes =
+#endif /* __ICCARM__ */
+
 void TAMP_IRQHandler(void)
 {
     NVIC_SystemReset();
@@ -1141,23 +1248,23 @@ static void active_tamper(void)
 {
   RTC_HandleTypeDef RTCHandle = {0};
 
-#ifdef OEMUROT_INTERNAL_TAMPER_ENABLE
+#if (OEMUROT_TAMPER_ENABLE == INTERNAL_TAMPER_ONLY)
   RTC_SecureStateTypeDef TamperSecureConfGet = {0};
   RTC_PrivilegeStateTypeDef TamperPrivConfGet = {0};
   fih_int fih_rc = FIH_FAILURE;
-#endif /* OEMUROT_INTERNAL_TAMPER_ENABLE */
+#endif /* OEMUROT_TAMPER_ENABLE == INTERNAL_TAMPER_ONLY */
 
   /* Configuration stage */
   if (uFlowStage == FLOW_STAGE_CFG)
   {
-#if defined(OEMUROT_DEV_MODE) && defined(OEMUROT_INTERNAL_TAMPER_ENABLE)
+#if defined(OEMUROT_DEV_MODE) && (OEMUROT_TAMPER_ENABLE == INTERNAL_TAMPER_ONLY)
     if (TamperEventCleared)
     {
       BOOT_LOG_INF("Boot with TAMPER Event Active");
       BOOT_LOG_INF("Build and Flash with commented line #define OEMUROT_INTERNAL_TAMPER_ENABLE\n");
       Error_Handler();
     }
-#endif /* defined(OEMUROT_DEV_MODE) && defined(OEMUROT_INTERNAL_TAMPER_ENABLE) */
+#endif /* defined(OEMUROT_DEV_MODE) && (OEMUROT_TAMPER_ENABLE == INTERNAL_TAMPER_ONLY) */
 
     /* RTC Init */
     RTCHandle.Instance = RTC;
@@ -1175,7 +1282,7 @@ static void active_tamper(void)
       Error_Handler();
     }
 
-#ifdef OEMUROT_INTERNAL_TAMPER_ENABLE
+#if (OEMUROT_TAMPER_ENABLE == INTERNAL_TAMPER_ONLY)
     /*  Internal Tamper activation  */
     /*  Enable Cryptographic IPs fault (tamp_itamp9) */
     if (HAL_RTCEx_SetInternalTamper(&RTCHandle,(RTC_InternalTamperTypeDef *)&InternalTamperConf)!=HAL_OK)
@@ -1203,12 +1310,12 @@ static void active_tamper(void)
     FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_TAMP_CFG_EN, FLOW_CTRL_TAMP_CFG_EN);
 
     BOOT_LOG_INF("TAMPER Activated");
-#endif /* OEMUROT_INTERNAL_TAMPER_ENABLE */
+#endif /* OEMUROT_TAMPER_ENABLE == INTERNAL_TAMPER_ONLY */
   }
-  /* verification stage */
+  /* Verification stage */
   else
   {
-#ifdef OEMUROT_INTERNAL_TAMPER_ENABLE
+#if (OEMUROT_TAMPER_ENABLE == INTERNAL_TAMPER_ONLY)
     /*  Check Internal Tamper activation */
     if ((READ_BIT(RTC->CR, RTC_CR_TAMPTS) != InternalTamperConf.TimeStampOnTamperDetection) ||
         (READ_REG(TAMP->CR1) != 0x01000000U) ||
@@ -1246,6 +1353,6 @@ static void active_tamper(void)
         Error_Handler();
     }
     FLOW_CONTROL_STEP(uFlowProtectValue, FLOW_STEP_TAMP_CFG_CH, FLOW_CTRL_TAMP_CFG_CH);
-#endif /* OEMUROT_INTERNAL_TAMPER_ENABLE */
+#endif /* OEMUROT_TAMPER_ENABLE == INTERNAL_TAMPER_ONLY */
   }
 }

@@ -332,9 +332,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls />
-              <Define>STM32N657xx,USE_FULL_LL_DRIVER,HSE_VALUE=24000000,HSE_STARTUP_TIMEOUT=100,LSE_STARTUP_TIMEOUT=5000,LSE_VALUE=32768,EXTERNAL_CLOCK_VALUE=12288000,MSI_VALUE=16000000,HSI_VALUE=64000000,LSI_VALUE=32000,VDD_VALUE=3300</Define>
+              <Define>STM32N657xx,USE_FULL_LL_DRIVER,HSE_VALUE=48000000,HSE_STARTUP_TIMEOUT=100,LSE_STARTUP_TIMEOUT=5000,LSE_VALUE=32768,EXTERNAL_CLOCK_VALUE=12288000,MSI_VALUE=16000000,HSI_VALUE=64000000,LSI_VALUE=32000,VDD_VALUE=3300</Define>
               <Undefine />
-              <IncludePath>../../FSBL/Inc;../../../../../../../Drivers/STM32N6xx_HAL_Driver/Inc;../../Drivers/STM32H5xx_HAL_Driver/Inc;../../../../../../../Drivers/CMSIS/Device/ST/STM32N6xx/Include;../../../../../../../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../../FSBL/Inc;../../../../../../../Drivers/STM32N6xx_HAL_Driver/Inc;../../../../../../../Drivers/CMSIS/Device/ST/STM32N6xx/Include;../../../../../../../Drivers/CMSIS/Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

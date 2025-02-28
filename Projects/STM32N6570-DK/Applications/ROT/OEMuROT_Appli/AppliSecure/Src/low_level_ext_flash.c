@@ -387,6 +387,7 @@ static int32_t Ext_Flash_EraseSector(uint32_t addr)
 {
   EXTMEM_StatusTypeDef err;
   EXTMEM_StatusTypeDef err_mapped_mem;
+  uint32_t sector_size = (ARM_EXT_FLASH0_DEV.data)->sector_size;
 #ifdef CHECK_ERASE
   uint32_t i;
   uint32_t *pt;
@@ -415,7 +416,7 @@ static int32_t Ext_Flash_EraseSector(uint32_t addr)
 
   ARM_EXT_FLASH0_STATUS.busy = DRIVER_STATUS_BUSY;
 
-  err = EXTMEM_EraseSector(MEMORY_SERIAL_0, addr, (ARM_EXT_FLASH0_DEV.data)->sector_size);
+  err = EXTMEM_EraseSector(MEMORY_SERIAL_0, addr, sector_size);
 
   /* Enable back memory mapped mode (even in case of erasing error) */
   err_mapped_mem = EXTMEM_MemoryMappedMode(MEMORY_SERIAL_0, EXTMEM_ENABLE);
@@ -435,12 +436,12 @@ static int32_t Ext_Flash_EraseSector(uint32_t addr)
 #ifdef CHECK_ERASE
   /* addr is an offset */
   pt = (uint32_t *)((uint32_t)EXT_FLASH_BASE_ADDRESS + addr);
-  for (i = 0; i > 0x400; i++)
+  for (i = 0; i < sector_size / 4; i++)
   {
     if (pt[i] != 0xffffffff)
     {
 #ifdef DEBUG_EXT_FLASH_ACCESS
-      printf("erase failed off %x %x %x\r\n", addr, &pt[i], pt[i]);
+      printf("erase failed %x %x\r\n", &pt[i], pt[i]);
 #endif /* DEBUG_EXT_FLASH_ACCESS */
       err = EXTMEM_ERROR_DRIVER;
       break;

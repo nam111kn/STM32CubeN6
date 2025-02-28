@@ -9,18 +9,18 @@ set password_bin=%projectdir%Config\DA_password.bin
 set hash_bin=%projectdir%hash.bin
 set da_pw_hash_otp=292
 
-set connect_no_reset=-c port=SWD ap=1 mode=Hotplug
+set connect_reset=-c port=SWD ap=1
 
 ::line for window executable
 set "applicfg=%cube_fw_path%\Utilities\PC_Software\ROT_AppliConfig\dist\AppliCfg.exe"
 set "python="
 if exist %applicfg% (
-echo run da_provisioning with windows executable
+echo run da_programming with windows executable
 goto hash
 )
 :py
 ::line for python
-echo run da_provisioning with python script
+echo run da_programming with python script
 set "applicfg=%cube_fw_path%\Utilities\PC_Software\ROT_AppliConfig\AppliCfg.py"
 set "python=python "
 
@@ -29,7 +29,7 @@ set "python=python "
 %python%%applicfg% hashcontent %hash_bin% -i %password_bin%
 
 :: Write password hash in OTP bits
-set command=%stm32programmercli% %connect_no_reset% -el %stm32ExtOTPInterace% -otp fwrite lock %hash_bin% word=%da_pw_hash_otp%
+set command="%stm32programmercli%" %connect_reset% -el "%stm32ExtOTPInterace%" -otp fwrite lock "%hash_bin%" word=%da_pw_hash_otp%
 !command!
 IF !errorlevel! NEQ 0 goto :error
 

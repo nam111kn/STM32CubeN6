@@ -1,19 +1,3 @@
-
----
-pagetitle: Readme
-lang: en
----
-::: {.row}
-::: {.col-sm-12 .col-lg-8}
-
-
----
-pagetitle: Readme
-lang: en
----
-::: {.row}
-::: {.col-sm-12 .col-lg-8}
-
 ## <b>Templates_Board Example Description</b>
 
 This project provides a reference template for the STM32N6570-DK board based on the STM32Cube HAL API that can be used
@@ -66,6 +50,8 @@ Reference, Template
     - Open the View > Images.
     - Double-click to deselect the second instance of project.out.
 
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
+
 ### <b>How to use it ?</b>
 
 In order to make the program work, you must do the following :
@@ -82,12 +68,3 @@ In order to make the program work, you must do the following :
  - Next, in resorting again to CubeProgrammer, load the binary and its header (Project-trusted.bin) in DK board external Flash at address 0x7000'0000.
  - Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).
  - Press the reset button. The code then executes in boot from external Flash mode.
-
-
-:::
-:::
-
-
-:::
-:::
-

@@ -22,6 +22,7 @@
 #define __ISP_PARAM_CONF__H
 
 /* DCMIPP ISP configuration for IMX335 sensor */
+/* DCMIPP ISP configuration for IMX335 sensor */
 static const ISP_IQParamTypeDef ISP_IQParamCacheInit_IMX335 = {
     .sensorGainStatic = {
         .gain = 0,
@@ -31,7 +32,7 @@ static const ISP_IQParamTypeDef ISP_IQParamCacheInit_IMX335 = {
     },
     .AECAlgo = {
         .enable = 1,
-        .exposureCompensation = 0,
+        .exposureCompensation = EXPOSURE_TARGET_0_0_EV,
     },
     .statRemoval = {
         .enable = 0,
@@ -54,7 +55,7 @@ static const ISP_IQParamTypeDef ISP_IQParamCacheInit_IMX335 = {
     },
     .demosaicing = {
         .enable = 1,
-        .type = 0,
+        .type = ISP_DEMOS_TYPE_RGGB,
         .peak = 2,
         .lineV = 4,
         .lineH = 4,

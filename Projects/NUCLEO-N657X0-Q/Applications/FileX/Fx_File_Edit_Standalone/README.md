@@ -9,8 +9,10 @@ The application's main calls the MX_FileX_Init() function in order to Initialize
 
 Upon successful opening of the created SRAM-Disk media, FileX continues with creating a file called "STM32.TXT" into the root directory by calling MX_FileX_Process(VOID *arg) function, then writes into it some predefined data. The file is re-opened in read only mode and content is checked.
 
-To use FileX in standalone mode the following flag must be defined in fx_user.h.
-  #define FX_STANDALONE_ENABLE
+As stated earlier, the present application runs in standalone mode without ThreadX, for this reason, the standalone variant of FileX is used, plus the following flags need to be set in fx_user.h:
+
+-  #define FX_SINGLE_THREAD
+-  #define FX_STANDALONE_ENABLE
 
 #### <b>Expected success behavior</b>
 
@@ -57,7 +59,9 @@ FileX, File System, FAT32, SRAM
   - **EWARM** : To monitor a variable in the live watch window, you must proceed as follow :
     - Start a debugging session.
     - Open the View > Images.
-    - Double-click to deselect the second instance of project.out. 
+    - Double-click to deselect the second instance of project.out.
+
+  - **MDK-ARM** : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.
 
 ### <b>How to use it ?</b>
 

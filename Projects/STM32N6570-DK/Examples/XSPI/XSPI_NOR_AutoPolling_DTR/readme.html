@@ -56,6 +56,7 @@ LED_RED toggles as soon as an error is returned by HAL API.</li>
 <li>Open the View &gt; Images.</li>
 <li>Double-click to deselect the second instance of project.out.</li>
 </ul></li>
+<li><p><strong>MDK-ARM</strong> : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.</p></li>
 </ul>
 <h3 id="how-to-use-it"><b>How to use it ?</b></h3>
 <p>In order to make the program work, you must do the following : - Set the boot mode in development mode (BOOT1 switch position is 1-3, BOOT0 switch position doesn’t matter). - Open your preferred toolchain - Rebuild all files and load your image into target memory. Code can be executed in this mode for debugging purposes.</p>

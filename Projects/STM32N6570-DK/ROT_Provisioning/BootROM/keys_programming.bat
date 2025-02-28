@@ -12,7 +12,7 @@ set hashtable_binary=Keys/publicKeysHashHashes.bin
 set oem_secret=Keys/OEM_SECRET.bin
 set rma_password=Keys/RMA_password.bin
 
-set connect_no_reset=-c port=SWD ap=1 mode=Hotplug
+set connect_no_reset=-c port=SWD ap=1
 
 set command="%stm32programmercli%" %connect_no_reset% -el "%stm32ExtOTPInterace%" -otp fwrite lock "%hashtable_binary%" word=%hashtable_otp%
 !command!
