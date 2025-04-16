@@ -2434,6 +2434,8 @@ SFDP_StatusTypeDef JEDEC_Basic_ManageQuadEnableRequierement(EXTMEM_DRIVER_NOR_SF
       retr = EXTMEM_SFDP_ERROR_DRIVER;
       goto error;
     }
+
+    retr = EXTMEM_SFDP_OK;
     break;
   }
   case 0x5u: /* 101b: QE is bit 1 of the status register 2. Status register 1 is read using Read Status instruction 05h. Status register 2 is read using instruction 35h. QE is set via Write Status instruction 01h with two data bytes where bit 1 of the second byte is one. It is cleared via Write Status with two data bytes where bit 1 of the second byte is zero.*/
