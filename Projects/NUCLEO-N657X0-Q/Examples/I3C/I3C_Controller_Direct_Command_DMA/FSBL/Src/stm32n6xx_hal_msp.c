@@ -82,20 +82,20 @@ void HAL_MspInit(void)
 }
 
 /**
-* @brief I3C MSP Initialization
-* This function configures the hardware resources used in this example
-* @param hi3c: I3C handle pointer
-* @retval None
-*/
+  * @brief I3C MSP Initialization
+  * This function configures the hardware resources used in this example
+  * @param hi3c: I3C handle pointer
+  * @retval None
+  */
 void HAL_I3C_MspInit(I3C_HandleTypeDef* hi3c)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
   if(hi3c->Instance==I3C1)
   {
-  /* USER CODE BEGIN I3C1_MspInit 0 */
+    /* USER CODE BEGIN I3C1_MspInit 0 */
 
-  /* USER CODE END I3C1_MspInit 0 */
+    /* USER CODE END I3C1_MspInit 0 */
 
   /** Initializes the peripherals clock
   */
@@ -121,14 +121,14 @@ void HAL_I3C_MspInit(I3C_HandleTypeDef* hi3c)
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF7_I3C1;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-    
+
     GPIO_InitStruct.Pin = GPIO_PIN_9;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF7_I3C1;
     HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
-    
+
     /* I3C1 DMA Init */
     /* GPDMA1_REQUEST_I3C1_TX Init */
     handle_GPDMA1_Channel2.Instance = GPDMA1_Channel2;
@@ -152,12 +152,6 @@ void HAL_I3C_MspInit(I3C_HandleTypeDef* hi3c)
 
     __HAL_LINKDMA(hi3c, hdmatx, handle_GPDMA1_Channel2);
 
-    if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel2, DMA_CHANNEL_PRIV|DMA_CHANNEL_SEC
-                              |DMA_CHANNEL_SRC_SEC|DMA_CHANNEL_DEST_SEC) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
     /* GPDMA1_REQUEST_I3C1_RX Init */
     handle_GPDMA1_Channel1.Instance = GPDMA1_Channel1;
     handle_GPDMA1_Channel1.Init.Request = GPDMA1_REQUEST_I3C1_RX;
@@ -179,12 +173,6 @@ void HAL_I3C_MspInit(I3C_HandleTypeDef* hi3c)
     }
 
     __HAL_LINKDMA(hi3c, hdmarx, handle_GPDMA1_Channel1);
-
-    if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel1, DMA_CHANNEL_PRIV|DMA_CHANNEL_SEC
-                              |DMA_CHANNEL_SRC_SEC|DMA_CHANNEL_DEST_SEC) != HAL_OK)
-    {
-      Error_Handler();
-    }
 
     /* GPDMA1_REQUEST_I3C1_TC Init */
     handle_GPDMA1_Channel0.Instance = GPDMA1_Channel0;
@@ -208,18 +196,12 @@ void HAL_I3C_MspInit(I3C_HandleTypeDef* hi3c)
 
     __HAL_LINKDMA(hi3c, hdmacr, handle_GPDMA1_Channel0);
 
-    if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel0, DMA_CHANNEL_PRIV|DMA_CHANNEL_SEC
-                              |DMA_CHANNEL_SRC_SEC|DMA_CHANNEL_DEST_SEC) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
     /* I3C1 interrupt Init */
     HAL_NVIC_SetPriority(I3C1_EV_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(I3C1_EV_IRQn);
     HAL_NVIC_SetPriority(I3C1_ER_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(I3C1_ER_IRQn);
-  /* USER CODE BEGIN I3C1_MspInit 1 */
+    /* USER CODE BEGIN I3C1_MspInit 1 */
     
     /* Add a delay to let startup of High level on the Bus */
     HAL_Delay(1);
@@ -232,25 +214,25 @@ void HAL_I3C_MspInit(I3C_HandleTypeDef* hi3c)
     GPIO_InitStruct.Pin = GPIO_PIN_9;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
-  /* USER CODE END I3C1_MspInit 1 */
+    /* USER CODE END I3C1_MspInit 1 */
 
   }
 
 }
 
 /**
-* @brief I3C MSP De-Initialization
-* This function freeze the hardware resources used in this example
-* @param hi3c: I3C handle pointer
-* @retval None
-*/
+  * @brief I3C MSP De-Initialization
+  * This function freeze the hardware resources used in this example
+  * @param hi3c: I3C handle pointer
+  * @retval None
+  */
 void HAL_I3C_MspDeInit(I3C_HandleTypeDef* hi3c)
 {
   if(hi3c->Instance==I3C1)
   {
-  /* USER CODE BEGIN I3C1_MspDeInit 0 */
+    /* USER CODE BEGIN I3C1_MspDeInit 0 */
 
-  /* USER CODE END I3C1_MspDeInit 0 */
+    /* USER CODE END I3C1_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_I3C1_CLK_DISABLE();
 
@@ -259,8 +241,9 @@ void HAL_I3C_MspDeInit(I3C_HandleTypeDef* hi3c)
     PH9     ------> I3C1_SCL
     */
     HAL_GPIO_DeInit(GPIOC, GPIO_PIN_1);
+
     HAL_GPIO_DeInit(GPIOH, GPIO_PIN_9);
-    
+
     /* I3C1 DMA DeInit */
     HAL_DMA_DeInit(hi3c->hdmatx);
     HAL_DMA_DeInit(hi3c->hdmarx);
@@ -269,9 +252,9 @@ void HAL_I3C_MspDeInit(I3C_HandleTypeDef* hi3c)
     /* I3C1 interrupt DeInit */
     HAL_NVIC_DisableIRQ(I3C1_EV_IRQn);
     HAL_NVIC_DisableIRQ(I3C1_ER_IRQn);
-  /* USER CODE BEGIN I3C1_MspDeInit 1 */
+    /* USER CODE BEGIN I3C1_MspDeInit 1 */
 
-  /* USER CODE END I3C1_MspDeInit 1 */
+    /* USER CODE END I3C1_MspDeInit 1 */
   }
 
 }

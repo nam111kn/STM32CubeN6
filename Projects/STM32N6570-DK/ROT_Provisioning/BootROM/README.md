@@ -1,4 +1,4 @@
-## <b>BootROM Related Scripts Description</b>
+## <b>BootROM related scripts description</b>
 
 This section provides the necessary scripts to generate and program BootROM keys.
 

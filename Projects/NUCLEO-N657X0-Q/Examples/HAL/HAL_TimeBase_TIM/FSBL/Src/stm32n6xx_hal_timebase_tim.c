@@ -23,6 +23,9 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+#define TIM_CNT_FREQ 1000000U /* Timer frequency counter : 1 MHz */
+#define TIM_FREQ     1000U    /* Timer frequency : 1 kHz => to have 1 ms interrupt */
+
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 TIM_HandleTypeDef        htim2;
@@ -40,7 +43,6 @@ TIM_HandleTypeDef        htim2;
   */
 HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
-  RCC_ClkInitTypeDef    clkconfig;
   uint32_t              uwTimclock = 0;
   uint32_t              uwPrescalerValue = 0;
 
@@ -52,14 +54,11 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   /* Enable TIM2 clock */
   __HAL_RCC_TIM2_CLK_ENABLE();
 
-  /* Get clock configuration */
-  HAL_RCC_GetClockConfig(&clkconfig);
-
   /* Compute TIM2 clock */
-  uwTimclock = HAL_RCC_GetPCLK1Freq();
+  uwTimclock = HAL_RCCEx_GetTIMGFreq();
 
-  /* Compute the prescaler value to have TIM2 counter clock equal to 1MHz */
-  uwPrescalerValue = (uint32_t) ((uwTimclock / 1000000U) - 1U);
+  /* Compute the prescaler value to have TIM2 counter clock equal to TIM_CNT_FREQ (1MHz) */
+  uwPrescalerValue = (uint32_t)((uwTimclock / TIM_CNT_FREQ) - 1U);
 
   /* Initialize TIM2 */
   htim2.Instance = TIM2;
@@ -70,7 +69,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
    * ClockDivision = 0
    * Counter direction = Up
    */
-  htim2.Init.Period = (1000000U / 1000U) - 1U;
+  htim2.Init.Period = (TIM_CNT_FREQ / TIM_FREQ) - 1U;
   htim2.Init.Prescaler = uwPrescalerValue;
   htim2.Init.ClockDivision = 0;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;

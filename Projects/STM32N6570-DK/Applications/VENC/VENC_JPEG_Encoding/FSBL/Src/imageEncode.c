@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include "JpegEncApi.h"
+#include "jpegencapi.h"
 #include "stm32n6xx_ll_venc.h"
 
 

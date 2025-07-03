@@ -21,7 +21,7 @@
 #include "stdio.h"
 
 #include "ewl.h"
-#include "H264EncApi.h"
+#include "h264encapi.h"
 #include "stm32n6xx_ll_venc.h"
 #include "stm32n6570_discovery.h"
 #include "stm32n6570_discovery_sd.h"

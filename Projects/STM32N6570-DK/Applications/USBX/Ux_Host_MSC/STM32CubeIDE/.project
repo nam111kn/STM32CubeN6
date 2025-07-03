@@ -1147,39 +1147,39 @@
 			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/common/src/txe_timer_info_get.c</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ThreadX/Port/tx_misra.s</name>
+			<name>Middlewares/ThreadX/Port/tx_misra.S</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_misra.s</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_misra.S</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ThreadX/Port/tx_thread_context_restore.s</name>
+			<name>Middlewares/ThreadX/Port/tx_thread_context_restore.S</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_context_restore.s</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_context_restore.S</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ThreadX/Port/tx_thread_context_save.s</name>
+			<name>Middlewares/ThreadX/Port/tx_thread_context_save.S</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_context_save.s</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_context_save.S</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ThreadX/Port/tx_thread_interrupt_control.s</name>
+			<name>Middlewares/ThreadX/Port/tx_thread_interrupt_control.S</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_interrupt_control.s</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_interrupt_control.S</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ThreadX/Port/tx_thread_interrupt_disable.s</name>
+			<name>Middlewares/ThreadX/Port/tx_thread_interrupt_disable.S</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_interrupt_disable.s</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_interrupt_disable.S</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ThreadX/Port/tx_thread_interrupt_restore.s</name>
+			<name>Middlewares/ThreadX/Port/tx_thread_interrupt_restore.S</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_interrupt_restore.s</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_interrupt_restore.S</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ThreadX/Port/tx_thread_schedule.s</name>
+			<name>Middlewares/ThreadX/Port/tx_thread_schedule.S</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_schedule.s</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_schedule.S</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ThreadX/Port/tx_thread_secure_stack.c</name>
@@ -1187,34 +1187,34 @@
 			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_secure_stack.c</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ThreadX/Port/tx_thread_secure_stack_allocate.s</name>
+			<name>Middlewares/ThreadX/Port/tx_thread_secure_stack_allocate.S</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_secure_stack_allocate.s</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_secure_stack_allocate.S</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ThreadX/Port/tx_thread_secure_stack_free.s</name>
+			<name>Middlewares/ThreadX/Port/tx_thread_secure_stack_free.S</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_secure_stack_free.s</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_secure_stack_free.S</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ThreadX/Port/tx_thread_secure_stack_initialize.s</name>
+			<name>Middlewares/ThreadX/Port/tx_thread_secure_stack_initialize.S</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_secure_stack_initialize.s</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_secure_stack_initialize.S</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ThreadX/Port/tx_thread_stack_build.s</name>
+			<name>Middlewares/ThreadX/Port/tx_thread_stack_build.S</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_stack_build.s</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_stack_build.S</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ThreadX/Port/tx_thread_system_return.s</name>
+			<name>Middlewares/ThreadX/Port/tx_thread_system_return.S</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_system_return.s</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_thread_system_return.S</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ThreadX/Port/tx_timer_interrupt.s</name>
+			<name>Middlewares/ThreadX/Port/tx_timer_interrupt.S</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_timer_interrupt.s</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/ST/threadx/ports/cortex_m55/gnu/src/tx_timer_interrupt.S</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ThreadX/Port/txe_thread_secure_stack_allocate.c</name>

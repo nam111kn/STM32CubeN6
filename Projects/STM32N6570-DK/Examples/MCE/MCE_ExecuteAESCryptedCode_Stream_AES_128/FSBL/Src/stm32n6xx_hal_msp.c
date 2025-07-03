@@ -163,6 +163,8 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef *hxspi)
     __HAL_RCC_PWR_CLK_ENABLE();
     HAL_PWREx_EnableVddIO3();
     HAL_PWREx_ConfigVddIORange(PWR_VDDIO3, PWR_VDDIO_RANGE_1V8);
+    /* Set SYSCFG configuration for IO speed optimization (clock already enabled) */
+    HAL_SYSCFG_EnableVDDIO3CompensationCell();
 
     /* Enable the XSPI memory interface clock */
     __HAL_RCC_XSPI2_CLK_ENABLE();

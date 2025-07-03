@@ -99,7 +99,7 @@ UINT App_ThreadX_Init(VOID *memory_ptr)
   if (tx_thread_create(&ThreadTwo, "Thread Two", ThreadTwo_Entry, 0,
                        pointer,  TX_APP_STACK_SIZE,
                        TX_APP_THREAD_PRIO, TX_APP_THREAD_PREEMPTION_THRESHOLD,
-                       TX_NO_TIME_SLICE, TX_AUTO_START) != TX_SUCCESS)
+                       TX_APP_THREAD_TIME_SLICE, TX_AUTO_START) != TX_SUCCESS)
   {
     ret = TX_THREAD_ERROR;
   }

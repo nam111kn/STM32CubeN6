@@ -217,9 +217,9 @@ typedef funcptr funcptr_NS;
 #define READ_REG_CMD                            0x40
 #define WRITE_REG_CMD                           0xC0
 
-  /* Default dummy clocks cycles */
-#define DUMMY_CLOCK_CYCLES_READ                 4
-#define DUMMY_CLOCK_CYCLES_WRITE                4
+  /* Default dummy clocks cycles, 7(6+1) to support up to 200MHz CLK */
+#define DUMMY_CLOCK_CYCLES_READ                 6
+#define DUMMY_CLOCK_CYCLES_WRITE                6
 
   /* Size of buffers */
 #define BUFFERSIZE                              10240

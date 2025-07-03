@@ -69,14 +69,12 @@ typedef funcptr funcptr_NS;
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
-extern void HAL_RIF_ILA_Callback(uint32_t PeriphId);
-/* USER CODE BEGIN EFP */
 
+/* USER CODE BEGIN EFP */
+extern void HAL_RIF_ILA_Callback(uint32_t PeriphId);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define LED_BLUE_Pin GPIO_PIN_8
-#define LED_BLUE_GPIO_Port GPIOG
 #define LED_GREEN_Pin GPIO_PIN_0
 #define LED_GREEN_GPIO_Port GPIOG
 

@@ -71,6 +71,7 @@ void MPU_Config(void);
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPDMA1_Init(void);
+static void SystemIsolation_Config(void);
 /* USER CODE BEGIN PFP */
 static void TransferComplete(DMA_HandleTypeDef *hdma);
 static void TransferError(DMA_HandleTypeDef *hdma);
@@ -126,10 +127,52 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPDMA1_Init();
+  SystemIsolation_Config();
   /* USER CODE BEGIN 2 */
   /* Initialize LED1 and LED2 */
   BSP_LED_Init(LED1);
   BSP_LED_Init(LED2);
+
+  /* Select Callbacks functions called after Half Transfer Complete, Transfer Complete and Transfer Error */
+  HAL_DMA_RegisterCallback(&handle_GPDMA1_Channel0, HAL_DMA_XFER_CPLT_CB_ID, TransferComplete);
+  HAL_DMA_RegisterCallback(&handle_GPDMA1_Channel0, HAL_DMA_XFER_ERROR_CB_ID, TransferError);
+
+  /* Configure the source, destination and buffer size DMA fields and Start DMA Channel/Stream transfer */
+  if (HAL_DMA_Start(&handle_GPDMA1_Channel1, (uint32_t)&aDST_TriggeringChannel_Buffer, (uint32_t)&aDST_TriggeredChannel_Buffer, (BUFFER_SIZE * 4U)) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /*##-3- Lunch trigger process ##############################################*/
+  /* Repeat for buffer size */
+  for (uint32_t dataIdx = 0U; dataIdx < BUFFER_SIZE; dataIdx++)
+  {
+    /* Clear DMA flags */
+    TransferCompleteDetected = 0U;
+    TransferErrorDetected    = 0U;
+
+    /* Configure the source, destination and buffer size DMA fields and Start DMA Channel/Stream transfer */
+    /* Enable All the DMA interrupts */
+    if (HAL_DMA_Start_IT(&handle_GPDMA1_Channel0, (uint32_t)&aSRC_Buffer[dataIdx], (uint32_t)&aDST_TriggeringChannel_Buffer[dataIdx], TRIGGERCHANNEL_BLOCK_SIZE) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    /* Wait for end of transmission or an error occurred */
+    while ((TransferCompleteDetected == 0) && (TransferErrorDetected != 1U));
+
+    /* Check DMA error */
+    if (TransferErrorDetected == 1U)
+    {
+      Error_Handler();
+    }
+  }
+
+  /*##-4- Check DMAs transactions ############################################*/
+  if (HAL_DMA_PollForTransfer(&handle_GPDMA1_Channel1, HAL_DMA_FULL_TRANSFER, DMA_TIMEOUT) != HAL_OK)
+  {
+    Error_Handler();
+  }
 
   /* Check trigger DMA buffer */
   if (Buffercmp((uint8_t*)aSRC_Buffer, (uint8_t*)aDST_TriggeringChannel_Buffer, (BUFFER_SIZE * 4U)) != 0U)
@@ -343,11 +386,6 @@ static void MX_GPDMA1_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel1, DMA_CHANNEL_PRIV|DMA_CHANNEL_SEC
-                              |DMA_CHANNEL_SRC_SEC|DMA_CHANNEL_DEST_SEC) != HAL_OK)
-  {
-    Error_Handler();
-  }
   handle_GPDMA1_Channel0.Instance = GPDMA1_Channel0;
   handle_GPDMA1_Channel0.Init.Request = DMA_REQUEST_SW;
   handle_GPDMA1_Channel0.Init.BlkHWRequest = DMA_BREQ_SINGLE_BURST;
@@ -366,54 +404,47 @@ static void MX_GPDMA1_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel0, DMA_CHANNEL_PRIV|DMA_CHANNEL_SEC
-                              |DMA_CHANNEL_SRC_SEC|DMA_CHANNEL_DEST_SEC) != HAL_OK)
-  {
-    Error_Handler();
-  }
   /* USER CODE BEGIN GPDMA1_Init 2 */
 
-  /* Select Callbacks functions called after Half Transfer Complete, Transfer Complete and Transfer Error */
-  HAL_DMA_RegisterCallback(&handle_GPDMA1_Channel0, HAL_DMA_XFER_CPLT_CB_ID, TransferComplete);
-  HAL_DMA_RegisterCallback(&handle_GPDMA1_Channel0, HAL_DMA_XFER_ERROR_CB_ID, TransferError);
-
-  /* Configure the source, destination and buffer size DMA fields and Start DMA Channel/Stream transfer */
-  if (HAL_DMA_Start(&handle_GPDMA1_Channel1, (uint32_t)&aDST_TriggeringChannel_Buffer, (uint32_t)&aDST_TriggeredChannel_Buffer, (BUFFER_SIZE * 4U)) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /*##-3- Lunch trigger process ##############################################*/
-  /* Repeat for buffer size */
-  for (uint32_t dataIdx = 0U; dataIdx < BUFFER_SIZE; dataIdx++)
-  {
-    /* Clear DMA flags */
-    TransferCompleteDetected = 0U;
-    TransferErrorDetected    = 0U;
-
-    /* Configure the source, destination and buffer size DMA fields and Start DMA Channel/Stream transfer */
-    /* Enable All the DMA interrupts */
-    if (HAL_DMA_Start_IT(&handle_GPDMA1_Channel0, (uint32_t)&aSRC_Buffer[dataIdx], (uint32_t)&aDST_TriggeringChannel_Buffer[dataIdx], TRIGGERCHANNEL_BLOCK_SIZE) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-    /* Wait for end of transmission or an error occurred */
-    while ((TransferCompleteDetected == 0) && (TransferErrorDetected != 1U));
-
-    /* Check DMA error */
-    if (TransferErrorDetected == 1U)
-    {
-      Error_Handler();
-    }
-  }
-
-  /*##-4- Check DMAs transactions ############################################*/
-  if (HAL_DMA_PollForTransfer(&handle_GPDMA1_Channel1, HAL_DMA_FULL_TRANSFER, DMA_TIMEOUT) != HAL_OK)
-  {
-    Error_Handler();
-  }
   /* USER CODE END GPDMA1_Init 2 */
+
+}
+
+/**
+  * @brief RIF Initialization Function
+  * @param None
+  * @retval None
+  */
+  static void SystemIsolation_Config(void)
+{
+
+  /* USER CODE BEGIN RIF_Init 0 */
+
+  /* USER CODE END RIF_Init 0 */
+
+  /* set all required IPs as secure privileged */
+  __HAL_RCC_RIFSC_CLK_ENABLE();
+
+  /* RIF-Aware IPs Config */
+
+  /* set up GPDMA configuration */
+  /* set GPDMA1 channel 0 */
+  if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel0,DMA_CHANNEL_SEC|DMA_CHANNEL_PRIV|DMA_CHANNEL_SRC_SEC|DMA_CHANNEL_DEST_SEC)!= HAL_OK )
+  {
+    Error_Handler();
+  }
+  /* set GPDMA1 channel 1 */
+  if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel1,DMA_CHANNEL_SEC|DMA_CHANNEL_PRIV|DMA_CHANNEL_SRC_SEC|DMA_CHANNEL_DEST_SEC)!= HAL_OK )
+  {
+    Error_Handler();
+  }
+
+  /* USER CODE BEGIN RIF_Init 1 */
+
+  /* USER CODE END RIF_Init 1 */
+  /* USER CODE BEGIN RIF_Init 2 */
+
+  /* USER CODE END RIF_Init 2 */
 
 }
 
@@ -537,7 +568,7 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.

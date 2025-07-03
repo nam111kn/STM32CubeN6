@@ -22,17 +22,19 @@
 <h2 id="ux_host_video-application-description"><b>Ux_Host_VIDEO Application Description</b></h2>
 <p>This application provides an example of Azure RTOS USBX stack usage. It shows how to develop USB Host Video able to enumerate and communicate with a webcam.</p>
 <p>The application is designed to behave as a USB Video Host able to operate with an USB webcam.</p>
-<p>The main entry function tx_application_define() is then called by ThreadX during kernel start, at this stage, all USBx resources are initialized, the VIDEO class driver is registered. The application creates two threads :</p>
+<p>The main entry function tx_application_define() is then called by ThreadX during kernel start, at this stage, all USBx resources are initialized, the VIDEO class driver is registered.</p>
+<p>The application creates two threads :</p>
 <ul>
 <li>app_ux_host_thread_entry (Priority : 10; Preemption threshold : 10) used to initialize USB_OTG HAL HCD driver and start the Host.</li>
 <li>video_thread_entry (Priority : 30; Preemption threshold : 30) used to proceed to video once the device is properly enumerated.</li>
 </ul>
 <h4 id="expected-success-behavior"><b>Expected success behavior</b></h4>
-<p>When a USB webcam is plugged to STM32N6570-DK board, a message will be displayed on the UART HyperTerminal showing the Vendor ID and the Product ID of the attached device. After enumeration phase, messages will be displayed on the HyperTerminal to indicate the frame number and the frame size.</p>
+<p>When a USB webcam is plugged to STM32N6570-DK board, a message will be displayed on the UART HyperTerminal showing the Vendor ID and the Product ID of the attached device.
+After enumeration phase, messages will be displayed on the HyperTerminal to indicate the frame number and the frame size.</p>
 <h4 id="error-behaviors"><b>Error behaviors</b></h4>
 <p>Errors are detected (such as unsupported device, enumeration fail) and the corresponding message is displayed on the HyperTerminal.</p>
 <h4 id="assumptions-if-any"><b>Assumptions if any</b></h4>
-<p>User is familiar with USB 2.0 “Universal Serial BUS” specification and Video class specification.</p>
+<p>User is familiar with USB 2.0 "Universal Serial BUS" specification and Video class specification.</p>
 <h4 id="known-limitations"><b>Known limitations</b></h4>
 <p>None</p>
 <h4 id="threadx-usage-hints"><b>ThreadX usage hints</b></h4>
@@ -67,7 +69,7 @@ In the example above the ThreadX heap size is set to 64KBytes.
 The ._threadx_heap must be located between the .bss and the ._user_heap_stack sections in the linker script.
 Caution: Make sure that ThreadX does not need more than the provided heap memory (64KBytes in this example).
 Read more in STM32CubeIDE User Guide, chapter: &quot;Linker script&quot;.</code></pre>
-<ul>
+</ul>
 <li>The “tx_initialize_low_level.S” should be also modified to enable the “USE_DYNAMIC_MEMORY_ALLOCATION” flag.</li>
 </ul></li>
 </ul>
@@ -79,11 +81,11 @@ Read more in STM32CubeIDE User Guide, chapter: &quot;Linker script&quot;.</code>
 <p>Connectivity, USBX, Host, USBPD, ThreadX, Video, webcam, UART/USART</p>
 <h3 id="hardware-and-software-environment"><b>Hardware and Software environment</b></h3>
 <ul>
-<li>This application runs on STM32N657X0H3QU devices.</li>
+<li>This application runs on STM32N657xx devices.</li>
 <li><p>This application has been tested with STMicroelectronics STM32N6570-DK boards Revision MB1939-N6570-C01 and can be easily tailored to any other supported device and development board.</p></li>
 <li>STM32N6570-DK Set-up
 <ul>
-<li>Plug the webcam into the STM32N657xx board through ‘Type C’ cable to the connector:
+<li>Plug the webcam into the STM32N657xx board through 'Type C' cable to the connector:
 <ul>
 <li>CN18 : to use USB High Speed OTG IP</li>
 </ul></li>
@@ -99,14 +101,14 @@ Read more in STM32CubeIDE User Guide, chapter: &quot;Linker script&quot;.</code>
 <li>Flow control: None</li>
 </ul></li>
 </ul></li>
-<li><strong>EWARM</strong> : To monitor a variable in the live watch window, you must proceed as follow :
+</ul></li>
+<li><p><strong>EWARM</strong> : To monitor a variable in the live watch window, you must proceed as follow :</p>
 <ul>
 <li>Start a debugging session.</li>
 <li>Open the View &gt; Images.</li>
 <li>Double-click to deselect the second instance of project.out.</li>
 </ul></li>
-<li><p><strong>MDK-ARM</strong> : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.</p></li>
-</ul></li>
+<li><strong>MDK-ARM</strong> : To monitor a variable in the live watch window, you must comment out SCB_EnableDCache() in main() function.</li>
 </ul>
 <h3 id="how-to-use-it"><b>How to use it ?</b></h3>
 <p>In order to make the program work, you must do the following :</p>
@@ -122,9 +124,10 @@ Read more in STM32CubeIDE User Guide, chapter: &quot;Linker script&quot;.</code>
 <li>Resort to CubeProgrammer to add a header to the generated binary Ux_Host_VIDEO.bin with the following command
 <ul>
 <li><em>STM32_SigningTool_CLI.exe -bin Ux_Host_VIDEO.bin -nk -of 0x80000000 -t fsbl -o Ux_Host_VIDEO-trusted.bin -hv 2.3 -dump Ux_Host_VIDEO-trusted.bin</em></li>
-<li>The resulting binary is Ux_Host_VIDEO-trusted.bin.</li>
+<li>The resulting binary is Ux_Host_VIDEO-trusted.bin.<br />
+</li>
 </ul></li>
-<li>Next, in resorting again to CubeProgrammer, load the binary and its header (Ux_Host_VIDEO-trusted.bin) in DK board external Flash at address 0x7000’0000.</li>
+<li>Next, in resorting again to CubeProgrammer, load the binary and its header (Ux_Host_VIDEO-trusted.bin) in DK board external Flash at address 0x7000'0000.</li>
 <li>Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).</li>
 <li>Press the reset button. The code then executes in boot from external Flash mode.</li>
 </ul>

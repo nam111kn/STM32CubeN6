@@ -39,14 +39,18 @@
 /* Enable print of boot time (obtained through DWT).
    DWT usage requires product state is not closed/locked.
    OEMxRoT logs must be disabled for relevant boot time. */
-#define PRINT_BOOT_TIME
+/* #define PRINT_BOOT_TIME */
 
 /* Private macros ------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 uint8_t *pUserAppId;
 const uint8_t UserAppId = 'A';
+
+#ifdef PRINT_BOOT_TIME
 static uint64_t time;
 static uint32_t end;
+#endif
+
 /* Private function prototypes -----------------------------------------------*/
 void FW_APP_PrintMainMenu(void);
 void FW_APP_Run(void);
@@ -122,14 +126,18 @@ size_t __write(int file, unsigned char const *ptr, size_t len)
   */
 int main(void)
 {
+#ifdef PRINT_BOOT_TIME
   /* Get boot cycles */
   end = DWT->CYCCNT;
+#endif
 
   /* Reset of all peripherals, Initializes the Flash interface and the systick. */
   HAL_Init();
 
+#ifdef PRINT_BOOT_TIME
   /* Get Boot Time */
-  time = ((uint64_t)(end) * 1000000U / SystemCoreClock);
+  time = ((uint64_t)(end) * 1000U / SystemCoreClock);
+#endif
 
   /* Register SecureFault callback defined in non-secure and to be called by secure handler */
   SECURE_RegisterCallback(SECURE_FAULT_CB_ID, (void *)SecureFault_Callback);

@@ -276,9 +276,6 @@ void boot_platform_quit(struct boot_arm_vector_table *vector)
 #ifdef OEMUROT_CACHE_ENABLE
   /* Disable I-Cache */
   SCB_DisableICache();
-
-  /* Disable D-Cache */
-  SCB_DisableDCache();
 #endif /* OEMUROT_CACHE_ENABLE */
 
 #if (OEMUROT_LOAD_AND_RUN != NO_LOAD_AND_RUN)
@@ -761,9 +758,6 @@ int32_t boot_platform_init(void)
 #ifdef OEMUROT_CACHE_ENABLE
   /* Enable I-Cache */
   SCB_EnableICache();
-
-  /* Enable D-Cache */
-  SCB_EnableDCache();
 #endif /* OEMUROT_CACHE_ENABLE */
 
   /* Start HW randomization */
@@ -837,9 +831,6 @@ int32_t boot_platform_init(void)
     }
   }
   memset((void *)boot_conf_flag, CONF_FLAG_ERASE_VALUE, sizeof(boot_conf_flag));
-#ifndef OEMUROT_MPU_PROTECTION
-  SCB_CleanDCache();
-#endif /* not OEMUROT_MPU_PROTECTION */
 #endif /* not MCUBOOT_OVERWRITE_ONLY */
 
   return 0;

@@ -2299,10 +2299,16 @@
                     <name>$PROJ_DIR$\..\..\Appli\Core\Src\stm32n6xx_it.c</name>
                 </file>
                 <file>
+                    <name>$PROJ_DIR$\..\..\Appli\Core\Src\time_monitor.c</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\..\..\Appli\Core\Src\tx_initialize_low_level.S</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\Appli\Core\Src\venc_app.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\Appli\Core\Src\venc_h264_config.c</name>
                 </file>
             </group>
             <group>
@@ -2362,10 +2368,16 @@
             <group>
                 <name>Components</name>
                 <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\BSP\Components\aps256xx\aps256xx.c</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\BSP\Components\imx335\imx335.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\BSP\Components\imx335\imx335_reg.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\BSP\Components\mx66uw1g45g\mx66uw1g45g.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\BSP\Components\tcpp0203\tcpp0203.c</name>
@@ -2388,6 +2400,9 @@
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\BSP\STM32N6570-DK\stm32n6570_discovery_usbpd_pwr.c</name>
                 </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\BSP\STM32N6570-DK\stm32n6570_discovery_xspi.c</name>
+                </file>
             </group>
         </group>
         <group>
@@ -2406,6 +2421,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\STM32N6xx_HAL_Driver\Src\stm32n6xx_hal_adc_ex.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\STM32N6xx_HAL_Driver\Src\stm32n6xx_hal_bsec.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\STM32N6xx_HAL_Driver\Src\stm32n6xx_hal_cacheaxi.c</name>
@@ -2469,6 +2487,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\STM32N6xx_HAL_Driver\Src\stm32n6xx_hal_uart_ex.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\STM32N6xx_HAL_Driver\Src\stm32n6xx_hal_xspi.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\..\Drivers\STM32N6xx_HAL_Driver\Src\stm32n6xx_ll_dma.c</name>

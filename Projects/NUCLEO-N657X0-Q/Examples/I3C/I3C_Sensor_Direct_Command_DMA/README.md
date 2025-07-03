@@ -1,11 +1,3 @@
-
----
-pagetitle: Readme
-lang: en
----
-::: {.row}
-::: {.col-sm-12 .col-lg-8}
-
 ## <b>I3C_Sensor_Direct_Command_DMA Example Description</b>
 
 How to handle a Direct Command procedure between STM32N6xx Nucleo and X-NUCLEO-IKS01A3,
@@ -158,8 +150,4 @@ In order to make the program work, you must do the following :
  - Press the reset button. The code then executes in boot from external Flash mode.
 
 
-
-
-:::
-:::
 

@@ -3,7 +3,7 @@
   ******************************************************************************
   * @file    Examples_LL/TIM/TIM_OutputCompare_Init/Src/main.c
   * @author  MCD Application Team
-  * @brief   This example describes how to use a timer instance in output 
+  * @brief   This example describes how to use a timer instance in output
   *          compare mode using the STM32N6xx TIM LL API.
   *          Peripheral initialization done using LL unitary services functions.
   ******************************************************************************
@@ -61,7 +61,6 @@ static uint8_t iOCMode = 0;
 static uint32_t uwCompareMatchCount = 0;
 
 /* TIM1 Clock */
-static uint32_t TimOutClock = 1;
 static uint32_t tim_prescaler = 0;
 static uint32_t tim_period = 0;
 static uint32_t tim_pulse_value = 0;
@@ -115,9 +114,9 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-  
+
   static uint32_t TimOutClock = 1;
-  TimOutClock = GetTimerCLKFreq();  
+  TimOutClock = GetTimerCLKFreq();
   /* Set the pre-scaler value to have TIM1 counter clock equal to 10 kHz */
   tim_prescaler = __LL_TIM_CALC_PSC(TimOutClock, 10000);
 
@@ -141,13 +140,13 @@ int main(void)
   /**************************/
   /* Enable the capture/compare interrupt for channel 1*/
   LL_TIM_EnableIT_CC1(TIM1);
-  
+
   /**********************************/
   /* Start output signal generation */
   /**********************************/
   /* Enable output channel 1 */
   LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1);
-    
+
   /* Enable counter */
   LL_TIM_EnableCounter(TIM1);
 
@@ -391,13 +390,13 @@ __STATIC_INLINE void Configure_OCMode(uint32_t OCMode)
 {
   /* Disable the counter */
   LL_TIM_DisableCounter(TIM1);
-  
+
   /* Reset the counter */
   LL_TIM_SetCounter(TIM1, 0);
-  
+
   /* Reset the compare match count */
   uwCompareMatchCount = 0;
-  
+
   /* Set the output level (active v.s. inactive) according to the new OC mode */
   switch (OCMode)
   {
@@ -406,19 +405,19 @@ __STATIC_INLINE void Configure_OCMode(uint32_t OCMode)
       /* Set the output channel to its inactive level (LOW)*/
       LL_TIM_OC_SetMode(TIM1, LL_TIM_CHANNEL_CH1, LL_TIM_OCMODE_FORCED_INACTIVE);
       break;
-      
+
     case LL_TIM_OCMODE_INACTIVE:
       /* Set the output channel to its active level (HIGH)*/
       LL_TIM_OC_SetMode(TIM1, LL_TIM_CHANNEL_CH1, LL_TIM_OCMODE_FORCED_ACTIVE);
       break;
-        
+
     default:
       break;
   }
-  
+
   /* Update the output channel mode */
   LL_TIM_OC_SetMode(TIM1, LL_TIM_CHANNEL_CH1, OCMode);
-  
+
   /* Re-enable the counter */
   LL_TIM_EnableCounter(TIM1);
 }
@@ -436,7 +435,7 @@ void UserButton_Callback(void)
 {
   /* Set new OC mode */
   iOCMode = (iOCMode + 1) % TIM_OC_MODES_NB;
-    
+
   /* Switch to next OC mode */
   Configure_OCMode(aOCMode[iOCMode]);
 }

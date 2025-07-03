@@ -75,11 +75,17 @@ int main(void)
   SCB_EnableDCache();
 
   /* MCU Configuration--------------------------------------------------------*/
+
+  /* Update SystemCoreClock variable according to RCC registers values. */
+  SystemCoreClockUpdate();
   HAL_Init();
 
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
+
+  /* Update SystemCoreClock variable */
+  SystemCoreClockUpdate();
 
   /* USER CODE BEGIN SysInit */
 

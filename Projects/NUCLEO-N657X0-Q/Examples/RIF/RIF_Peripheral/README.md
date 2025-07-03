@@ -59,18 +59,17 @@ File | Description
 
 ### <b>How to use it?</b>
 
-In order to make the program work, you must do the following :
+To run this example in development mode :
 
  - Set the boot mode in development mode (BOOT1 switch position is 2-3, BOOT0 switch position doesn't matter).
  - Open your preferred toolchain
- - Rebuild all files (both FSBL and non-secure application) and load the secure application into target memory. The non-secure application should be loaded automatically. Code can be executed in this mode for debugging purposes.
+ - Rebuild all files (both FSBL and non-secure application)
 
- Next, this program can be run in boot from flash mode. This is done by following the instructions below:
+**EWARM**, **MDK-ARM**:
 
- - Resort to CubeProgrammer to add a header to the generated binary Project.bin *in the AppliNonSecure folder* with the following command
-   - *STM32_SigningTool_CLI.exe -bin Project.bin -nk -of 0x80000000 -t fsbl -o Project-trusted.bin -hv 2.3 -dump Project-trusted.bin*
-   - The resulting binary is Project-trusted.bin.
- - Next, in resorting again to CubeProgrammer, load the binary and its header (Project-trusted.bin) in the board external Flash at address 0x7000'0000.
- - Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).
- - Press the reset button. The code then executes in boot from external Flash mode.
+ - launch the debug with the FSBL configuration. The non secure application is loaded into RAM automatically.
+
+
+ This program can be run only with boot mode set in development mode.
+
 

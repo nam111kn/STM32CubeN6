@@ -1,11 +1,3 @@
-
----
-pagetitle: Readme
-lang: en
----
-::: {.row}
-::: {.col-sm-12 .col-lg-8}
-
 ## <b>CORTEX_CACHE Example Description</b>
 
 This project provides a CORTEXM cache example based on the CMSIS API that can be used
@@ -83,8 +75,4 @@ In order to make the program work, you must do the following :
  - Next, in resorting again to CubeProgrammer, load the binary and its header (Project-trusted.bin) in DK board external Flash at address 0x7000'0000.
  - Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).
  - Press the reset button. The code then executes in boot from external Flash mode.
-
-
-:::
-:::
 

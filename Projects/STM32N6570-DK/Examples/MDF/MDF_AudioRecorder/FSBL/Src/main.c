@@ -71,6 +71,7 @@ void PeriphCommonClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_GPDMA1_Init(void);
 static void MX_MDF1_Init(void);
+static void SystemIsolation_Config(void);
 /* USER CODE BEGIN PFP */
 static void MPU_Config(void);
 static void WM8904_Probe(void);
@@ -126,6 +127,7 @@ int main(void)
   MX_GPIO_Init();
   MX_GPDMA1_Init();
   MX_MDF1_Init();
+  SystemIsolation_Config();
   /* USER CODE BEGIN 2 */
   if (BSP_ERROR_NONE != BSP_LED_Init(LED_RED))
   {
@@ -187,8 +189,8 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-    /** Configure the System Power Supply
-    */
+  /** Configure the System Power Supply
+  */
   if (HAL_PWREx_ConfigSupply(PWR_EXTERNAL_SOURCE_SUPPLY) != HAL_OK)
   {
     Error_Handler();
@@ -208,9 +210,9 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-    /** Get current CPU/System buses clocks configuration and if necessary switch
+  /** Get current CPU/System buses clocks configuration and if necessary switch
  to intermediate HSI clock to ensure target clock can be set
-    */
+  */
   HAL_RCC_GetClockConfig(&RCC_ClkInitStruct);
   if ((RCC_ClkInitStruct.CPUCLKSource == RCC_CPUCLKSOURCE_IC1) ||
      (RCC_ClkInitStruct.SYSCLKSource == RCC_SYSCLKSOURCE_IC2_IC6_IC11))
@@ -225,9 +227,9 @@ void SystemClock_Config(void)
     }
   }
 
-    /** Initializes the RCC Oscillators according to the specified parameters
+  /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
-    */
+  */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_NONE;
   RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL1.PLLSource = RCC_PLLSOURCE_HSI;
@@ -250,8 +252,8 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-    /** Initializes the CPU, AHB and APB buses clocks
-    */
+  /** Initializes the CPU, AHB and APB buses clocks
+  */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_CPUCLK|RCC_CLOCKTYPE_HCLK
                               |RCC_CLOCKTYPE_SYSCLK|RCC_CLOCKTYPE_PCLK1
                               |RCC_CLOCKTYPE_PCLK2|RCC_CLOCKTYPE_PCLK5
@@ -286,8 +288,8 @@ void PeriphCommonClock_Config(void)
 {
   RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
 
-    /** Initializes the peripherals clock
-    */
+  /** Initializes the peripherals clock
+  */
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_TIM;
   PeriphClkInitStruct.TIMPresSelection = RCC_TIMPRES_DIV1;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
@@ -340,9 +342,9 @@ static void MX_MDF1_Init(void)
 
   /* USER CODE END MDF1_Init 1 */
 
-    /**
+  /**
     MdfHandle0 structure initialization and HAL_MDF_Init function call
-    */
+  */
   MdfHandle0.Instance = MDF1_Filter0;
   MdfHandle0.Init.CommonParam.InterleavedFilters = 0;
   MdfHandle0.Init.CommonParam.ProcClockDivider = 2;
@@ -360,11 +362,11 @@ static void MX_MDF1_Init(void)
     Error_Handler();
   }
 
-    /**
+  /**
     MdfFilterConfig0, MdfOldConfig0 and/or MdfScdConfig0 structures initialization
 
     WARNING : only structures are filled, no specific init function call for filter
-    */
+  */
   MdfFilterConfig0.DataSource = MDF_DATA_SOURCE_BSMX;
   MdfFilterConfig0.Delay = 0;
   MdfFilterConfig0.CicMode = MDF_ONE_FILTER_SINC4;
@@ -387,20 +389,57 @@ static void MX_MDF1_Init(void)
 }
 
 /**
+  * @brief RIF Initialization Function
+  * @param None
+  * @retval None
+  */
+  static void SystemIsolation_Config(void)
+{
+
+  /* USER CODE BEGIN RIF_Init 0 */
+
+  /* USER CODE END RIF_Init 0 */
+
+  /* set all required IPs as secure privileged */
+  __HAL_RCC_RIFSC_CLK_ENABLE();
+
+  /* RIF-Aware IPs Config */
+
+  /* set up GPDMA configuration */
+  /* set GPDMA1 channel 6 */
+  if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel6,DMA_CHANNEL_SEC|DMA_CHANNEL_PRIV|DMA_CHANNEL_SRC_SEC|DMA_CHANNEL_DEST_SEC)!= HAL_OK )
+  {
+    Error_Handler();
+  }
+
+  /* set up GPIO configuration */
+  HAL_GPIO_ConfigPinAttributes(GPIOE,GPIO_PIN_2,GPIO_PIN_SEC|GPIO_PIN_NPRIV);
+  HAL_GPIO_ConfigPinAttributes(GPIOE,GPIO_PIN_8,GPIO_PIN_SEC|GPIO_PIN_NPRIV);
+
+  /* USER CODE BEGIN RIF_Init 1 */
+
+  /* USER CODE END RIF_Init 1 */
+  /* USER CODE BEGIN RIF_Init 2 */
+
+  /* USER CODE END RIF_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
   */
 static void MX_GPIO_Init(void)
 {
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
+  /* USER CODE BEGIN MX_GPIO_Init_1 */
+  /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
 
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
+  /* USER CODE BEGIN MX_GPIO_Init_2 */
+  /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
@@ -596,7 +635,7 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.

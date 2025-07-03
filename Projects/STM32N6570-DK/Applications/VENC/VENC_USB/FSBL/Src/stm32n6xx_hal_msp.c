@@ -71,6 +71,12 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef *hxspi)
 
   if (hxspi->Instance == XSPI2)
   {
+    __HAL_RCC_XSPI2_FORCE_RESET();
+    __HAL_RCC_XSPI2_RELEASE_RESET();
+    __HAL_RCC_XSPIM_FORCE_RESET();
+    __HAL_RCC_XSPIM_RELEASE_RESET();
+    /* XSPI clock source configuration */
+
     BSEC_HandleTypeDef hbsec;
     uint32_t fuse_data = 0;
 
@@ -120,8 +126,16 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef *hxspi)
     HAL_PWREx_EnableVddIO3();
     HAL_PWREx_ConfigVddIORange(PWR_VDDIO3, PWR_VDDIO_RANGE_1V8);
 
+
     /* Enable the XSPI memory interface clock */
     __HAL_RCC_XSPI2_CLK_ENABLE();
+    __HAL_RCC_XSPIM_CLK_ENABLE();
+
+    /* Reset the XSPI memory interface */
+    __HAL_RCC_XSPI2_FORCE_RESET();
+    __HAL_RCC_XSPI2_RELEASE_RESET();
+    __HAL_RCC_XSPIM_FORCE_RESET();
+    __HAL_RCC_XSPIM_RELEASE_RESET();
 
     /* Set GPIO pin configuration for XSPI operation */
     {

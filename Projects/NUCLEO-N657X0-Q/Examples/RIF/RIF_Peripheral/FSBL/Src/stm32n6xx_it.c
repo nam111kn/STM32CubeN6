@@ -213,9 +213,20 @@ void SysTick_Handler(void)
 /* please refer to the startup file (startup_stm32n6xx.s).                    */
 /******************************************************************************/
 
-/* USER CODE BEGIN 1 */
+/**
+  * @brief This function handles IAC interrupt.
+  */
 void IAC_IRQHandler(void)
 {
+  /* USER CODE BEGIN IAC_IRQn 0 */
+
+  /* USER CODE END IAC_IRQn 0 */
   HAL_RIF_IRQHandler();
+  /* USER CODE BEGIN IAC_IRQn 1 */
+
+  /* USER CODE END IAC_IRQn 1 */
 }
+
+/* USER CODE BEGIN 1 */
+
 /* USER CODE END 1 */

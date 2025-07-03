@@ -1,5 +1,5 @@
 #MicroXplorer Configuration settings - do not modify
-Appli.IPs=CORTEX_M55_S,GPDMA1,GPIO,NVIC1\:I,HPDMA1,LINKEDLIST,RIF,RCC
+Appli.IPs=CORTEX_M55_S,GPDMA1,GPIO,NVIC1\:I,HPDMA1,LINKEDLIST,RIF,RCC,SAU\:I
 CAD.formats=
 CAD.pinconfig=
 CAD.provider=

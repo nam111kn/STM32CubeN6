@@ -120,7 +120,7 @@
                 </option>
                 <option>
                     <name>OCImagesPath1</name>
-                    <state>$PROJ_DIR$\..\..\EWARM\Appli\Ux_Device_Video_H264\Exe\Project.out</state>
+                    <state>$PROJ_DIR$\..\..\EWARM\Appli\VENC_USB_LRUN\Exe\Project.out</state>
                 </option>
                 <option>
                     <name>OCImagesSuppressCheck2</name>

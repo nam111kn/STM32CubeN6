@@ -1,4 +1,4 @@
-## <b>OEMuROT_Boot Application Description</b>
+## <b>OEMuROT_Boot application description</b>
 
 This project provides an OEMuROT boot example.
 

@@ -91,8 +91,8 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef* hxspi)
     /* USER CODE BEGIN XSPI1_MspInit 0 */
     /* XSPI power enable */
     __HAL_RCC_PWR_CLK_ENABLE();
-    HAL_PWREx_EnableVddIO3();
-    HAL_PWREx_ConfigVddIORange(PWR_VDDIO3, PWR_VDDIO_RANGE_1V8);
+    HAL_PWREx_EnableVddIO2(); // change, IO2 for XSPI1
+    HAL_PWREx_ConfigVddIORange(PWR_VDDIO2, PWR_VDDIO_RANGE_1V8);
     /* USER CODE END XSPI1_MspInit 0 */
 
   /** Initializes the peripherals clock

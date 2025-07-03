@@ -1093,6 +1093,11 @@
                         <cmdline>"../postbuild.bat" "secure"</cmdline>
                         <workingDirectory>$PROJ_DIR$</workingDirectory>
                         <buildSequence>postLink</buildSequence>
+                        <dependencies>
+                            <file>
+                                <name>../../Binary/rot_tz_s_app.bin</name>
+                            </file>
+                        </dependencies>
                     </buildAction>
                 </buildActions>
             </data>
@@ -1109,9 +1114,6 @@
             <name>CMSIS</name>
             <file>
                 <name>$PROJ_DIR$\startup_stm32n657xx.s</name>
-                <excluded>
-                    <configuration>Debug</configuration>
-                </excluded>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\AppliSecure\Src\system_stm32n6xx_s.c</name>

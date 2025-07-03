@@ -121,23 +121,17 @@
 <li><p>This example has been tested with NUCLEO-N657X0-Q board and can be easily tailored to any other supported device and development board.</p></li>
 </ul>
 <h3 id="how-to-use-it"><b>How to use it?</b></h3>
-<p>In order to make the program work, you must do the following :</p>
+<p>To run this example in development mode :</p>
 <ul>
 <li>Set the boot mode in development mode (BOOT1 switch position is 2-3, BOOT0 switch position doesn’t matter).</li>
 <li>Open your preferred toolchain</li>
-<li>Rebuild all files (both FSBL and non-secure application) and load the secure application into target memory. The non-secure application should be loaded automatically. Code can be executed in this mode for debugging purposes.</li>
+<li>Rebuild all files (both FSBL and non-secure application)</li>
 </ul>
-<p>Next, this program can be run in boot from flash mode. This is done by following the instructions below:</p>
+<p><strong>EWARM</strong>, <strong>MDK-ARM</strong>:</p>
 <ul>
-<li>Resort to CubeProgrammer to add a header to the generated binary Project.bin <em>in the AppliNonSecure folder</em> with the following command
-<ul>
-<li><em>STM32_SigningTool_CLI.exe -bin Project.bin -nk -of 0x80000000 -t fsbl -o Project-trusted.bin -hv 2.3 -dump Project-trusted.bin</em></li>
-<li>The resulting binary is Project-trusted.bin.</li>
-</ul></li>
-<li>Next, in resorting again to CubeProgrammer, load the binary and its header (Project-trusted.bin) in the board external Flash at address 0x7000’0000.</li>
-<li>Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).</li>
-<li>Press the reset button. The code then executes in boot from external Flash mode.</li>
+<li>launch the debug with the FSBL configuration. The non secure application is loaded into RAM automatically.</li>
 </ul>
+<p>This program can be run only with boot mode set in development mode.</p>
 </div>
 </div>
 </body>

@@ -1093,6 +1093,21 @@
   <group>
     <name>Drivers</name>
     <group>
+      <name>CMSIS</name>
+      <file>
+        <name>$PROJ_DIR$/../../FSBL/Src/system_stm32n6xx_fsbl.c</name>
+      </file>
+    </group>
+    <group>
+      <name>BSP</name>
+      <group>
+        <name>STM32N6xx_Nucleo</name>
+        <file>
+          <name>$PROJ_DIR$/../../../../../../../Drivers/BSP/STM32N6xx_Nucleo/stm32n6xx_nucleo.c</name>
+        </file>
+      </group>
+    </group>
+    <group>
       <name>STM32N6xx_HAL_Driver</name>
       <file>
         <name>$PROJ_DIR$/../../../../../../../Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_cortex.c</name>
@@ -1127,21 +1142,9 @@
       <file>
         <name>$PROJ_DIR$/../../../../../../../Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_hash.c</name>
       </file>
-    </group>
-    <group>
-      <name>CMSIS</name>
       <file>
-        <name>$PROJ_DIR$/../../FSBL/Src/system_stm32n6xx_fsbl.c</name>
+        <name>$PROJ_DIR$/../../../../../../../Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_rif.c</name>
       </file>
-    </group>
-    <group>
-      <name>BSP</name>
-      <group>
-        <name>STM32N6xx_Nucleo</name>
-        <file>
-          <name>$PROJ_DIR$/../../../../../../../Drivers/BSP/STM32N6xx_Nucleo/stm32n6xx_nucleo.c</name>
-        </file>
-      </group>
     </group>
   </group>
 </project>
