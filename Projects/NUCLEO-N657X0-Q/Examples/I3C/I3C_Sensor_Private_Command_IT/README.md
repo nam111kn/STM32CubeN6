@@ -1,11 +1,3 @@
-
----
-pagetitle: Readme
-lang: en
----
-::: {.row}
-::: {.col-sm-12 .col-lg-8}
-
 ## <b>I3C_Sensor_Private_Command_IT Example Description</b>
 
 How to handle I3C as Controller data buffer transmission/reception between STM32N6xx Nucleo and X-NUCLEO-IKS01A3,
@@ -172,8 +164,4 @@ Next, this program can be run in boot from flash mode. This is done by following
 
 
 
-
-
-:::
-:::
 

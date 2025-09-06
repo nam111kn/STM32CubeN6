@@ -214,7 +214,7 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles EXTI line13 interrupt.
+  * @brief This function handles EXTI Line13 interrupt.
   */
 void EXTI13_IRQHandler(void)
 {

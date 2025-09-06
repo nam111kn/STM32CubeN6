@@ -3,7 +3,10 @@
 
 This application provides an example of VENC usage on STM32N6570-DK board,
 it shows how to develop a USB video device using the camera pipeline and VENC IP.
-It also shows how to use the VENC with the camera pipeline in hardware handshake mode.
+It is also designed to be easily configurable:
+
+  - Hardware handshake or frame mode
+  - 1080p15, 720p30, 480p30
 
 The application is designed to emulate a USB video device, the code provides all required device descriptors framework
 and associated class descriptor report to build a compliant USB video device.
@@ -83,18 +86,18 @@ In order to make the program work, you must do the following :
  - Open your preferred toolchain
  - Select first the FSBL workspace
  - Rebuild all files from sub-project FSBL (if no modification is done on FSBL project, this step can be done only once)
- - Select the Ux_Device_Video workspace
- - Rebuild all files from sub-project Ux_Device_Video
- - Resort to CubeProgrammer to add a header to the generated Ux_Device_Video binary Ux_Device_Video.bin with the following command
-   - *STM32_SigningTool_CLI.exe -bin Ux_Device_Video.bin -nk -of 0x80000000 -t fsbl -o Ux_Device_Video-trusted.bin -hv 2.3 -dump Ux_Device_Video-trusted.bin*
+ - Select the Firmware workspace (VENC_USB_Appli or VENC_USB_LRUN)
+ - Rebuild all files from sub-project VENC_USB_XXX
+ - Use CubeProgrammer to add a header to the generated VENC_USB_XXX binary Project.bin with the following command
+   - *STM32_SigningTool_CLI.exe -bin Project.bin -nk -of 0x80000000 -t fsbl -o Firmware-trusted.bin -hv 2.3 -dump Firmware-trusted.bin*
        - The resulting binary is Ux_Device_Video-trusted.bin.
- - Next, in resorting again to CubeProgrammer, load the Ux_Device_Video binary and its header (Ux_Device_Video-trusted.bin) in DK board external Flash at address 0x7010'0000.
+ - Next, in resorting again to CubeProgrammer, load the Firmware binary and its header (Firmware-trusted.bin) in DK board external Flash at address 0x7010'0000.
  - Load the FSBL binary in internal RAM using the IDE
  - Run the example
 
  Next, this program can be run in boot from flash mode. This is done by following the instructions below:
 
- - Resort to CubeProgrammer to add a header to the generated binary FSBL.bin with the following command
+ - Use  CubeProgrammer to add a header to the generated binary FSBL.bin with the following command
    - *STM32_SigningTool_CLI.exe -bin FSBL.bin -nk -of 0x80000000 -t fsbl -o FSBL-trusted.bin -hv 2.3 -dump FSBL-trusted.bin*
        - The resulting binary is FSBL-trusted.bin.
  - In resorting again to CubeProgrammer, load the FSBL binary and its header (FSBL-trusted.bin) in DK board external Flash at address 0x7000'0000.

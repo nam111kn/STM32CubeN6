@@ -20,13 +20,15 @@
 #include "main.h"
 #include "stdio.h"
 #include "ewl.h"
-#include "H264EncApi.h"
+#include "h264encapi.h"
 #include "venc_app.h"
 #include "imx335.h"
 #include "stm32n6xx_ll_venc.h"
 #include "stm32n6570_discovery.h"
 #include "stm32n6570_discovery_camera.h"
 #include "tx_api.h"
+#include "utils.h"
+#include "venc_h264_config.h"
 
 /** @addtogroup Templates
 * @{
@@ -44,31 +46,35 @@ typedef struct {
 } venc_output_frame_t;
 /* Private define ------------------------------------------------------------*/
 
-#define FRAMERATE 20
 #define VENC_APP_QUEUE_SIZE 15
-#define INPUT_FRAME_BUFFER_ADDRESS 0x34050000UL
 #define VENC_OUTPUT_BLOCK_SIZE 0x30000
 #define VENC_OUTPUT_BLOCK_NBR 10
+
+
 /* Private macro -------------------------------------------------------------*/
 
 #define ALIGNED(ptr, bytes) (((ptr + bytes - 1)/bytes) * bytes)
 /* Private variables ---------------------------------------------------------*/
 
 
+extern DCMIPP_HandleTypeDef hcamera_dcmipp;
+
+
 static H264EncIn encIn= {0};
-static H264EncOut encOut= {0};
+	static H264EncOut encOut= {H264ENC_INTRA_FRAME,0, 0, 0, 0, 0, 0, 0,  H264ENC_NO_REFERENCE_NO_REFRESH,  H264ENC_NO_REFERENCE_NO_REFRESH};
 static H264EncInst encoder= {0};
-static H264EncConfig cfg= {0};
 static uint32_t frame_nb = 0;
-uint8_t ewl_pool[0x190000] __NON_CACHEABLE __attribute__((aligned(8)));
+
+/* Input Frame : in internal ram */
 venc_output_frame_t queue_buf[VENC_OUTPUT_BLOCK_NBR];
-uint8_t output_block_buffer[VENC_OUTPUT_BLOCK_NBR * VENC_OUTPUT_BLOCK_SIZE] __NON_CACHEABLE __attribute((aligned(8)));
+uint8_t output_block_buffer[VENC_OUTPUT_BLOCK_NBR * VENC_OUTPUT_BLOCK_SIZE] ALIGN_32 __NON_CACHEABLE ;
+
 TX_EVENT_FLAGS_GROUP venc_app_flags;
 TX_QUEUE enc_frame_queue;
 TX_BLOCK_POOL venc_block_pool;
 
 /* Private function prototypes -----------------------------------------------*/
-static int encoder_prepare(uint32_t width, uint32_t height);
+static int encoder_prepare(void);
 static int encode_frame(void);
 static int encoder_end(void);
 static int encoder_start(void);
@@ -101,7 +107,7 @@ void venc_thread_func(ULONG arg){
     Error_Handler();
   }
 
-  IMX335_SetFramerate(Camera_CompObj, 20);
+  IMX335_SetFramerate(Camera_CompObj, hVencH264Instance.cfgH264Main.frameRateNum /hVencH264Instance.cfgH264Main.frameRateDenom);
   /* initialize VENC */
   LL_VENC_Init();
 
@@ -109,7 +115,7 @@ void venc_thread_func(ULONG arg){
   BSP_LED_On(LED1);
   BSP_LED_On(LED2);
 
-  encoder_prepare(960, 720);
+  encoder_prepare();
   VENC_APP_EncodingStart();
 
   while(1)
@@ -119,6 +125,7 @@ void venc_thread_func(ULONG arg){
     {
       printf("Error in BSP image processing\n");
     }
+    tx_event_flags_get(&venc_app_flags, FRAME_RECEIVED_FLAG, TX_AND_CLEAR, &flags, TX_WAIT_FOREVER);
     if(!encode_frame())
     {
       BSP_LED_Toggle(LED_GREEN);
@@ -126,85 +133,65 @@ void venc_thread_func(ULONG arg){
   }
 }
 
-int encoder_prepare(uint32_t width, uint32_t height)
+int encoder_prepare(void)
 {
   H264EncRet ret;
-  H264EncPreProcessingCfg preproc_cfg = {0};
-  H264EncRateCtrl ratectrl_cfg = {0};
-  H264EncCodingCtrl codingctrl_cfg = {0};
-
   frame_nb = 0;
-  /* Step 1: Initialize an encoder instance */
-  /* set config to 1 ref frame */
-  cfg.refFrameAmount = 1;
-  /* 30 fps frame rate */
-  cfg.frameRateDenom = 1;
-  cfg.frameRateNum = FRAMERATE;
-  /* Image resolution */
-  cfg.width = width;
-  cfg.height = height;
-  /* Stream type */
-  cfg.streamType = H264ENC_BYTE_STREAM;
 
-  /* encoding level*/
-  /*See API guide for level depending on resolution and framerate*/
-  cfg.level = H264ENC_LEVEL_4;
-  cfg.svctLevel = 0;
-  cfg.viewMode = H264ENC_BASE_VIEW_SINGLE_BUFFER;
+  /* Set encode configuration */
+  ret = H264EncInit(&hVencH264Instance.cfgH264Main, &encoder);
 
-  ret = H264EncInit(&cfg, &encoder);
   if (ret != H264ENC_OK)
   {
     return -1;
   }
 
-  /* set format conversion for preprocessing */
-  ret = H264EncGetPreProcessing(encoder, &preproc_cfg);
+
+  /* Set preprocessing*/
+  ret = H264EncSetPreProcessing(encoder, &hVencH264Instance.cfgH264Preproc);
   if(ret != H264ENC_OK)
   {
     return -1;
   }
-  preproc_cfg.inputType = H264ENC_YUV422_INTERLEAVED_YUYV;
-  ret = H264EncSetPreProcessing(encoder, &preproc_cfg);
+  ret = H264EncSetCodingCtrl(encoder, &hVencH264Instance.cfgH264Coding);
   if(ret != H264ENC_OK)
   {
     return -1;
   }
-  /* setup coding ctrl */
-  ret = H264EncGetCodingCtrl(encoder, &codingctrl_cfg);
-  if(ret != H264ENC_OK)
-  {
-    return -1;
-  }
-  codingctrl_cfg.inputLineBufEn = 1;
-  codingctrl_cfg.inputLineBufLoopBackEn = 1;
-  codingctrl_cfg.inputLineBufDepth = 1;
-  codingctrl_cfg.inputLineBufHwModeEn = 1;
-  codingctrl_cfg.idrHeader = 1;
-  ret = H264EncSetCodingCtrl(encoder, &codingctrl_cfg);
-  if(ret != H264ENC_OK)
-  {
-    return -1;
-  }
-/* set bit rate configuration */
-  ret = H264EncGetRateCtrl(encoder, &ratectrl_cfg);
-  if(ret != H264ENC_OK)
-  {
-    return -1;
-  }
-  ratectrl_cfg.qpHdr = 25;
-  ratectrl_cfg.bitPerSecond = 1000000;
-  ratectrl_cfg.pictureRc = 0;
-  ratectrl_cfg.gopLen = 30;
-  ratectrl_cfg.intraQpDelta = 0;
-  ratectrl_cfg.fixedIntraQp = 0;
-  ratectrl_cfg.hrd = 0;
-  ret = H264EncSetRateCtrl(encoder, &ratectrl_cfg);
+
+  /* set bit rate configuration */
+  ret = H264EncSetRateCtrl(encoder, &hVencH264Instance.cfgH264Rate);
   if(ret != H264ENC_OK)
   {
     return -1;
   }
   return 0;
+
+}
+
+static void  encoder_reset(void)
+{
+  if (HAL_DCMIPP_PIPE_Suspend(&hcamera_dcmipp, DCMIPP_PIPE1) != HAL_OK)
+  {
+    printf("HAL_DCMIPP_PIPE_Suspend failed\n");
+  }
+
+  /* Wait for end of trame */
+  tx_thread_sleep(15 * TX_TIMER_TICKS_PER_SECOND / 1000);
+
+
+  /* VENV HW REset */
+  __HAL_RCC_VENC_FORCE_RESET();
+  tx_thread_sleep(1 * TX_TIMER_TICKS_PER_SECOND / 1000);
+  __HAL_RCC_VENC_RELEASE_RESET();
+  tx_thread_sleep(1 * TX_TIMER_TICKS_PER_SECOND / 1000);
+
+  /*Resume DCMIPP after VENC reset*/
+  if (HAL_DCMIPP_PIPE_Resume(&hcamera_dcmipp, DCMIPP_PIPE1) != HAL_OK)
+  {
+    printf("HAL_DCMIPP_PIPE_Resume failed");
+  }
+
 }
 
 static int encoder_start(void)
@@ -214,7 +201,7 @@ static int encoder_start(void)
 
 
   /* start camera acquisition */
-  if(BSP_CAMERA_Start(0, (uint8_t *)(INPUT_FRAME_BUFFER_ADDRESS), CAMERA_MODE_CONTINUOUS)!= BSP_ERROR_NONE){
+  if(BSP_CAMERA_Start(0,  GetInputFrame(NULL), CAMERA_MODE_CONTINUOUS)!= BSP_ERROR_NONE){
     Error_Handler();
   }
 
@@ -242,6 +229,8 @@ static int encoder_start(void)
   return 0;
 }
 
+__weak void timeMonitor(void) {};
+uint32_t nb_encoded_frame = 0;
 
 static int encode_frame(void)
 {
@@ -261,12 +250,13 @@ static int encode_frame(void)
   encIn.ipf = H264ENC_REFERENCE_AND_REFRESH;
   encIn.ltrf = H264ENC_REFERENCE;
   /* set input buffers to structures */
-  encIn.busLuma = INPUT_FRAME_BUFFER_ADDRESS;
+   encIn.busLuma = (uint32_t)GetInputFrame(NULL);
 
   /* allocate and set output buffer */
 
   if(tx_block_allocate(&venc_block_pool, (void **) &frame_buffer.block_addr, TX_WAIT_FOREVER) != TX_SUCCESS)
   {
+    printf("VENC : failed to allocate output buffer\n");
     return -1;
   }
   frame_buffer.aligned_block_addr = (uint32_t *) ALIGNED((uint32_t) frame_buffer.block_addr, 8);
@@ -274,6 +264,9 @@ static int encode_frame(void)
   encIn.busOutBuf = (uint32_t) encIn.pOutBuf;
   encIn.outBufSize = VENC_OUTPUT_BLOCK_SIZE - 8;
   ret = H264EncStrmEncode(encoder, &encIn, &encOut, NULL, NULL, NULL);
+
+  timeMonitor();
+
   switch (ret)
   {
   case H264ENC_FRAME_READY:
@@ -290,15 +283,16 @@ static int encode_frame(void)
       tx_block_release(frame_buffer.block_addr);
     }
     encIn.codingType = H264ENC_PREDICTED_FRAME;
+     nb_encoded_frame++;
     break;
   case H264ENC_FUSE_ERROR:
-    printf("DCMIPP and VENC desync, restart the video\n");
-    VENC_APP_EncodingStop();
-    VENC_APP_EncodingStart();
+    printf("DCMIPP and VENC desync (frame#%ld), restart the video\n", frame_nb);
+    tx_block_release(frame_buffer.block_addr);
+    encoder_reset();
     break;
   default:
     printf("error encoding frame %d\n", ret);
-    tx_block_release(encIn.pOutBuf);
+    tx_block_release(frame_buffer.block_addr);
     encIn.codingType = H264ENC_INTRA_FRAME;
     return -1;
     break;
@@ -341,12 +335,47 @@ HAL_StatusTypeDef MX_DCMIPP_ClockConfig(DCMIPP_HandleTypeDef *hdcmipp)
   return HAL_OK;
 }
 
+static HAL_StatusTypeDef  dcmipp_downsize(DCMIPP_HandleTypeDef *hdcmipp,int32_t pipe, int32_t camWidth,int32_t camHeight,int32_t captureWidth,int32_t captureHeight)
+{
+  /* Calcultation explained in RM0486v2 table 354*/
+
+  DCMIPP_DownsizeTypeDef DonwsizeConf ={0};
+  /* Configure the downsize */
+  DonwsizeConf.HRatio      = (uint32_t)((((float)(camWidth)) / ((float)(captureWidth))) * 8192.F);
+  DonwsizeConf.VRatio      = (uint32_t)((((float)(camHeight )) / ((float)(captureHeight ))) * 8192.F);
+  DonwsizeConf.HSize       = captureWidth;
+  DonwsizeConf.VSize       = captureHeight;
+
+  DonwsizeConf.HDivFactor  = (uint32_t)floor((1024 * 8192 -1) / DonwsizeConf.HRatio);
+  DonwsizeConf.VDivFactor  = (uint32_t)floor((1024 * 8192 -1) / DonwsizeConf.VRatio);
+
+  if(HAL_DCMIPP_PIPE_SetDownsizeConfig(hdcmipp, pipe, &DonwsizeConf) != HAL_OK) return HAL_ERROR;
+  if(HAL_DCMIPP_PIPE_EnableDownsize(hdcmipp, pipe)!= HAL_OK) return HAL_ERROR;
+  return HAL_OK;
+}
+
+static HAL_StatusTypeDef  dcmipp_enable_HW_Handshake(DCMIPP_HandleTypeDef *hdcmipp)
+{
+  if (HAL_DCMIPP_PIPE_SetLineWrappingConfig(hdcmipp, DCMIPP_PIPE1, DCMIPP_WRAP_ADDRESS_64_LINES) != HAL_OK)
+  {
+    return HAL_ERROR;
+  }
+
+  if (HAL_DCMIPP_PIPE_EnableLineWrapping(hdcmipp, DCMIPP_PIPE1) != HAL_OK)
+  {
+    return HAL_ERROR;
+  }
+ /* Enable line event with no interrupt to use the hardware trigger to the video encoder  */
+  MODIFY_REG(DCMIPP->P1PPCR, DCMIPP_P1PPCR_LINEMULT_Msk,DCMIPP_MULTILINE_32_LINES);
+  return HAL_OK;
+}
+
 HAL_StatusTypeDef MX_DCMIPP_Init(DCMIPP_HandleTypeDef *hdcmipp)
 {
   DCMIPP_PipeConfTypeDef pPipeConf = {0};
   DCMIPP_CSI_PIPE_ConfTypeDef pCSIPipeConf = {0};
   DCMIPP_CSI_ConfTypeDef csiconf = {0};
-  DCMIPP_DownsizeTypeDef DonwsizeConf ={0};
+   HAL_StatusTypeDef ret = HAL_OK;
 
   if (HAL_DCMIPP_Init(hdcmipp) != HAL_OK)
   {
@@ -375,11 +404,11 @@ HAL_StatusTypeDef MX_DCMIPP_Init(DCMIPP_HandleTypeDef *hdcmipp)
     return HAL_ERROR;
   }
 
-  pPipeConf.FrameRate  = DCMIPP_FRAME_RATE_ALL;
-  pPipeConf.PixelPackerFormat = DCMIPP_PIXEL_PACKER_FORMAT_YUV422_1;
+   pPipeConf.FrameRate  = DCMIPP_FRAME_RATE_ALL;  /* Sensor framerate is set with IMX335_SetFramerate(..FRAMERATE);*/
+   pPipeConf.PixelPackerFormat = hDcmippH264Instance.format;
 
   /* Set Pitch for Main and Ancillary Pipes */
-  pPipeConf.PixelPipePitch  = 1920 ; /* Number of bytes */
+   pPipeConf.PixelPipePitch  =hDcmippH264Instance.pitch; /* Number of bytes */
 
   /* Configure Pipe */
   if (HAL_DCMIPP_PIPE_SetConfig(hdcmipp, DCMIPP_PIPE1, &pPipeConf) != HAL_OK)
@@ -406,30 +435,21 @@ HAL_StatusTypeDef MX_DCMIPP_Init(DCMIPP_HandleTypeDef *hdcmipp)
   {
     return HAL_ERROR;
   }
+  /* Configure DCMIPP output size*/
+  ret= dcmipp_downsize(hdcmipp,DCMIPP_PIPE1,
+                        hCamH264Instance.width,
+                        hCamH264Instance.height,
+                        hVencH264Instance.cfgH264Main.width,
+                        hVencH264Instance.cfgH264Main.height);
 
-  /* Configure the downsize */
-  DonwsizeConf.HRatio      = 22118;
-  DonwsizeConf.VRatio      = 22118;
-  DonwsizeConf.HSize       = 960;
-  DonwsizeConf.VSize       = 720;
-  DonwsizeConf.HDivFactor  = 380;
-  DonwsizeConf.VDivFactor  = 380;
-
-  HAL_DCMIPP_PIPE_SetDownsizeConfig(hdcmipp, DCMIPP_PIPE1, &DonwsizeConf);
-  HAL_DCMIPP_PIPE_EnableDownsize(hdcmipp, DCMIPP_PIPE1);
-
-  if (HAL_DCMIPP_PIPE_SetLineWrappingConfig(hdcmipp, DCMIPP_PIPE1, DCMIPP_WRAP_ADDRESS_32_LINES) != HAL_OK)
+  /* Specific Hardware Handshake if needed*/
+  if (ret == HAL_OK && hVencH264Instance.cfgH264Coding.inputLineBufHwModeEn)
   {
-    return HAL_ERROR;
+    ret = dcmipp_enable_HW_Handshake(hdcmipp);
   }
 
-  if (HAL_DCMIPP_PIPE_EnableLineWrapping(hdcmipp, DCMIPP_PIPE1) != HAL_OK)
-  {
-    return HAL_ERROR;
-  }
- /* Enable line event with no interrupt to use the hardware trigger to the video encoder  */
-  MODIFY_REG(DCMIPP->P1PPCR, DCMIPP_P1PPCR_LINEMULT_Msk,DCMIPP_MULTILINE_16_LINES);
-  return HAL_OK;
+  return ret;
+
 }
 
 void BSP_CAMERA_FrameEventCallback(uint32_t instance)
@@ -439,16 +459,6 @@ void BSP_CAMERA_FrameEventCallback(uint32_t instance)
 }
 
 
-void EWLPoolChoiceCb(u8 **pool_ptr, size_t *size)
-{
-  *pool_ptr = ewl_pool;
-  *size = 0x190000;
-}
-
-void EWLPoolReleaseCb(u8 **pool_ptr)
-{
-  UNUSED(pool_ptr);
-}
 
 /* Functions. */
 void VENC_APP_EncodingStart(void)

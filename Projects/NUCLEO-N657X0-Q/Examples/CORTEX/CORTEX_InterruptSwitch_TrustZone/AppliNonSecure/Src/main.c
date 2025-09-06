@@ -76,6 +76,9 @@ int main(void)
 
   /* USER CODE END Init */
 
+  /* Update SystemCoreClock variable */
+  SystemCoreClockUpdate();
+
   /* USER CODE BEGIN SysInit */
 
   /* USER CODE END SysInit */

@@ -30,6 +30,7 @@
 #include "low_level_security.h"
 #include "low_level_mce.h"
 #include "low_level_otp.h"
+#include "debug_authentication.h"
 
 #define MPU_ATTRIBUTE_DEVICE      MPU_ATTRIBUTES_NUMBER0
 #define MPU_ATTRIBUTE_CODE        MPU_ATTRIBUTES_NUMBER1

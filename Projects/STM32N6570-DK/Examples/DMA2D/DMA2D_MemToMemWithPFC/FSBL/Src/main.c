@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "ARGB8888_300x120.h"
+#include "dolphin_156x129_565.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,7 +50,7 @@ LTDC_HandleTypeDef hltdc;
 /* DMA2D output buffer which is input layer 2 for LTDC display on LCD */
 /* Format is ARGB4444 : 16 bpp and size 300x120 */
 __IO uint32_t transfer_complete;
-__ALIGN_BEGIN uint32_t aBufferResult[(LAYER_SIZE_X * LAYER_SIZE_Y * LAYER_NB_BYTES_PER_PIXEL) / 4]__attribute__((aligned(16))) __NON_CACHEABLE = {0};
+__ALIGN_BEGIN uint32_t aBufferResult[(LAYER_SIZE_X * LAYER_SIZE_Y * LAYER_NB_BYTES_PER_PIXEL)/4 ]__attribute__((aligned(16))) __NON_CACHEABLE = {0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -116,8 +116,8 @@ int main(void)
   hdma2d.XferErrorCallback = TransferError;
   /* Start DMA2D transfer*/
   if(HAL_DMA2D_Start_IT(&hdma2d,
-                        (uint32_t)&ARGB8888_300x120, /* Input image 300x120 of format ARGB8888 (32 bpp) */
-                        (uint32_t)&aBufferResult,    /* Output image of same size 300x120 after conversion by PFC in ARGB4444 (16 bpp) */
+                        (uint32_t)&dolphin_156x129_565, /* Input image 156x129 of format RGB6565 (16 bpp) */
+                        (uint32_t)&aBufferResult,    /* Output image of same size 156x126 after conversion by PFC in RGB888 (24 bpp) */
                         LAYER_SIZE_X,
                         LAYER_SIZE_Y) != HAL_OK)
   {
@@ -261,10 +261,10 @@ static void MX_DMA2D_Init(void)
   /* USER CODE END DMA2D_Init 1 */
   hdma2d.Instance = DMA2D;
   hdma2d.Init.Mode = DMA2D_M2M_PFC;
-  hdma2d.Init.ColorMode = DMA2D_OUTPUT_RGB565;
+  hdma2d.Init.ColorMode = DMA2D_OUTPUT_RGB888;
   hdma2d.Init.OutputOffset = 0;
   hdma2d.LayerCfg[1].InputOffset = 0;
-  hdma2d.LayerCfg[1].InputColorMode = DMA2D_INPUT_ARGB8888;
+  hdma2d.LayerCfg[1].InputColorMode = DMA2D_INPUT_RGB565;
   hdma2d.LayerCfg[1].AlphaMode = DMA2D_NO_MODIF_ALPHA;
   hdma2d.LayerCfg[1].InputAlpha = 0xFF;
   if (HAL_DMA2D_Init(&hdma2d) != HAL_OK)
@@ -321,15 +321,15 @@ static void MX_LTDC_Init(void)
   pLayerCfg.WindowX0 = 0;
   pLayerCfg.WindowX1 = 156;
   pLayerCfg.WindowY0 = 0;
-  pLayerCfg.WindowY1 = 163;
-  pLayerCfg.PixelFormat = LTDC_PIXEL_FORMAT_RGB565;
+  pLayerCfg.WindowY1 = 129;
+  pLayerCfg.PixelFormat = LTDC_PIXEL_FORMAT_RGB888;
   pLayerCfg.Alpha = 255;
   pLayerCfg.Alpha0 = 0;
   pLayerCfg.BlendingFactor1 = LTDC_BLENDING_FACTOR1_CA;
   pLayerCfg.BlendingFactor2 = LTDC_BLENDING_FACTOR2_CA;
   pLayerCfg.FBStartAdress = (uint32_t)&aBufferResult;
-  pLayerCfg.ImageWidth = 320;
-  pLayerCfg.ImageHeight = 120;
+  pLayerCfg.ImageWidth = 156;
+  pLayerCfg.ImageHeight = 129;
   pLayerCfg.Backcolor.Blue = 0;
   pLayerCfg.Backcolor.Green = 0;
   pLayerCfg.Backcolor.Red = 0;
@@ -356,22 +356,18 @@ static void MX_LTDC_Init(void)
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-/* USER CODE BEGIN MX_GPIO_Init_1 */
+  /* USER CODE BEGIN MX_GPIO_Init_1 */
 
-/* USER CODE END MX_GPIO_Init_1 */
+  /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOQ_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOE_CLK_ENABLE();
-  __HAL_RCC_GPIOO_CLK_ENABLE();
-  __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPION_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOQ, LCD_BL_CTRL_Pin|LCD_ONOFF_Pin, GPIO_PIN_RESET);
@@ -383,7 +379,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOQ, &GPIO_InitStruct);
 
-/* USER CODE BEGIN MX_GPIO_Init_2 */
+  /* USER CODE BEGIN MX_GPIO_Init_2 */
   
     /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOQ, LCD_BL_CTRL_Pin|LCD_ONOFF_Pin, GPIO_PIN_SET);
@@ -393,7 +389,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOQ, &GPIO_InitStruct);
-/* USER CODE END MX_GPIO_Init_2 */
+  /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
@@ -470,8 +466,7 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
-
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.

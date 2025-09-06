@@ -43,9 +43,9 @@ const char BACK_SLASH_POINT[]="\b.";
 /* Private variables ---------------------------------------------------------*/
 /* @note ATTENTION - please keep this variable 32bit aligned */
 static uint8_t m_aPacketData[PACKET_1K_SIZE + PACKET_DATA_INDEX +
-                             PACKET_TRAILER_SIZE]; /*!<Array used to store Packet Data*/
-uint8_t m_aFileName[FILE_NAME_LENGTH + 1U]; /*!< Array used to store File Name data */
-static CRC_HandleTypeDef CrcHandle; /*!<CRC handle*/
+                             PACKET_TRAILER_SIZE] __NON_CACHEABLE; /*!<Array used to store Packet Data*/
+uint8_t m_aFileName[FILE_NAME_LENGTH + 1U] __NON_CACHEABLE; /*!< Array used to store File Name data */
+static CRC_HandleTypeDef CrcHandle __NON_CACHEABLE; /*!<CRC handle*/
 
 /* Private function prototypes -----------------------------------------------*/
 static HAL_StatusTypeDef ReceivePacket(uint8_t *pData, uint32_t *puLength, uint32_t uTimeout);

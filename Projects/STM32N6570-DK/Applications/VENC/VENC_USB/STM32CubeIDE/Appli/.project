@@ -52,6 +52,11 @@
 			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/STM32N6570-DK/stm32n6570_discovery_usbpd_pwr.c</locationURI>
 		</link>
 		<link>
+			<name>Drivers/BSP/stm32n6570_discovery_xspi.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/STM32N6570-DK/stm32n6570_discovery_xspi.c</locationURI>
+		</link>		
+		<link>
 			<name>Drivers/STM32N6xx_HAL_Driver/stm32n6xx_hal.c</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal.c</locationURI>
@@ -166,6 +171,11 @@
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_uart_ex.c</locationURI>
 		</link>
+		<link>
+			<name>Drivers/STM32N6xx_HAL_Driver/stm32n6xx_hal_xspi.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Drivers/STM32N6xx_HAL_Driver/Src/stm32n6xx_hal_xspi.c</locationURI>
+		</link>		
 		<link>
 			<name>Drivers/STM32N6xx_HAL_Driver/stm32n6xx_ll_dma.c</name>
 			<type>1</type>
@@ -1222,6 +1232,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/Appli/Core/Src/venc_app.c</locationURI>
 		</link>
 		<link>
+			<name>Src/Core/venc_h264_config.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Appli/Core/Src/venc_h264_config.c</locationURI>
+		</link>		
+		<link>
 			<name>Src/USBPD/usbpd.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/Appli/USBPD/App/usbpd.c</locationURI>
@@ -1267,6 +1282,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/Appli/USBX/App/ux_device_video.c</locationURI>
 		</link>
 		<link>
+			<name>Drivers/BSP/Components/aps256xx.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/Components/aps256xx/aps256xx.c</locationURI>
+		</link>
+		<link>
 			<name>Drivers/BSP/Components/imx335.c</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/Components/imx335/imx335.c</locationURI>
@@ -1276,6 +1296,11 @@
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/Components/imx335/imx335_reg.c</locationURI>
 		</link>
+        <link>
+			<name>Drivers/BSP/Components/mx66uw1g45g.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/Components/mx66uw1g45g/mx66uw1g45g.c</locationURI>
+		</link>		
 		<link>
 			<name>Drivers/BSP/Components/tcpp0203.c</name>
 			<type>1</type>

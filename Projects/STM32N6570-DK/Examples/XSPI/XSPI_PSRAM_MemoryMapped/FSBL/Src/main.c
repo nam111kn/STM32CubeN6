@@ -105,6 +105,8 @@ int main(void)
 
   Configure_APMemory();
 
+  /* Bypass the Pre-scaler */
+  HAL_XSPI_SetClockPrescaler(&hxspi1, 0);// change, XSPI1/PSRAM CLK: 200MHz
   /*Configure Memory Mapped mode*/
 
   sCommand.OperationType      = HAL_XSPI_OPTYPE_WRITE_CFG;
@@ -298,7 +300,13 @@ void SystemClock_Config(void)
   * in the RCC_OscInitTypeDef structure.
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_NONE;
-  RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL1.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL1.PLLM = 4;
+  RCC_OscInitStruct.PLL1.PLLN = 75;
+  RCC_OscInitStruct.PLL1.PLLFractional = 0;
+  RCC_OscInitStruct.PLL1.PLLP1 = 1;
+  RCC_OscInitStruct.PLL1.PLLP2 = 1;
   RCC_OscInitStruct.PLL2.PLLState = RCC_PLL_NONE;
   RCC_OscInitStruct.PLL3.PLLState = RCC_PLL_NONE;
   RCC_OscInitStruct.PLL4.PLLState = RCC_PLL_NONE;
@@ -313,13 +321,22 @@ void SystemClock_Config(void)
                               |RCC_CLOCKTYPE_SYSCLK|RCC_CLOCKTYPE_PCLK1
                               |RCC_CLOCKTYPE_PCLK2|RCC_CLOCKTYPE_PCLK5
                               |RCC_CLOCKTYPE_PCLK4;
-  RCC_ClkInitStruct.CPUCLKSource = RCC_CPUCLKSOURCE_HSI;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.CPUCLKSource = RCC_CPUCLKSOURCE_IC1;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_IC2_IC6_IC11;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_APB1_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_APB2_DIV1;
   RCC_ClkInitStruct.APB4CLKDivider = RCC_APB4_DIV1;
   RCC_ClkInitStruct.APB5CLKDivider = RCC_APB5_DIV1;
+  RCC_ClkInitStruct.IC1Selection.ClockSelection = RCC_ICCLKSOURCE_PLL1;
+  RCC_ClkInitStruct.IC1Selection.ClockDivider = 2;
+  RCC_ClkInitStruct.IC2Selection.ClockSelection = RCC_ICCLKSOURCE_PLL1;
+  RCC_ClkInitStruct.IC2Selection.ClockDivider = 3;
+  RCC_ClkInitStruct.IC6Selection.ClockSelection = RCC_ICCLKSOURCE_PLL1;
+  RCC_ClkInitStruct.IC6Selection.ClockDivider = 4;
+  RCC_ClkInitStruct.IC11Selection.ClockSelection = RCC_ICCLKSOURCE_PLL1;
+  RCC_ClkInitStruct.IC11Selection.ClockDivider = 4;
+
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -491,8 +508,11 @@ uint32_t APS256_ReadReg(XSPI_HandleTypeDef *Ctx, uint32_t Address, uint8_t *Valu
 static void Configure_APMemory(void)
 {
   /* MR0 register for read and write */
-  uint8_t regW_MR0[2]={0x24,0x8D}; /* To configure AP memory Latency Type and drive Strength */
+  uint8_t regW_MR0[2]={0x30,0x8D}; /* To configure AP memory Latency Type and drive Strength */ 
   uint8_t regR_MR0[2]={0};
+
+  uint8_t regW_MR4[2]={0x20,0xF0}; /* To configure AP memory, Write Latency=7 up to 200MHz */
+  uint8_t regR_MR4[2]={0};
 
   /* MR8 register for read and write */
   uint8_t regW_MR8[2]={0x4B,0x08}; /* To configure AP memory Burst Type */
@@ -515,6 +535,21 @@ static void Configure_APMemory(void)
 
   /* Check MR0 configuration */
   if (regR_MR0 [0] != regW_MR0 [0])
+  {
+    Error_Handler() ;
+  }
+
+  /* Configure Write Latency */
+  if (APS256_WriteReg(&hxspi1, MR4, regW_MR4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* Check MR4 configuration */
+  if (APS256_ReadReg(&hxspi1, MR4, regR_MR4, latency) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (regR_MR4[0] != regW_MR4[0])
   {
     Error_Handler() ;
   }
@@ -554,7 +589,7 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.

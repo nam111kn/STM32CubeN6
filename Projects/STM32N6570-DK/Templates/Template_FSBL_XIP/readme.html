@@ -19,6 +19,8 @@
 <body>
 <div class="row">
 <div class="col-sm-12 col-lg-8">
+<div class="row">
+<div class="col-sm-12 col-lg-8">
 <h2 id="template-fsbl-xip-execute-in-place-description"><b>Template FSBL XIP (eXecute In Place) Description</b></h2>
 <p>This project provides a reference FSBL XIP template based on the STM32Cube HAL API that can be used to build any firmware application to execute in external Flash (sub-project Appli). After bootROM execution, the FSBL project executes in internal RAM, ensures proper MPU, caches and clock setting then configures the external Flash in execution mode. When done, the program counter is set to the application entry point and the application in turn executes.</p>
 <ul>
@@ -119,6 +121,8 @@
 <li>Set the boot mode in boot from external Flash (BOOT0 switch position is 1-2 and BOOT1 switch position is 1-2).</li>
 <li>Press the reset button. The code then executes in boot from external Flash mode.</li>
 </ul>
+</div>
+</div>
 </div>
 </div>
 </body>

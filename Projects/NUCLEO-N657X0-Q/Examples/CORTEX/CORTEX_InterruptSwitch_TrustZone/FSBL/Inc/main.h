@@ -77,13 +77,12 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define USER_BUTTON_Pin GPIO_PIN_13
 #define USER_BUTTON_GPIO_Port GPIOC
-#define LED2_Pin GPIO_PIN_10
-#define LED2_GPIO_Port GPIOG
 #define LED1_Pin GPIO_PIN_8
 #define LED1_GPIO_Port GPIOG
 
 /* USER CODE BEGIN Private defines */
-
+#define LED2_Pin GPIO_PIN_10
+#define LED2_GPIO_Port GPIOG
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

@@ -216,6 +216,7 @@ void CSI_IRQHandler(void)
 void DCMIPP_IRQHandler(void)
 {
   BSP_CAMERA_IRQHandler(0);
+  //timeMonitor() ;
 }
 /* USER CODE BEGIN 1 */
 

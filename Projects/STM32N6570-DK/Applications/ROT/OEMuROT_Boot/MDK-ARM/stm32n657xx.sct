@@ -29,9 +29,11 @@ LR_CODE BL2_CODE_START {
         *(.BL2_Jump_Code)
         *(.BL2_Jump_Data)
         stm32n6xx_hal_cortex.o (+RO)
+#ifdef MCUBOOT_USE_MCE
         stm32n6xx_hal_mce.o (+RO)
-        stm32n6xx_hal_bsec.o (+RO)
         low_level_mce.o (+RO)
+#endif
+        stm32n6xx_hal_bsec.o (+RO)
         low_level_otp.o (+RO)
         *(.BL2_Error_Code)
     }

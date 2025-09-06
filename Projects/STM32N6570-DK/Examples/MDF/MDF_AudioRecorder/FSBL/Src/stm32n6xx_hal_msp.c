@@ -100,8 +100,8 @@ void HAL_MDF_MspInit(MDF_HandleTypeDef* hmdf)
 
     /* USER CODE END MDF1_MspInit 0 */
 
-    /** Initializes the peripherals clock
-    */
+  /** Initializes the peripherals clock
+  */
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_MDF1;
     PeriphClkInitStruct.Mdf1ClockSelection = RCC_MDF1CLKSOURCE_IC8;
     PeriphClkInitStruct.ICSelection[RCC_IC8].ClockSelection = RCC_ICCLKSOURCE_PLL3;
@@ -178,12 +178,6 @@ void HAL_MDF_MspInit(MDF_HandleTypeDef* hmdf)
     }
 
     __HAL_LINKDMA(hmdf, hdma, handle_GPDMA1_Channel6);
-
-    if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel6, DMA_CHANNEL_PRIV|DMA_CHANNEL_SEC
-                              |DMA_CHANNEL_SRC_SEC|DMA_CHANNEL_DEST_SEC) != HAL_OK)
-    {
-      Error_Handler();
-    }
 
     /* MDF1 interrupt Init */
     HAL_NVIC_SetPriority(MDF1_FLT0_IRQn, 0, 0);

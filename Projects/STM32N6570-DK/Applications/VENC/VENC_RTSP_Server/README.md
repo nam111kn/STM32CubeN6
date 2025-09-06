@@ -37,7 +37,6 @@ The **AppServerThread**, once started:
 
 The **VENCAppThread**, once started:
 
-  + Starts the LCD screen for camera preview
   + Initialize the camera stream
   + Initialize the video encoder
   + Encode the video stream and place in an output buffer

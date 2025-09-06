@@ -203,6 +203,8 @@ void SystemClock_Config(void)
   LL_RCC_SetAPB4Prescaler(LL_RCC_APB4_DIV_1);
   LL_RCC_SetAPB5Prescaler(LL_RCC_APB5_DIV_1);
 
+  LL_RCC_SetTIMPrescaler(LL_RCC_TIM_PRESCALER_1);
+
   LL_RCC_IC1_SetSource(LL_RCC_ICCLKSOURCE_PLL1);
   LL_RCC_IC1_SetDivider(2);
   LL_RCC_IC1_Enable();
@@ -368,8 +370,6 @@ uint32_t GetTimerCLKFreq(void)
 
   return timer_clock_freq;
 }
-
-/* USER CODE BEGIN 4 */
 
 /******************************************************************************/
 /*   USER IRQ HANDLER TREATMENT                                               */

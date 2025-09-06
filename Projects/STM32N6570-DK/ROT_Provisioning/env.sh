@@ -6,6 +6,38 @@ if [ $# -ge 1 ] && [ -d $1 ]; then
 else
     projectdir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 fi
+
+#=================================================================================================
+# Managing HOST OS diversity : begin
+#=================================================================================================
+OS=$(uname)
+
+echo ${OS} | grep -i -e windows -e mingw >/dev/null
+if [ $? == 0 ]; then
+  echo ""
+  echo " =========================================="
+  echo "| For Windows OS, please use .bat scripts. |"
+  echo " =========================================="
+  echo ""
+  echo "       Press any key to continue..."
+  echo
+  read -p "" -n1 -s
+  exit 0
+fi
+
+if [ "$OS" == "Linux" ]; then
+  echo "HOST OS : Linux detected"
+elif [ "$OS" == "Darwin" ]; then
+  echo "HOST OS : MacOS detected"
+else
+  echo "!!!HOST OS not supported : >$OS<!!!"
+  exit 1
+fi
+
+#=================================================================================================
+# Managing HOST OS diversity : end
+#=================================================================================================
+
 #==============================================================================
 #                                    General
 #==============================================================================
@@ -25,8 +57,8 @@ else
   stm32tpccli="STM32TrustedPackageCreator_CLI"
 	stm32keygencli="STM32_KeyGen_CLI"
 	stm32signingtoolcli="STM32_SigningTool_CLI"
-	stm32ExtLoaderFlash="ExternalLoader/MX66UW1G45G_STM32N6570-DK.stldr"
-	stm32ExtOTPInterace="ExternalLoader/OTP_FUSES_STM32N6xx.stldr"
+	stm32ExtLoaderFlash="$stm32programmercli_path/ExternalLoader/MX66UW1G45G_STM32N6570-DK.stldr"
+	stm32ExtOTPInterace="$stm32programmercli_path/ExternalLoader/OTP_FUSES_STM32N6xx.stldr"
 	imgtool="Utilities/Linux/imgtool"
 fi
 

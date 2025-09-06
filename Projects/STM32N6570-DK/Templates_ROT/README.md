@@ -1,4 +1,4 @@
-## <b>OEMuROT_Appli Template Description</b>
+## <b>OEMuROT_Appli Template description</b>
 
 This project provides a OEMuROT boot path application example.
 

@@ -67,6 +67,7 @@ extern uint32_t aDST_Buffer3[BUFFER3_SIZE] __NON_CACHEABLE;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPDMA1_Init(void);
+static void SystemIsolation_Config(void);
 /* USER CODE BEGIN PFP */
 void MPU_Config(void);
 static void TransferComplete(DMA_HandleTypeDef *hdma);
@@ -126,6 +127,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPDMA1_Init();
+  SystemIsolation_Config();
   /* USER CODE BEGIN 2 */
 
   /* Clean Nodes fields */
@@ -351,13 +353,42 @@ static void MX_GPDMA1_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel12, DMA_CHANNEL_PRIV|DMA_CHANNEL_SEC) != HAL_OK)
-  {
-    Error_Handler();
-  }
   /* USER CODE BEGIN GPDMA1_Init 2 */
 
   /* USER CODE END GPDMA1_Init 2 */
+
+}
+
+/**
+  * @brief RIF Initialization Function
+  * @param None
+  * @retval None
+  */
+  static void SystemIsolation_Config(void)
+{
+
+  /* USER CODE BEGIN RIF_Init 0 */
+
+  /* USER CODE END RIF_Init 0 */
+
+  /* set all required IPs as secure privileged */
+  __HAL_RCC_RIFSC_CLK_ENABLE();
+
+  /* RIF-Aware IPs Config */
+
+  /* set up GPDMA configuration */
+  /* set GPDMA1 channel 12 */
+  if (HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel12,DMA_CHANNEL_SEC|DMA_CHANNEL_PRIV|DMA_CHANNEL_SRC_NSEC|DMA_CHANNEL_DEST_NSEC)!= HAL_OK )
+  {
+    Error_Handler();
+  }
+
+  /* USER CODE BEGIN RIF_Init 1 */
+
+  /* USER CODE END RIF_Init 1 */
+  /* USER CODE BEGIN RIF_Init 2 */
+
+  /* USER CODE END RIF_Init 2 */
 
 }
 
@@ -458,7 +489,7 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.

@@ -1094,6 +1094,11 @@
                         <cmdline>"../postbuild.bat" "nonsecure"</cmdline>
                         <workingDirectory>$PROJ_DIR$</workingDirectory>
                         <buildSequence>postLink</buildSequence>
+                        <dependencies>
+                            <file>
+                                <name>../../Binary/rot_tz_ns_app.bin</name>
+                            </file>
+                        </dependencies>
                     </buildAction>
                 </buildActions>
             </data>

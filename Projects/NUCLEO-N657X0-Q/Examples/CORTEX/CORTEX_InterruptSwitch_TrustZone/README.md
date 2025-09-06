@@ -90,10 +90,19 @@ File | Description
 ### <b>How to use it ?</b>
 
 To run this example in development mode :
+
  - Set the boot mode in development mode (BOOT1 switch position is 2-3, BOOT0 switch position doesn't matter).
  - Open your preferred toolchain
- - Rebuild all files (both FSBL and non-secure application) and launch debug with the FSBL configuration.
-    The non secure application is loaded into RAM automatically.
+ - Rebuild all files (both FSBL and non-secure application)
+
+**EWARM**, **MDK-ARM**:
+
+ - launch the debug with the FSBL configuration. The non secure application is loaded into RAM automatically.
+
+**STM32CubeIDE**:
+
+ - create a debug configuration where both applications are loaded into the device
+ - launch the debug
 
 
 This example is made to run in debug mode only.

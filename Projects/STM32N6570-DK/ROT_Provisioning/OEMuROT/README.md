@@ -1,4 +1,4 @@
-## <b>ROT_Provisioning OEMuROT Description</b>
+## <b>ROT_Provisioning OEMuROT description</b>
 
 This section provides an overview of the available scripts for OEMuROT.
 

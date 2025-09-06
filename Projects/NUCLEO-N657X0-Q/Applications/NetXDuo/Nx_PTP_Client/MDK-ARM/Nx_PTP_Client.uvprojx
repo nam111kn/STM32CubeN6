@@ -3872,31 +3872,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Middlewares/NetXDuo/tsn</GroupName>
-          <Files>
-            <File>
-              <FileName>nx_mrp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/ST/netxduo/tsn/src/nx_mrp.c</FilePath>
-            </File>
-            <File>
-              <FileName>nx_msrp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/ST/netxduo/tsn/src/nx_msrp.c</FilePath>
-            </File>
-            <File>
-              <FileName>nx_mvrp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/ST/netxduo/tsn/src/nx_mvrp.c</FilePath>
-            </File>
-            <File>
-              <FileName>nx_srp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/ST/netxduo/tsn/src/nx_srp.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>Middlewares/NetXDuo/DHCP Client</GroupName>
           <Files>
             <File>

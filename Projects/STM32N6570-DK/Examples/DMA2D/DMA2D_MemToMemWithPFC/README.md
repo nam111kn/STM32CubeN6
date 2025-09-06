@@ -19,18 +19,26 @@ the Layer 1 Core Instruction and Data Caches.
 
   In this basic example the goal is to explain the different fields of the DMA2D 
   structure in the case of Memory-to-memory with pixel format conversion (PFC) transfer mode
-  and the difference between pixel coded on 32bits (ARGB8888 format) and coded on 16bits (RGB565 format).
+  and the difference between pixel coded on 16bits (RGB565 format) and coded on 24bits (RGB888 format).
   
-  The transformed picture is shown on an LCD screen, which is set up to present an RGB565 format image
+  The transformed picture is shown on an LCD screen, which is set up to present an RGB888 format image
   from the DMA2D's destination address.
   
-- How to convert pixel format from **ARGB8888** to **RGB565** ?
+- How to convert pixel format from **RGB565** to **RGB888** ?
  => transparency information is discarded 
- => only the five MSBs (for R and B) and six MSBs (for G) are taken into account </p>
-<pre>
- eg : 0x A7..A0  B7..B0 C7..C0 D7..D0 -->  B7..B3 C7..C2 D7..D3    
-          |_|     |_|    |_|    |_|         |_|    |_|    |_|
-           A       R      G      B           R      G      B
+ Extract Color Channels from RGB565:
+
+ Red (R): Extract the 5-bit red value.
+ Green (G): Extract the 6-bit green value.
+ Blue (B): Extract the 5-bit blue value.
+ Expand Color Channels to 8 Bits:
+
+ Red (R): Scale the 5-bit value to 8 bits by replicating the MSBs.
+ From R4..R0, expand to R7..R0.
+ Green (G): Scale the 6-bit value to 8 bits by replicating the MSBs.
+ From G5..G0, expand to G7..G0.
+ Blue (B): Scale the 5-bit value to 8 bits by replicating the MSBs.
+ From B4..B0, expand to B7..B0.
 </pre>
 
 - After DMA2D configuration, the data transfer is performed and then the transferred

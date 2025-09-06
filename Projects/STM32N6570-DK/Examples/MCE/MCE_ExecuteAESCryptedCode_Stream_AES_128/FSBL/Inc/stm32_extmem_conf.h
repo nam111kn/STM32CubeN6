@@ -32,7 +32,7 @@ extern "C" {
   @brief management of the driver layer enable
 */
 #define EXTMEM_DRIVER_NOR_SFDP   1
-#define EXTMEM_DRIVER_PSRAM  1
+#define EXTMEM_DRIVER_PSRAM  0
 
 /*
   @brief management of the driver layer enable
@@ -120,9 +120,9 @@ EXTMEM_DefinitionTypeDef extmem_list_config[1] =
 //      }
 //    }
 //
-//    
-    
-    
+//
+
+
 //}
 
 };

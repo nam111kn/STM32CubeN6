@@ -24,7 +24,7 @@
 #include "main.h"
 #include <string.h>
 #include <stdio.h>
-#include "JpegEncApi.h"
+#include "jpegencapi.h"
 
 /** @addtogroup STM32N6xx_HAL_Template
   * @{

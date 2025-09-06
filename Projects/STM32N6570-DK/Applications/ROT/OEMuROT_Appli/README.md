@@ -1,4 +1,4 @@
-## <b>OEMuROT_Appli Application Description</b>
+## <b>OEMuROT_Appli application description</b>
 
 This project provides an OEMuROT application example. This application will display a menu on the console that allows
 the download of a new versions of applications and data images.

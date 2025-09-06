@@ -20,7 +20,7 @@
 #include "main.h"
 #include "stdio.h"
 #include "ewl.h"
-#include "H264EncApi.h"
+#include "h264encapi.h"
 #include "venc_app.h"
 #include "stlogo.h"
 #include "imx335.h"
@@ -65,6 +65,7 @@ static H264EncOut encOut= {0};
 static H264EncInst encoder= {0};
 static H264EncConfig cfg= {0};
 static uint32_t frame_nb = 0;
+uint32_t nbLineEvent=0;
 uint8_t ewl_pool[0x190000] __NON_CACHEABLE __attribute__((aligned(8)));
 venc_output_frame_t queue_buf[VENC_OUTPUT_BLOCK_NBR];
 uint8_t output_block_buffer[VENC_OUTPUT_BLOCK_NBR * VENC_OUTPUT_BLOCK_SIZE] __NON_CACHEABLE __attribute((aligned(8)));
@@ -106,7 +107,17 @@ void venc_thread_func(ULONG arg){
     Error_Handler();
   }
 
-  IMX335_SetFramerate(Camera_CompObj, 20);
+
+  {
+    DCMIPP_HandleTypeDef hdcmipp;
+
+    hdcmipp.Instance = DCMIPP;
+
+    __HAL_DCMIPP_ENABLE_IT(&hdcmipp, DCMIPP_IT_PIPE1_LINE);
+
+  }
+
+  IMX335_SetFramerate(Camera_CompObj, 30);
   /* initialize VENC */
   LL_VENC_Init();
 
@@ -123,6 +134,12 @@ void venc_thread_func(ULONG arg){
     if(BSP_CAMERA_BackgroundProcess() != BSP_ERROR_NONE)
     {
       printf("Error in BSP image processing\n");
+    }
+    tx_event_flags_get(&venc_app_flags, FRAME_RECEIVED_FLAG, TX_AND_CLEAR, &flags, TX_WAIT_FOREVER);
+    if (nbLineEvent)
+    {
+      printf("Video Overflow - Skip Frame\n");
+      continue;
     }
     if(encode_frame())
     {
@@ -449,7 +466,15 @@ HAL_StatusTypeDef MX_DCMIPP_Init(DCMIPP_HandleTypeDef *hdcmipp)
 void BSP_CAMERA_FrameEventCallback(uint32_t instance)
 {
   /* signal new frame*/
+  nbLineEvent = 0;
   tx_event_flags_set(&venc_app_flags, FRAME_RECEIVED_FLAG, TX_OR);
+}
+
+void BSP_CAMERA_LineEventCallback(uint32_t instance)
+{
+  /* signal new frame*/
+ nbLineEvent++;
+
 }
 
 void EWLPoolChoiceCb(u8 **pool_ptr, size_t *size)

@@ -1129,6 +1129,11 @@
                         <cmdline>postbuild.bat</cmdline>
                         <workingDirectory>$PROJ_DIR$</workingDirectory>
                         <buildSequence>postLink</buildSequence>
+                        <dependencies>
+                            <file>
+                                <name>../Binary/OEMuROT_Boot.bin</name>
+                            </file>
+                        </dependencies>
                     </buildAction>
                 </buildActions>
             </data>

@@ -1,4 +1,4 @@
-##  <b>Nx_PTP_Client Application Description</b>
+##  <b>Nx_PTP_Client application description</b>
 
  This application provides an example of Azure RTOS NetX/NetXDuo stack usage.
 It shows how to develop a PTP Master and Client applications to synchronize using the NetX PTP addon : 

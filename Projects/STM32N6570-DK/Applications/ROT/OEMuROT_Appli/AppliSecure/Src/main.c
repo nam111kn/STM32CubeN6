@@ -33,14 +33,17 @@
 /* Non-secure Vector table to jump to                                         */
 /* Caution: address must correspond to non-secure address as it is mapped in  */
 /*          the non-secure vector table                                       */
-
 #define VTOR_TABLE_NS_START_ADDR 0x24064400 /* This define is updated automatically from OEMuROT_Boot project */
+#define EXT_FLASH_BASE_ADDRESS         XSPI2_BASE          /* External Flash (XSPI2 + MCE2 - AES) */
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 extern ARM_DRIVER_FLASH Driver_EXT_FLASH0;
+
 /* Private function prototypes -----------------------------------------------*/
 /* Global variables ----------------------------------------------------------*/
+void MPU_Config(void);
+void LL_SECU_DisableCleanMpu(void);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -53,6 +56,12 @@ extern ARM_DRIVER_FLASH Driver_EXT_FLASH0;
 int main(void)
 {
   funcptr_NS NonSecure_ResetHandler;
+
+  /*!!! To boot in a secure way, the RoT has configured and activated the Memory Protection Unit
+  In order to keep a secure environment execution, you should reconfigure the
+  MPU to make it compatible with your application.
+  This example provides a basic configuration for the Memory Protection Unit*/
+  MPU_Config();
 
   /* Enable I-Cache */
   SCB_EnableICache();
@@ -118,6 +127,72 @@ int main(void)
   /* Non-secure software does not return, this code is not executed */
   while (1) {
     __NOP();
+  }
+}
+
+void MPU_Config(void)
+{
+  /* Disable and clean previous MPU config */
+  LL_SECU_DisableCleanMpu();
+
+  MPU_Region_InitTypeDef default_config = {0};
+  MPU_Attributes_InitTypeDef attr_config = {0};
+  uint32_t primask_bit = __get_PRIMASK();
+
+  /* Disable the MPU to allow configuration changes */
+  HAL_MPU_Disable();
+
+  /* Create an attribute configuration for the MPU */
+  attr_config.Attributes = INNER_OUTER(MPU_NOT_CACHEABLE);
+  attr_config.Number = MPU_ATTRIBUTES_NUMBER0;
+  HAL_MPU_ConfigMemoryAttributes(&attr_config);
+
+  /* Common settings for all MPU regions configured below */
+  default_config.Enable = MPU_REGION_ENABLE;
+  default_config.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+  default_config.AccessPermission = MPU_REGION_ALL_RW;
+  default_config.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
+  default_config.AttributesIndex = MPU_ATTRIBUTES_NUMBER0;
+
+  /* Configure a non cacheable Flash region (Primary and Secondary slots: Appli Secure and Nonsecure, Data Secure and Nonsecure) */
+  default_config.Number = MPU_REGION_NUMBER0;
+  default_config.BaseAddress = EXT_FLASH_BASE_ADDRESS + S_APPLI_OFFSET;
+  default_config.LimitAddress = EXT_FLASH_BASE_ADDRESS + S_APPLI_SECONDARY_OFFSET + S_DATA_PARTITION_SIZE + NS_DATA_PARTITION_SIZE + NS_APPLI_PARTITION_SIZE + S_APPLI_PARTITION_SIZE - 1;
+  HAL_MPU_ConfigRegion(&default_config);
+
+  /* Configure The SRAM2 */
+  default_config.Number = MPU_REGION_NUMBER1;
+  default_config.BaseAddress = SRAM2_AXI_BASE_S;
+  default_config.LimitAddress =SRAM2_AXI_BASE_S + SRAM2_AXI_SIZE - 1;
+  HAL_MPU_ConfigRegion(&default_config);
+
+  /* Configure The SRAM1 */
+  default_config.Number = MPU_REGION_NUMBER2;
+  default_config.BaseAddress = SRAM1_AXI_BASE_S;
+  default_config.LimitAddress =SRAM1_AXI_BASE_S + SRAM1_AXI_SIZE - 1;
+  HAL_MPU_ConfigRegion(&default_config);
+
+  /* enable the MPU */
+  HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+
+  /* Exit critical section to lock the system and avoid any issue around MPU mechanisme */
+  __set_PRIMASK(primask_bit);
+}
+
+/**
+  * @brief  MPU cleaning
+  * @param  None
+  * @retval None
+  */
+void LL_SECU_DisableCleanMpu(void)
+{
+  uint8_t i;
+
+  MPU->CTRL = 0;
+
+  for(i = MPU_REGION_NUMBER0; i <= MPU_REGION_NUMBER15; i++)
+  {
+    HAL_MPU_DisableRegion(i);
   }
 }
 
